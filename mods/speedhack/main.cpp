@@ -1,44 +1,49 @@
 // Speed hack — press + to speed up, - to slow down, 0 to reset.
+// Hooks CCScheduler::update and multiplies dt directly.
 #include <sdk.h>
 #include <windows.h>
+#include <cstdio>
 
 static float g_speed = 1.0f;
 static volatile bool g_running = true;
 static HANDLE g_thread = nullptr;
+static HWND g_hwnd = nullptr;
 
-using getScheduler_t = void* (__fastcall*)(void*);
-using setTimeScale_t = void(__fastcall*)(void*, float);
-using sharedDirector_t = void* (*)();
+static void(__fastcall* orig_scheduler_update)(void*, float);
 
-static getScheduler_t g_getScheduler = nullptr;
-static setTimeScale_t g_setTimeScale = nullptr;
-static sharedDirector_t g_sharedDirector = nullptr;
+static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
+    orig_scheduler_update(scheduler, dt * g_speed);
+}
 
-static void apply_speed() {
-    if (!g_sharedDirector || !g_getScheduler || !g_setTimeScale) return;
-    void* director = g_sharedDirector();
-    if (!director) return;
-    void* scheduler = g_getScheduler(director);
-    if (!scheduler) return;
-    g_setTimeScale(scheduler, g_speed);
+static void update_title() {
+    if (!g_hwnd || !IsWindow(g_hwnd)) return;
+    if (g_speed == 1.0f) {
+        SetWindowTextA(g_hwnd, "Geometry Dash");
+    } else {
+        char title[64];
+        snprintf(title, sizeof(title), "Geometry Dash [%.2fx]", g_speed);
+        SetWindowTextA(g_hwnd, title);
+    }
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
     while (g_running) {
+        bool changed = false;
         if ((GetAsyncKeyState(VK_OEM_PLUS) & 1) || (GetAsyncKeyState(VK_ADD) & 1)) {
             g_speed += 0.25f;
             if (g_speed > 5.0f) g_speed = 5.0f;
-            apply_speed();
+            changed = true;
         }
         if ((GetAsyncKeyState(VK_OEM_MINUS) & 1) || (GetAsyncKeyState(VK_SUBTRACT) & 1)) {
             g_speed -= 0.25f;
             if (g_speed < 0.25f) g_speed = 0.25f;
-            apply_speed();
+            changed = true;
         }
         if (GetAsyncKeyState('0') & 1) {
             g_speed = 1.0f;
-            apply_speed();
+            changed = true;
         }
+        if (changed) update_title();
         Sleep(50);
     }
     return 0;
@@ -48,22 +53,23 @@ extern "C" __declspec(dllexport) void mod_unload() {
     g_running = false;
     if (g_thread) { WaitForSingleObject(g_thread, 2000); CloseHandle(g_thread); g_thread = nullptr; }
     g_speed = 1.0f;
-    apply_speed();
+    if (g_hwnd && IsWindow(g_hwnd)) SetWindowTextA(g_hwnd, "Geometry Dash");
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
     g_running = true;
 
+    g_hwnd = FindWindowA(nullptr, "Geometry Dash");
+
     HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
     if (!cocos) return;
 
-    g_sharedDirector = (sharedDirector_t)GetProcAddress(cocos,
-        "?sharedDirector@CCDirector@cocos2d@@SAPEAV12@XZ");
-    g_getScheduler = (getScheduler_t)GetProcAddress(cocos,
-        "?getScheduler@CCDirector@cocos2d@@UEAAPEAVCCScheduler@2@XZ");
-    g_setTimeScale = (setTimeScale_t)GetProcAddress(cocos,
-        "?setTimeScale@CCScheduler@cocos2d@@QEAAXM@Z");
+    void* schedUpdate = (void*)GetProcAddress(cocos,
+        "?update@CCScheduler@cocos2d@@UEAAXM@Z");
+    if (schedUpdate) {
+        cadence::hook(schedUpdate, (void*)hook_scheduler_update, (void**)&orig_scheduler_update);
+    }
 
     g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
 }

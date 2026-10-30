@@ -1,12 +1,13 @@
 // FPS display — on-screen label showing live FPS in the top-left corner.
-// Recreates a CCLabelBMFont each update instead of calling setString,
-// because the setString export is a this-adjuster thunk that corrupts
-// the pointer when called directly (not through vtable).
+// Uses two labels: a static "FPS:" prefix and a dynamic number that updates.
 #include <sdk.h>
 #include <windows.h>
 #include <cstdio>
 
-static void* g_label = nullptr;
+struct CCPoint { float x, y; };
+
+static void* g_label_prefix = nullptr;
+static void* g_label_value = nullptr;
 static void* g_label_scene = nullptr;
 static bool g_game_ready = false;
 static int g_frame_count = 0;
@@ -20,6 +21,8 @@ using CCLabelBMFont_create_t = void* (*)(const char* str, const char* fnt);
 using addChild_t = void(__fastcall*)(void*, void*, int);
 using setPosition_t = void(__fastcall*)(void*, float, float);
 using removeChild_t = void(__fastcall*)(void*, void*, bool);
+using setScale_t = void(__fastcall*)(void*, float);
+using setAnchorPoint_t = void(__fastcall*)(void*, const CCPoint*);
 
 static sharedDirector_t fn_sharedDirector = nullptr;
 static getRunningScene_t fn_getRunningScene = nullptr;
@@ -27,6 +30,8 @@ static CCLabelBMFont_create_t fn_labelCreate = nullptr;
 static addChild_t fn_addChild = nullptr;
 static setPosition_t fn_setPosition = nullptr;
 static removeChild_t fn_removeChild = nullptr;
+static setScale_t fn_setScale = nullptr;
+static setAnchorPoint_t fn_setAnchorPoint = nullptr;
 
 static void(__fastcall* orig_scheduler_update)(void*, float) = nullptr;
 static bool(__fastcall* orig_MenuLayer_init)(void* self) = nullptr;
@@ -37,7 +42,36 @@ static bool __fastcall hook_MenuLayer_init(void* self) {
     return ret;
 }
 
-static void update_label(const char* text) {
+static void* create_label(const char* text, float x, float y) {
+    void* label = fn_labelCreate(text, "bigFont.fnt");
+    if (!label) return nullptr;
+    CCPoint anchor = {0.0f, 1.0f};
+    if (fn_setAnchorPoint) fn_setAnchorPoint(label, &anchor);
+    if (fn_setScale) fn_setScale(label, 0.35f);
+    if (fn_setPosition) fn_setPosition(label, x, y);
+    return label;
+}
+
+static void ensure_prefix(void* scene) {
+    if (g_label_prefix) return;
+    g_label_prefix = create_label("FPS:", 5.0f, 310.0f);
+    if (g_label_prefix) fn_addChild(scene, g_label_prefix, 99999);
+}
+
+static void update_value(void* scene, const char* text) {
+    if (g_label_value && fn_removeChild) {
+        fn_removeChild(scene, g_label_value, true);
+        g_label_value = nullptr;
+    }
+    g_label_value = create_label(text, 55.0f, 310.0f);
+    if (g_label_value) fn_addChild(scene, g_label_value, 99999);
+}
+
+static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
+    orig_scheduler_update(scheduler, dt);
+
+    if (!g_game_ready) return;
+    if (g_warmup_frames < 120) { g_warmup_frames++; return; }
     if (!fn_sharedDirector || !fn_getRunningScene || !fn_labelCreate || !fn_addChild) return;
 
     void* director = fn_sharedDirector();
@@ -46,33 +80,9 @@ static void update_label(const char* text) {
     if (!scene) return;
 
     if (scene != g_label_scene) {
-        g_label = nullptr;
-        g_label_scene = nullptr;
-    }
-
-    // Remove old label
-    if (g_label && fn_removeChild) {
-        fn_removeChild(g_label_scene, g_label, true);
-        g_label = nullptr;
-    }
-
-    // Create new label with updated text
-    g_label = fn_labelCreate(text, "bigFont.fnt");
-    if (!g_label) return;
-
-    if (fn_setPosition) fn_setPosition(g_label, 65.0f, 275.0f);
-    fn_addChild(scene, g_label, 99999);
-    g_label_scene = scene;
-}
-
-static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
-    orig_scheduler_update(scheduler, dt);
-
-    if (!g_game_ready) return;
-
-    if (g_warmup_frames < 120) {
-        g_warmup_frames++;
-        return;
+        g_label_prefix = nullptr;
+        g_label_value = nullptr;
+        g_label_scene = scene;
     }
 
     g_frame_count++;
@@ -86,14 +96,17 @@ static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
         g_frame_count = 0;
         g_last_time = now;
 
-        char buf[32];
-        snprintf(buf, sizeof(buf), "FPS: %.0f", fps);
-        update_label(buf);
+        ensure_prefix(scene);
+
+        char buf[16];
+        snprintf(buf, sizeof(buf), "%.0f", fps);
+        update_value(scene, buf);
     }
 }
 
 extern "C" __declspec(dllexport) void mod_unload() {
-    g_label = nullptr;
+    g_label_prefix = nullptr;
+    g_label_value = nullptr;
     g_label_scene = nullptr;
     g_game_ready = false;
     g_frame_count = 0;
@@ -118,6 +131,10 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
         "?setPosition@CCNode@cocos2d@@UEAAXMM@Z");
     fn_removeChild = (removeChild_t)GetProcAddress(cocos,
         "?removeChild@CCNode@cocos2d@@UEAAXPEAV12@_N@Z");
+    fn_setScale = (setScale_t)GetProcAddress(cocos,
+        "?setScale@CCNode@cocos2d@@UEAAXM@Z");
+    fn_setAnchorPoint = (setAnchorPoint_t)GetProcAddress(cocos,
+        "?setAnchorPoint@CCNode@cocos2d@@UEAAXAEBVCCPoint@2@@Z");
 
     QueryPerformanceFrequency(&g_freq);
     QueryPerformanceCounter(&g_last_time);
