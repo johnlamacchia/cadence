@@ -71,6 +71,10 @@ extern "C" __declspec(dllexport) void mod_unload() {
     g_playlayer = nullptr;
 }
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"({"name":"Hide Ground","desc":"Hides ground and mid-ground lines","key":"V","ver":"1.0"})";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
     g_running = true;

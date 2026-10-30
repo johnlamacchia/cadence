@@ -8,6 +8,10 @@ static void __fastcall hook_toggleHideAttempts(void* self, bool hide) {
     orig_toggleHideAttempts(self, true);
 }
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"({"name":"Hide Attempts","desc":"Hides the attempt counter label","ver":"1.0"})";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
 

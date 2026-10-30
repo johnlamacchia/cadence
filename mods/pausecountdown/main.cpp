@@ -37,6 +37,10 @@ extern "C" __declspec(dllexport) void mod_unload() {
     }
 }
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"({"name":"Pause Countdown","desc":"3-2-1 countdown after unpausing","ver":"1.0"})";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
 

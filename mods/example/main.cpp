@@ -132,6 +132,10 @@ extern "C" __declspec(dllexport) void mod_unload() {
     g_CCMenuItemSpriteExtra_create = nullptr;
 }
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"({"name":"Example","desc":"Adds a Hello button to the main menu","ver":"1.0"})";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
 

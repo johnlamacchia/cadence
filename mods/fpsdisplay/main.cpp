@@ -117,6 +117,10 @@ extern "C" __declspec(dllexport) void mod_unload() {
     g_warmup_frames = 0;
 }
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"j({"name":"FPS Display","desc":"On-screen FPS counter","ver":"1.0"})j";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
 

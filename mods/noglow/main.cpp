@@ -8,6 +8,10 @@ static void __fastcall hook_toggleGlitter(void* self, bool visible) {
     orig_toggleGlitter(self, false);
 }
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"({"name":"No Glow","desc":"Removes glitter/glow effects","ver":"1.0"})";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
 

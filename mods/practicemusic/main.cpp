@@ -43,6 +43,10 @@ static void __fastcall hook_startMusic(void* self) {
 
 extern "C" __declspec(dllexport) void mod_unload() {}
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"({"name":"Practice Music","desc":"Normal music in practice mode","ver":"1.0"})";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
 

@@ -56,6 +56,10 @@ extern "C" __declspec(dllexport) void mod_unload() {
     if (g_hwnd && IsWindow(g_hwnd)) SetWindowTextA(g_hwnd, "Geometry Dash");
 }
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"j({"name":"Speed Hack","desc":"Change game speed 0.25x-5x","key":"+/- 0","ver":"1.0"})j";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
     g_running = true;

@@ -17,6 +17,18 @@
 #include <cstdarg>
 #include <cstdio>
 
+// ── Mod metadata ─────────────────────────────────────────────────────
+
+struct ModEntry {
+    const char* filename;
+    const char* name;
+    const char* author;
+    const char* description;
+    const char* keybind;
+    const char* version;
+    bool enabled;
+};
+
 // ── C API ─────────────────────────────────────────────────────────────
 
 struct LoaderAPI {
@@ -43,6 +55,10 @@ struct LoaderAPI {
 
     // Write a line to loader.log (printf-style formatting).
     void (*log_fn)(const LoaderAPI* self, const char* fmt, ...);
+
+    // Get the list of loaded mods. Returns pointer to internal array.
+    // Count is written to *out_count. Valid until next hot reload.
+    const ModEntry* (*get_mods)(const LoaderAPI* self, int* out_count);
 };
 
 // Convenience macros for the C API
@@ -92,6 +108,11 @@ inline void log(const char* fmt, ...) {
     g_api->log_fn(g_api, "%s", buf);
 }
 
+inline const ModEntry* get_mods(int* count) {
+    if (!g_api || !g_api->get_mods) { *count = 0; return nullptr; }
+    return g_api->get_mods(g_api, count);
+}
+
 // Type-safe hook helper.
 // Usage:
 //   static bool(__thiscall* orig_init)(MenuLayer*);
@@ -121,6 +142,13 @@ bool hook_typed(const char* sig, Detour detour, Original* original) {
 // Clean up any state that would dangle (UI elements, timers, etc.).
 // You do NOT need to unhook — the loader removes your hooks automatically.
 //   extern "C" void mod_unload();
+
+// Optional: metadata for the mod menu. JSON with any subset of:
+// name, author, description (desc), keybind (key), version (ver).
+// Mods without this export show their filename in the mod menu.
+//   extern "C" const char* mod_info() {
+//       return R"({"name":"My Mod","author":"me","desc":"Does stuff","key":"N","ver":"1.0"})";
+//   }
 
 // Optional: export layout hashes so the loader can refuse your mod
 // if class layouts changed between GD versions.

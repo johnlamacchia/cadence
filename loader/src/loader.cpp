@@ -119,6 +119,16 @@ static void log(const char* fmt, ...) {
 
 // --- LoaderAPI implementation ---
 
+struct ModEntry {
+    const char* filename;
+    const char* name;
+    const char* author;
+    const char* description;
+    const char* keybind;
+    const char* version;
+    bool enabled;
+};
+
 struct LoaderAPI {
     void* (*addr)(const LoaderAPI* self, const char* signature);
     bool  (*hook_fn)(const LoaderAPI* self, void* target, void* detour, void** original);
@@ -126,6 +136,7 @@ struct LoaderAPI {
     const char* (*gd_version_fn)(const LoaderAPI* self);
     void* (*cocos_addr)(const LoaderAPI* self, const char* mangled_name);
     void  (*log_fn)(const LoaderAPI* self, const char* fmt, ...);
+    const ModEntry* (*get_mods)(const LoaderAPI* self, int* out_count);
 };
 
 static void* api_addr(const LoaderAPI*, const char* sig) {
@@ -164,7 +175,14 @@ static void api_log(const LoaderAPI*, const char* fmt, ...) {
     fflush(g_log);
 }
 
-static LoaderAPI g_api = {api_addr, api_hook, api_unhook, api_gd_version, api_cocos_addr, api_log};
+static std::vector<ModEntry> g_mod_entries;
+
+static const ModEntry* api_get_mods(const LoaderAPI*, int* out_count) {
+    *out_count = (int)g_mod_entries.size();
+    return g_mod_entries.empty() ? nullptr : g_mod_entries.data();
+}
+
+static LoaderAPI g_api = {api_addr, api_hook, api_unhook, api_gd_version, api_cocos_addr, api_log, api_get_mods};
 
 // --- Address loading ---
 
@@ -226,15 +244,57 @@ static bool load_layout_hashes(const std::filesystem::path& base_dir) {
 
 typedef void (*ModMainFunc)(const LoaderAPI* api);
 typedef void (*ModUnloadFunc)();
+typedef const char* (*ModInfoFunc)();
 
-struct ModInfo {
+struct ModInfoInternal {
     std::filesystem::path path;
-    std::string name;
+    std::string filename;
     HMODULE handle;
+    std::string display_name;
+    std::string author;
+    std::string description;
+    std::string keybind;
+    std::string version;
+    bool enabled;
 };
 
-static std::vector<ModInfo> g_loaded_mods;
+static std::vector<ModInfoInternal> g_loaded_mods;
 static std::filesystem::path g_base_dir;
+
+static void rebuild_mod_entries() {
+    g_mod_entries.clear();
+    g_mod_entries.reserve(g_loaded_mods.size());
+    for (auto& m : g_loaded_mods) {
+        ModEntry e;
+        e.filename    = m.filename.c_str();
+        e.name        = m.display_name.empty() ? m.filename.c_str() : m.display_name.c_str();
+        e.author      = m.author.c_str();
+        e.description = m.description.c_str();
+        e.keybind     = m.keybind.c_str();
+        e.version     = m.version.c_str();
+        e.enabled     = m.enabled;
+        g_mod_entries.push_back(e);
+    }
+}
+
+static std::string json_get(const std::unordered_map<std::string, std::string>& m, const char* key) {
+    auto it = m.find(key);
+    return it != m.end() ? it->second : "";
+}
+
+static void parse_mod_info(ModInfoInternal& mod) {
+    auto get_info = (ModInfoFunc)GetProcAddress(mod.handle, "mod_info");
+    if (!get_info) return;
+    const char* raw = get_info();
+    if (!raw) return;
+    json_reader::Parser p{raw, raw + strlen(raw)};
+    auto data = p.read_string_map();
+    mod.display_name = json_get(data, "name");
+    mod.author       = json_get(data, "author");
+    mod.description  = json_get(data, "desc");
+    mod.keybind      = json_get(data, "key");
+    mod.version      = json_get(data, "ver");
+}
 
 static bool check_mod_hashes(HMODULE mod, const std::string& mod_name) {
     // Mod exports: const char* mod_layout_hashes() → JSON string of class→hash
@@ -260,7 +320,7 @@ static void unload_all_mods() {
     for (auto it = g_loaded_mods.rbegin(); it != g_loaded_mods.rend(); ++it) {
         auto unload = (ModUnloadFunc)GetProcAddress(it->handle, "mod_unload");
         if (unload) {
-            log("[INFO] calling mod_unload for '%s'", it->name.c_str());
+            log("[INFO] calling mod_unload for '%s'", it->filename.c_str());
             unload();
         }
         MODULEINFO mi;
@@ -269,12 +329,13 @@ static void unload_all_mods() {
                 (uintptr_t)mi.lpBaseOfDll,
                 (uintptr_t)mi.lpBaseOfDll + mi.SizeOfImage);
             if (removed > 0)
-                log("[INFO] removed %d hooks from '%s'", removed, it->name.c_str());
+                log("[INFO] removed %d hooks from '%s'", removed, it->filename.c_str());
         }
         FreeLibrary(it->handle);
-        log("[INFO] unloaded '%s'", it->name.c_str());
+        log("[INFO] unloaded '%s'", it->filename.c_str());
     }
     g_loaded_mods.clear();
+    g_mod_entries.clear();
 }
 
 static void load_mods(const std::filesystem::path& mods_dir) {
@@ -313,9 +374,17 @@ static void load_mods(const std::filesystem::path& mods_dir) {
 
         log("[INFO] loading mod '%s'", mod_name.c_str());
         mod_main(&g_api);
-        g_loaded_mods.push_back({dll_path, mod_name, mod});
+
+        ModInfoInternal info;
+        info.path = dll_path;
+        info.filename = mod_name;
+        info.handle = mod;
+        info.enabled = true;
+        parse_mod_info(info);
+        g_loaded_mods.push_back(std::move(info));
         log("[INFO] mod '%s' initialized", mod_name.c_str());
     }
+    rebuild_mod_entries();
 }
 
 // --- Main-thread reload via drawScene hook ---

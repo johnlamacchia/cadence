@@ -44,6 +44,10 @@ extern "C" __declspec(dllexport) void mod_unload() {
     g_playLayer = nullptr;
 }
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"({"name":"Instant Restart","desc":"Press R to restart the level","key":"R","ver":"1.0"})";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
 

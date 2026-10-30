@@ -94,6 +94,10 @@ extern "C" __declspec(dllexport) void mod_unload() {
     g_draw_node_active = false;
 }
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"({"name":"Hitboxes","desc":"Toggle debug hitbox rendering","key":"H","ver":"1.0"})";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
     g_running = true;

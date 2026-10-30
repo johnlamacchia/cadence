@@ -53,6 +53,10 @@ extern "C" __declspec(dllexport) void mod_unload() {
     g_attempts = 0;
 }
 
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"({"name":"Attempt Counter","desc":"Tracks session attempts, shows on quit","ver":"1.0"})";
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
 
