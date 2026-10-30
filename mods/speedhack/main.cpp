@@ -3,7 +3,6 @@
 // all game updates, so this one hook speeds up everything.
 #include <sdk.h>
 #include <windows.h>
-#include <cstdio>
 
 static float g_speed = 1.0f;
 static volatile bool g_running = true;
@@ -63,11 +62,7 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
 
     g_hwnd = FindWindowA(nullptr, "Geometry Dash");
 
-    HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
-    if (!cocos) return;
-
-    void* schedUpdate = (void*)GetProcAddress(cocos,
-        "?update@CCScheduler@cocos2d@@UEAAXM@Z");
+    void* schedUpdate = cadence::cocos("?update@CCScheduler@cocos2d@@UEAAXM@Z");
     if (schedUpdate) {
         cadence::hook(schedUpdate, (void*)hook_scheduler_update,
             (void**)&orig_scheduler_update);

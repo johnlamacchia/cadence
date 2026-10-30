@@ -6,16 +6,16 @@
 //
 // The LoaderAPI lets you:
 //   1. Resolve GD function addresses by signature string
-//   2. Hook any resolved function (x64, chains correctly)
-//   3. Unhook
-//   4. Query the current GD version
-//
-// Functions are never resolved by baked-in address. If GD updates and
-// addresses change, users swap the address JSON file and existing mod
-// DLLs keep working without recompilation.
+//   2. Resolve cocos2d exports by mangled name
+//   3. Hook any resolved function (x64, chains correctly)
+//   4. Unhook
+//   5. Log to the shared loader.log
+//   6. Query the current GD version
 
 #pragma once
 #include <cstdint>
+#include <cstdarg>
+#include <cstdio>
 
 // ── C API ─────────────────────────────────────────────────────────────
 
@@ -34,6 +34,15 @@ struct LoaderAPI {
 
     // Current GD version string (e.g. "2.2091").
     const char* (*gd_version_fn)(const LoaderAPI* self);
+
+    // Resolve a cocos2d export by its MSVC-mangled name.
+    // Equivalent to GetProcAddress(libcocos2d, name) but you don't
+    // need to call GetModuleHandle yourself.
+    // Example: api->cocos_addr(api, "?setVisible@CCNode@cocos2d@@UEAAX_N@Z")
+    void* (*cocos_addr)(const LoaderAPI* self, const char* mangled_name);
+
+    // Write a line to loader.log (printf-style formatting).
+    void (*log_fn)(const LoaderAPI* self, const char* fmt, ...);
 };
 
 // Convenience macros for the C API
@@ -41,6 +50,7 @@ struct LoaderAPI {
 #define GD_HOOK(api, target, detour, orig) ((api)->hook_fn((api), (target), (detour), (orig)))
 #define GD_UNHOOK(api, target)            ((api)->unhook_fn((api), (target)))
 #define GD_VERSION(api)                   ((api)->gd_version_fn((api)))
+#define GD_COCOS(api, name)              ((api)->cocos_addr((api), (name)))
 
 // ── C++ type-safe layer (header-only) ─────────────────────────────────
 
@@ -66,6 +76,20 @@ inline bool unhook(void* target) {
 
 inline const char* gd_version() {
     return g_api ? g_api->gd_version_fn(g_api) : "unknown";
+}
+
+inline void* cocos(const char* mangled_name) {
+    return g_api ? g_api->cocos_addr(g_api, mangled_name) : nullptr;
+}
+
+inline void log(const char* fmt, ...) {
+    if (!g_api || !g_api->log_fn) return;
+    va_list ap;
+    va_start(ap, fmt);
+    char buf[512];
+    vsnprintf(buf, sizeof(buf), fmt, ap);
+    va_end(ap);
+    g_api->log_fn(g_api, "%s", buf);
 }
 
 // Type-safe hook helper.

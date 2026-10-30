@@ -91,14 +91,10 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
         "PlayLayer::onQuit()",
         hook_PlayLayer_onQuit, &orig_PlayLayer_onQuit);
 
-    HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
-    if (cocos) {
-        void* drawScene = (void*)GetProcAddress(cocos,
-            "?drawScene@CCDirector@cocos2d@@QEAAXXZ");
-        if (drawScene) {
-            cadence::hook(drawScene, (void*)hook_drawScene,
-                (void**)&orig_drawScene);
-        }
+    void* drawScene = cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ");
+    if (drawScene) {
+        cadence::hook(drawScene, (void*)hook_drawScene,
+            (void**)&orig_drawScene);
     }
 
     g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);

@@ -92,23 +92,17 @@ static bool __fastcall hook_MenuLayer_init(MenuLayer* self) {
                 using addChild_t = void(__fastcall*)(cocos2d::CCNode*, cocos2d::CCNode*);
                 using setPosition_t = void(__fastcall*)(cocos2d::CCNode*, float, float);
 
-                HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
-                if (cocos) {
-                    // CCNode::addChild(CCNode*)
-                    auto addChild = (addChild_t)GetProcAddress(cocos,
+                {
+                    auto addChild = (addChild_t)cadence::cocos(
                         "?addChild@CCNode@cocos2d@@UEAAXPEAVCCLayer@2@@Z");
-                    // Try alternative mangled name
-                    if (!addChild) addChild = (addChild_t)GetProcAddress(cocos,
+                    if (!addChild) addChild = (addChild_t)cadence::cocos(
                         "?addChild@CCNode@cocos2d@@UEAAXPEAV12@@Z");
 
-                    auto setPos = (setPosition_t)GetProcAddress(cocos,
-                        "?setPosition@CCNode@cocos2d@@UEAAXMMPEAVCCPoint@2@@Z");
-                    if (!setPos) setPos = (setPosition_t)GetProcAddress(cocos,
+                    auto setPos = (setPosition_t)cadence::cocos(
                         "?setPosition@CCNode@cocos2d@@UEAAXMM@Z");
 
-                    // Create a CCMenu for our button
                     using CCMenu_create_t = cocos2d::CCMenu*(__cdecl*)();
-                    auto ccMenuCreate = (CCMenu_create_t)GetProcAddress(cocos,
+                    auto ccMenuCreate = (CCMenu_create_t)cadence::cocos(
                         "?create@CCMenu@cocos2d@@SAPEAV12@XZ");
 
                     if (ccMenuCreate && addChild) {

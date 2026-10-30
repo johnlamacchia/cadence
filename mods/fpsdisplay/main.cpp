@@ -2,7 +2,6 @@
 // Uses two labels: a static "FPS:" prefix and a dynamic number that updates.
 #include <sdk.h>
 #include <windows.h>
-#include <cstdio>
 
 struct CCPoint { float x, y; };
 
@@ -121,33 +120,21 @@ extern "C" __declspec(dllexport) void mod_unload() {
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
 
-    HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
-    if (!cocos) return;
-
-    fn_sharedDirector = (sharedDirector_t)GetProcAddress(cocos,
-        "?sharedDirector@CCDirector@cocos2d@@SAPEAV12@XZ");
-    fn_getRunningScene = (getRunningScene_t)GetProcAddress(cocos,
-        "?getRunningScene@CCDirector@cocos2d@@QEAAPEAVCCScene@2@XZ");
-    fn_labelCreate = (CCLabelBMFont_create_t)GetProcAddress(cocos,
-        "?create@CCLabelBMFont@cocos2d@@SAPEAV12@PEBD0@Z");
-    fn_addChild = (addChild_t)GetProcAddress(cocos,
-        "?addChild@CCNode@cocos2d@@UEAAXPEAV12@H@Z");
-    fn_setPosition = (setPosition_t)GetProcAddress(cocos,
-        "?setPosition@CCNode@cocos2d@@UEAAXMM@Z");
-    fn_removeChild = (removeChild_t)GetProcAddress(cocos,
-        "?removeChild@CCNode@cocos2d@@UEAAXPEAV12@_N@Z");
-    fn_setScale = (setScale_t)GetProcAddress(cocos,
-        "?setScale@CCNode@cocos2d@@UEAAXM@Z");
-    fn_setAnchorPoint = (setAnchorPoint_t)GetProcAddress(cocos,
-        "?setAnchorPoint@CCNode@cocos2d@@UEAAXAEBVCCPoint@2@@Z");
+    fn_sharedDirector = (sharedDirector_t)cadence::cocos("?sharedDirector@CCDirector@cocos2d@@SAPEAV12@XZ");
+    fn_getRunningScene = (getRunningScene_t)cadence::cocos("?getRunningScene@CCDirector@cocos2d@@QEAAPEAVCCScene@2@XZ");
+    fn_labelCreate = (CCLabelBMFont_create_t)cadence::cocos("?create@CCLabelBMFont@cocos2d@@SAPEAV12@PEBD0@Z");
+    fn_addChild = (addChild_t)cadence::cocos("?addChild@CCNode@cocos2d@@UEAAXPEAV12@H@Z");
+    fn_setPosition = (setPosition_t)cadence::cocos("?setPosition@CCNode@cocos2d@@UEAAXMM@Z");
+    fn_removeChild = (removeChild_t)cadence::cocos("?removeChild@CCNode@cocos2d@@UEAAXPEAV12@_N@Z");
+    fn_setScale = (setScale_t)cadence::cocos("?setScale@CCNode@cocos2d@@UEAAXM@Z");
+    fn_setAnchorPoint = (setAnchorPoint_t)cadence::cocos("?setAnchorPoint@CCNode@cocos2d@@UEAAXAEBVCCPoint@2@@Z");
 
     QueryPerformanceFrequency(&g_freq);
     QueryPerformanceCounter(&g_last_time);
 
     cadence::hook_typed("MenuLayer::init()", hook_MenuLayer_init, &orig_MenuLayer_init);
 
-    void* schedUpdate = (void*)GetProcAddress(cocos,
-        "?update@CCScheduler@cocos2d@@UEAAXM@Z");
+    void* schedUpdate = cadence::cocos("?update@CCScheduler@cocos2d@@UEAAXM@Z");
     if (schedUpdate) {
         cadence::hook(schedUpdate, (void*)hook_scheduler_update, (void**)&orig_scheduler_update);
     }

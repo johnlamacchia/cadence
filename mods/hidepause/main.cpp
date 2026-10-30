@@ -61,18 +61,13 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
     g_running = true;
 
-    HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
-    if (!cocos) return;
-
-    fn_setVisible = (setVisible_t)GetProcAddress(cocos,
-        "?setVisible@CCNode@cocos2d@@UEAAX_N@Z");
+    fn_setVisible = (setVisible_t)cadence::cocos("?setVisible@CCNode@cocos2d@@UEAAX_N@Z");
 
     cadence::hook_typed(
         "UILayer::init(GJBaseGameLayer* layer)",
         hook_UILayer_init, &orig_UILayer_init);
 
-    void* drawScene = (void*)GetProcAddress(cocos,
-        "?drawScene@CCDirector@cocos2d@@QEAAXXZ");
+    void* drawScene = cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ");
     if (drawScene) {
         cadence::hook(drawScene, (void*)hook_drawScene,
             (void**)&orig_drawScene);

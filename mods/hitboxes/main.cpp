@@ -101,11 +101,7 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     fn_toggleDebugDraw = (toggleDebugDraw_t)cadence::addr("PlayLayer::toggleDebugDraw()");
     fn_updateDebugDraw = (updateDebugDraw_t)cadence::addr("GJBaseGameLayer::updateDebugDraw()");
 
-    HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
-    if (cocos) {
-        fn_drawNodeClear = (CCDrawNode_clear_t)GetProcAddress(cocos,
-            "?clear@CCDrawNode@cocos2d@@QEAAXXZ");
-    }
+    fn_drawNodeClear = (CCDrawNode_clear_t)cadence::cocos("?clear@CCDrawNode@cocos2d@@QEAAXXZ");
 
     cadence::hook_typed("PlayLayer::shouldDrawDebugHitboxes()",
         hook_shouldDraw, &orig_shouldDraw);
@@ -116,13 +112,10 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::hook_typed("PlayLayer::onQuit()",
         hook_PlayLayer_onQuit, &orig_PlayLayer_onQuit);
 
-    if (cocos) {
-        void* schedUpdate = (void*)GetProcAddress(cocos,
-            "?update@CCScheduler@cocos2d@@UEAAXM@Z");
-        if (schedUpdate) {
-            cadence::hook(schedUpdate, (void*)hook_scheduler_update,
-                (void**)&orig_scheduler_update);
-        }
+    void* schedUpdate = cadence::cocos("?update@CCScheduler@cocos2d@@UEAAXM@Z");
+    if (schedUpdate) {
+        cadence::hook(schedUpdate, (void*)hook_scheduler_update,
+            (void**)&orig_scheduler_update);
     }
 
     g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);

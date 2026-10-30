@@ -124,6 +124,8 @@ struct LoaderAPI {
     bool  (*hook_fn)(const LoaderAPI* self, void* target, void* detour, void** original);
     bool  (*unhook_fn)(const LoaderAPI* self, void* target);
     const char* (*gd_version_fn)(const LoaderAPI* self);
+    void* (*cocos_addr)(const LoaderAPI* self, const char* mangled_name);
+    void  (*log_fn)(const LoaderAPI* self, const char* fmt, ...);
 };
 
 static void* api_addr(const LoaderAPI*, const char* sig) {
@@ -145,7 +147,24 @@ static const char* api_gd_version(const LoaderAPI*) {
     return g_gd_version.c_str();
 }
 
-static LoaderAPI g_api = {api_addr, api_hook, api_unhook, api_gd_version};
+static void* api_cocos_addr(const LoaderAPI*, const char* mangled_name) {
+    static HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
+    if (!cocos) return nullptr;
+    return (void*)GetProcAddress(cocos, mangled_name);
+}
+
+static void api_log(const LoaderAPI*, const char* fmt, ...) {
+    if (!g_log) return;
+    va_list ap;
+    va_start(ap, fmt);
+    fprintf(g_log, "[MOD] ");
+    vfprintf(g_log, fmt, ap);
+    va_end(ap);
+    fprintf(g_log, "\n");
+    fflush(g_log);
+}
+
+static LoaderAPI g_api = {api_addr, api_hook, api_unhook, api_gd_version, api_cocos_addr, api_log};
 
 // --- Address loading ---
 
