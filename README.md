@@ -150,9 +150,34 @@ cadence/
 ├── loader/             the proxy DLL (winmm.dll)
 │   ├── include/sdk.h   entire public API
 │   └── src/            proxy, hook engine, mod loader
-├── mods/example/       example mod
+├── mods/               example mods (see below)
 └── tools/              sdk update command
 ```
+
+## Example mods
+
+Cadence ships with 16 example mods demonstrating the SDK. Drop any combination into `mods/`:
+
+| Mod | What it does | Key |
+|-----|-------------|-----|
+| `example` | Adds a "Hello" button to the main menu | — |
+| `fpsdisplay` | Live FPS counter in the window title bar | — |
+| `noclip` | Prevents player death | N |
+| `speedhack` | Change game speed | +/- |
+| `practicemusic` | Normal music in practice mode | — |
+| `instantrestart` | Press R to restart the current level | R |
+| `hitboxes` | Toggle debug hitbox rendering | H |
+| `autoretry` | Auto-restart on death (no death screen) | T |
+| `startposswitcher` | Quick level reset | [ / ] |
+| `pausecountdown` | 3-2-1 countdown after unpausing | — |
+| `attemptcounter` | Tracks session attempts, shows on quit | — |
+| `anticheat` | Bypasses the spawn abuse check | — |
+| `hidepause` | Hides the pause button UI | P |
+| `noglow` | Removes glitter/glow effects | — |
+| `hideground` | Hides ground and mid-ground lines | V |
+| `hideattempts` | Hides the attempt counter label | — |
+
+Multiple mods can hook the same function — the hook engine chains them automatically.
 
 ## License
 
