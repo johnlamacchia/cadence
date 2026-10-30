@@ -3,7 +3,7 @@
 #include <sdk.h>
 #include <windows.h>
 
-static bool g_hide_pause = true;
+static bool g_hide_pause = false;
 static volatile bool g_running = true;
 static HANDLE g_thread = nullptr;
 
@@ -30,7 +30,7 @@ static DWORD WINAPI key_thread(LPVOID) {
 extern "C" __declspec(dllexport) void mod_unload() {
     g_running = false;
     if (g_thread) { WaitForSingleObject(g_thread, 2000); CloseHandle(g_thread); g_thread = nullptr; }
-    g_hide_pause = true;
+    g_hide_pause = false;
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {

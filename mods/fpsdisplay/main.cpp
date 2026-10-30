@@ -60,7 +60,7 @@ static void update_label(const char* text) {
     g_label = fn_labelCreate(text, "bigFont.fnt");
     if (!g_label) return;
 
-    if (fn_setPosition) fn_setPosition(g_label, 60.0f, 290.0f);
+    if (fn_setPosition) fn_setPosition(g_label, 65.0f, 275.0f);
     fn_addChild(scene, g_label, 99999);
     g_label_scene = scene;
 }
