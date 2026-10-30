@@ -1,0 +1,40 @@
+// Hide pause button — removes the pause button UI for a cleaner gameplay view.
+// Press P to toggle visibility.
+#include <sdk.h>
+#include <windows.h>
+
+static bool g_hide_pause = true;
+
+static void(__fastcall* orig_toggleMenuVisibility)(void* self, bool visible);
+
+static void __fastcall hook_toggleMenuVisibility(void* self, bool visible) {
+    if (g_hide_pause) {
+        orig_toggleMenuVisibility(self, false);
+        return;
+    }
+    orig_toggleMenuVisibility(self, visible);
+}
+
+static DWORD WINAPI key_thread(LPVOID) {
+    while (true) {
+        if (GetAsyncKeyState('P') & 1) {
+            g_hide_pause = !g_hide_pause;
+        }
+        Sleep(50);
+    }
+    return 0;
+}
+
+extern "C" __declspec(dllexport) void mod_unload() {
+    g_hide_pause = true;
+}
+
+extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
+    cadence::set_api(api);
+
+    cadence::hook_typed(
+        "UILayer::toggleMenuVisibility(bool visible)",
+        hook_toggleMenuVisibility, &orig_toggleMenuVisibility);
+
+    CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
+}

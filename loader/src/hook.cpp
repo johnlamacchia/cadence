@@ -135,6 +135,27 @@ bool install(void* target, void* detour, void** original) {
     ensure_init();
     EnterCriticalSection(&g_lock);
 
+    // Check if target is already hooked — chain through the existing detour
+    for (auto* e = g_hooks; e; e = e->next) {
+        if (e->target == target) {
+            // Chain: target → new detour → old detour → trampoline → original
+            *original = e->detour;
+
+            uint8_t* func = (uint8_t*)target;
+            DWORD old_protect;
+            VirtualProtect(func, JMP_ABS_SIZE, PAGE_EXECUTE_READWRITE, &old_protect);
+            write_abs_jmp(func, detour);
+            VirtualProtect(func, JMP_ABS_SIZE, old_protect, &old_protect);
+            FlushInstructionCache(GetCurrentProcess(), func, JMP_ABS_SIZE);
+
+            auto* entry = new HookEntry{target, detour, e->detour, g_hooks};
+            g_hooks = entry;
+
+            LeaveCriticalSection(&g_lock);
+            return true;
+        }
+    }
+
     ZydisDecoder decoder;
     ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_STACK_WIDTH_64);
 
