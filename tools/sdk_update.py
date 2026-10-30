@@ -23,7 +23,7 @@ GD_DIR = Path(r"C:\Program Files (x86)\Steam\steamapps\common\Geometry Dash")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Update gd-sdk to a new GD version")
+    parser = argparse.ArgumentParser(description="Update Cadence to a new GD version")
     parser.add_argument("--old", required=True, help="Old GD version (e.g. 2.2091)")
     parser.add_argument("--new", required=True, help="New GD version (e.g. 2.2092)")
     parser.add_argument("--gd-dir", default=str(GD_DIR), help="GD install directory")

@@ -3,6 +3,7 @@
 #include <sdk.h>
 #include <windows.h>
 #include <cstdio>
+#include <string>
 
 // Minimal cocos2d types (just enough to compile)
 namespace cocos2d {
@@ -27,13 +28,14 @@ class CCMenuItemSpriteExtra;
 class ButtonSprite;
 
 // Function pointer types
+// std::string by value on MSVC x64 is passed as a hidden pointer
 using FLAlertLayer_create_t = FLAlertLayer* (*)(
-    void* delegate, const char* title, const char* desc,
+    void* delegate, const char* title, std::string* desc,
     const char* btn1, const char* btn2, float width);
 
 using ButtonSprite_create_t = ButtonSprite* (*)(
-    const char* text, int width, bool absolute, const char* font,
-    const char* texture, float height, float scale);
+    const char* caption, int width, int minWidth, float scale,
+    bool absolute, const char* font, const char* bg, float height);
 
 using CCMenuItemSpriteExtra_create_t = CCMenuItemSpriteExtra* (*)(
     cocos2d::CCNode* sprite, cocos2d::CCNode* disabledSprite,
@@ -51,10 +53,11 @@ static bool(__fastcall* orig_MenuLayer_init)(MenuLayer* self);
 // Our callback for the button
 static void __fastcall on_hello_button(cocos2d::CCObject* self, cocos2d::CCObject* sender) {
     if (!g_FLAlertLayer_create) return;
+    std::string desc("Hello from Cadence!\n\nThis button was added by the example mod.");
     auto* alert = g_FLAlertLayer_create(
         nullptr,                     // no delegate
-        "gd-sdk",                    // title
-        "Hello from gd-sdk!\n\nThis button was added by the example mod.",
+        "Cadence",                   // title
+        &desc,                       // std::string passed by hidden pointer
         "OK",                        // btn1
         nullptr,                     // btn2
         300.0f                       // width
@@ -73,7 +76,7 @@ static bool __fastcall hook_MenuLayer_init(MenuLayer* self) {
     // Create a "Hello" button and add it to the menu
     // ButtonSprite::create("Hello", ...) → CCMenuItemSpriteExtra::create(sprite, ...)
     if (g_ButtonSprite_create && g_CCMenuItemSpriteExtra_create) {
-        auto* label = g_ButtonSprite_create("Hello", 0, false, "bigFont.fnt", "GJ_button_01.png", 30.0f, 1.0f);
+        auto* label = g_ButtonSprite_create("Hello", 0, 0, 1.0f, false, "bigFont.fnt", "GJ_button_01.png", 30.0f);
         if (label) {
             auto* btn = g_CCMenuItemSpriteExtra_create(
                 (cocos2d::CCNode*)label,
@@ -126,23 +129,23 @@ static bool __fastcall hook_MenuLayer_init(MenuLayer* self) {
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
-    gdsdk::set_api(api);
+    cadence::set_api(api);
 
     // Resolve GD functions
-    g_FLAlertLayer_create = (FLAlertLayer_create_t)gdsdk::addr(
+    g_FLAlertLayer_create = (FLAlertLayer_create_t)cadence::addr(
         "FLAlertLayer::create(FLAlertLayerProtocol* delegate, char const* title, std::string desc, char const* btn1, char const* btn2, float width)");
 
-    g_FLAlertLayer_show = gdsdk::addr("FLAlertLayer::show()");
+    g_FLAlertLayer_show = cadence::addr("FLAlertLayer::show()");
 
-    g_ButtonSprite_create = (ButtonSprite_create_t)gdsdk::addr(
-        "ButtonSprite::create(char const* caption, int width, bool absolute, char const* font, char const* texture, float height, float scale)");
+    g_ButtonSprite_create = (ButtonSprite_create_t)cadence::addr(
+        "ButtonSprite::create(char const* caption, int width, int minWidth, float scale, bool absolute, char const* font, char const* bg, float height)");
 
-    g_CCMenuItemSpriteExtra_create = (CCMenuItemSpriteExtra_create_t)gdsdk::addr(
-        "CCMenuItemSpriteExtra::create(cocos2d::CCNode*, cocos2d::CCNode*, cocos2d::CCObject*, cocos2d::SEL_MenuHandler)");
+    g_CCMenuItemSpriteExtra_create = (CCMenuItemSpriteExtra_create_t)cadence::addr(
+        "CCMenuItemSpriteExtra::create(cocos2d::CCNode* sprite, cocos2d::CCNode* selectedSprite, cocos2d::CCObject* target, cocos2d::SEL_MenuHandler callback)");
 
     // Hook MenuLayer::init
-    void* init_addr = gdsdk::addr("MenuLayer::init()");
+    void* init_addr = cadence::addr("MenuLayer::init()");
     if (init_addr) {
-        gdsdk::hook(init_addr, (void*)hook_MenuLayer_init, (void**)&orig_MenuLayer_init);
+        cadence::hook(init_addr, (void*)hook_MenuLayer_init, (void**)&orig_MenuLayer_init);
     }
 }

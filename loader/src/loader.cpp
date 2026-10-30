@@ -279,7 +279,7 @@ bool init() {
     // Open log
     auto log_path = base_dir / "loader.log";
     g_log = _wfopen(log_path.c_str(), L"w");
-    log("[INFO] gd-sdk loader starting");
+    log("[INFO] Cadence loader starting");
 
     // Load addresses from generated/ subfolder or same directory
     auto gen_dir = base_dir / "generated";

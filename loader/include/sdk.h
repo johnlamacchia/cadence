@@ -1,4 +1,4 @@
-// gd-sdk public API
+// Cadence public API
 // This is the entire mod-facing interface. Read time: ~3 minutes.
 //
 // A mod is a DLL that exports:
@@ -46,7 +46,7 @@ struct LoaderAPI {
 
 #ifdef __cplusplus
 
-namespace gdsdk {
+namespace cadence {
 
 inline const LoaderAPI* g_api = nullptr;
 
@@ -76,7 +76,7 @@ inline const char* gd_version() {
 //       // add your stuff
 //       return true;
 //   }
-//   gdsdk::hook_typed("MenuLayer::init()", hook_init, &orig_init);
+//   cadence::hook_typed("MenuLayer::init()", hook_init, &orig_init);
 template<typename Detour, typename Original>
 bool hook_typed(const char* sig, Detour detour, Original* original) {
     void* target = addr(sig);
@@ -84,7 +84,7 @@ bool hook_typed(const char* sig, Detour detour, Original* original) {
     return hook(target, (void*)detour, (void**)original);
 }
 
-} // namespace gdsdk
+} // namespace cadence
 
 #endif // __cplusplus
 

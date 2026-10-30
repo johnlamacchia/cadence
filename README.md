@@ -1,6 +1,6 @@
-# gd-sdk
+# Cadence
 
-Minimal mod loader + SDK for Geometry Dash 2.2091 (Windows x64).
+Minimal mod loader for Geometry Dash 2.2091 (Windows x64).
 
 No utility libraries, no framework opinions. The loader does three things: loads mod DLLs, resolves GD function addresses, and installs hooks. Everything else is up to you.
 
@@ -46,14 +46,14 @@ A mod is a DLL that exports one function:
 #include <sdk.h>
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
-    gdsdk::set_api(api);
+    cadence::set_api(api);
 
     // Resolve a GD function by its signature
-    void* addr = gdsdk::addr("MenuLayer::init()");
+    void* addr = cadence::addr("MenuLayer::init()");
 
     // Hook it
     static bool(__fastcall* original)(void* self);
-    gdsdk::hook(addr, (void*)my_hook, (void**)&original);
+    cadence::hook(addr, (void*)my_hook, (void**)&original);
 }
 ```
 
@@ -132,7 +132,7 @@ The loader hooks nothing in GD itself — it only loads mod DLLs from `mods/` an
 ## Project structure
 
 ```
-gd-sdk/
+cadence/
 ├── binaries/           versioned GD exe copies
 ├── codegen/            Broma parser + header/address generator
 ├── generated/          output: headers, address JSON, layout hashes
