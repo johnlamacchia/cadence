@@ -142,6 +142,12 @@ cadence::hook_typed("MenuLayer::init()", hook_init, &orig_init);
 // Remove a hook (usually not needed — the loader removes hooks on unload)
 cadence::unhook(target);
 
+// Resolve a cocos2d export by mangled name (no GetModuleHandle needed)
+void* fn = cadence::cocos("?setVisible@CCNode@cocos2d@@UEAAX_N@Z");
+
+// Write to the shared loader.log (printf-style)
+cadence::log("my mod loaded, speed = %.1f", speed);
+
 // Query GD version string
 const char* ver = cadence::gd_version();  // e.g. "2.2091"
 ```
@@ -155,9 +161,11 @@ void*       api->addr(api, "ClassName::funcName(params)");
 bool        api->hook_fn(api, target, detour, &original);
 bool        api->unhook_fn(api, target);
 const char* api->gd_version_fn(api);
+void*       api->cocos_addr(api, "?mangled@name@@...");
+void        api->log_fn(api, "fmt", ...);
 ```
 
-Convenience macros: `GD_ADDR(api, sig)`, `GD_HOOK(api, target, det, orig)`, `GD_UNHOOK(api, target)`, `GD_VERSION(api)`.
+Convenience macros: `GD_ADDR(api, sig)`, `GD_HOOK(api, target, det, orig)`, `GD_UNHOOK(api, target)`, `GD_VERSION(api)`, `GD_COCOS(api, name)`.
 
 ### Function signatures
 
@@ -243,38 +251,34 @@ static void __fastcall hook_drawScene(void* director) {
 
 ### Hooking cocos2d functions
 
-For cocos2d exports from `libcocos2d.dll`, use `GetProcAddress` with the MSVC-mangled name:
+Use `cadence::cocos()` to resolve exports from `libcocos2d.dll` by their MSVC-mangled name:
 
 ```cpp
-HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
-
 // CCScheduler::update — runs every frame, good for per-frame logic
-void* schedUpdate = (void*)GetProcAddress(cocos,
-    "?update@CCScheduler@cocos2d@@UEAAXM@Z");
+void* schedUpdate = cadence::cocos("?update@CCScheduler@cocos2d@@UEAAXM@Z");
 
 // CCDirector::drawScene — runs every frame, good for occasional dispatch
-void* drawScene = (void*)GetProcAddress(cocos,
-    "?drawScene@CCDirector@cocos2d@@QEAAXXZ");
+void* drawScene = cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ");
 
 // CCNode operations
-void* addChild = GetProcAddress(cocos, "?addChild@CCNode@cocos2d@@UEAAXPEAV12@H@Z");
-void* setPosition = GetProcAddress(cocos, "?setPosition@CCNode@cocos2d@@UEAAXMM@Z");
-void* setVisible = GetProcAddress(cocos, "?setVisible@CCNode@cocos2d@@UEAAX_N@Z");
-void* setScale = GetProcAddress(cocos, "?setScale@CCNode@cocos2d@@UEAAXM@Z");
-void* removeChild = GetProcAddress(cocos, "?removeChild@CCNode@cocos2d@@UEAAXPEAV12@_N@Z");
+auto fn_addChild   = (addChild_t)cadence::cocos("?addChild@CCNode@cocos2d@@UEAAXPEAV12@H@Z");
+auto fn_setPos     = (setPos_t)cadence::cocos("?setPosition@CCNode@cocos2d@@UEAAXMM@Z");
+auto fn_setVisible = (setVis_t)cadence::cocos("?setVisible@CCNode@cocos2d@@UEAAX_N@Z");
+auto fn_setScale   = (setScale_t)cadence::cocos("?setScale@CCNode@cocos2d@@UEAAXM@Z");
+auto fn_remove     = (remove_t)cadence::cocos("?removeChild@CCNode@cocos2d@@UEAAXPEAV12@_N@Z");
 
 // CCLabelBMFont::create
-void* labelCreate = GetProcAddress(cocos,
-    "?create@CCLabelBMFont@cocos2d@@SAPEAV12@PEBD0@Z");
+auto fn_label = (label_t)cadence::cocos("?create@CCLabelBMFont@cocos2d@@SAPEAV12@PEBD0@Z");
 
-// CCDirector::sharedDirector + getRunningScene (for adding UI to current scene)
-void* sharedDirector = GetProcAddress(cocos,
-    "?sharedDirector@CCDirector@cocos2d@@SAPEAV12@XZ");
-void* getRunningScene = GetProcAddress(cocos,
-    "?getRunningScene@CCDirector@cocos2d@@QEAAPEAVCCScene@2@XZ");
+// CCDirector — for adding UI to the current scene
+auto fn_director = (dir_t)cadence::cocos("?sharedDirector@CCDirector@cocos2d@@SAPEAV12@XZ");
+auto fn_scene    = (scene_t)cadence::cocos("?getRunningScene@CCDirector@cocos2d@@QEAAPEAVCCScene@2@XZ");
 
 // CCMenu::create
-void* menuCreate = GetProcAddress(cocos, "?create@CCMenu@cocos2d@@SAPEAV12@XZ");
+auto fn_menu = (menu_t)cadence::cocos("?create@CCMenu@cocos2d@@SAPEAV12@XZ");
+
+// Then hook it like any other function:
+cadence::hook(schedUpdate, (void*)my_hook, (void**)&orig_scheduler_update);
 ```
 
 ### Layout hash checking
