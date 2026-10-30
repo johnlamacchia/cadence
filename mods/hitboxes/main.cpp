@@ -6,6 +6,7 @@
 
 static bool g_show_hitboxes = false;
 static void* g_playlayer = nullptr;
+static volatile bool g_in_level = false;
 static bool g_draw_node_active = false;
 static volatile bool g_running = true;
 static HANDLE g_thread = nullptr;
@@ -36,36 +37,40 @@ static bool __fastcall hook_shouldDrawBase(void* self) {
 
 static bool __fastcall hook_PlayLayer_init(void* self, void* level, bool dc) {
     bool ret = orig_PlayLayer_init(self, level, dc);
-    g_playlayer = self;
     g_draw_node_active = false;
+    g_playlayer = self;
+    g_in_level = true;
     return ret;
 }
 
 static void __fastcall hook_PlayLayer_onQuit(void* self) {
-    g_playlayer = nullptr;
+    g_in_level = false;
     g_draw_node_active = false;
+    g_playlayer = nullptr;
     orig_PlayLayer_onQuit(self);
 }
 
 static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
     orig_scheduler_update(scheduler, dt);
 
-    if (!g_playlayer) return;
+    if (!g_in_level || !g_playlayer) return;
+    void* pl = g_playlayer;
 
     if (g_show_hitboxes) {
         if (!g_draw_node_active && fn_toggleDebugDraw) {
-            fn_toggleDebugDraw(g_playlayer);
+            fn_toggleDebugDraw(pl);
+            if (!g_in_level) return;
             g_draw_node_active = true;
         }
-        // Redraw hitboxes every frame so they track moving objects.
-        // Clear the draw node, then call updateDebugDraw to repopulate.
-        void* drawNode = *(void**)((char*)g_playlayer + 0x3870);
-        if (drawNode && fn_drawNodeClear && fn_updateDebugDraw) {
+        void* drawNode = *(void**)((char*)pl + 0x3870);
+        uintptr_t dn = (uintptr_t)drawNode;
+        if (drawNode && dn > 0x10000 && dn < 0x7FFFFFFFFFFF &&
+            fn_drawNodeClear && fn_updateDebugDraw) {
             fn_drawNodeClear(drawNode);
-            fn_updateDebugDraw(g_playlayer);
+            if (g_in_level) fn_updateDebugDraw(pl);
         }
     } else if (g_draw_node_active && fn_toggleDebugDraw) {
-        fn_toggleDebugDraw(g_playlayer);
+        fn_toggleDebugDraw(pl);
         g_draw_node_active = false;
     }
 }
@@ -84,6 +89,7 @@ extern "C" __declspec(dllexport) void mod_unload() {
     g_running = false;
     if (g_thread) { WaitForSingleObject(g_thread, 2000); CloseHandle(g_thread); g_thread = nullptr; }
     g_show_hitboxes = false;
+    g_in_level = false;
     g_playlayer = nullptr;
     g_draw_node_active = false;
 }

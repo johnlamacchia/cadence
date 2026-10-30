@@ -79,11 +79,16 @@ static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
     void* scene = fn_getRunningScene(director);
     if (!scene) return;
 
-    if (scene != g_label_scene) {
+    bool scene_changed = (scene != g_label_scene);
+    if (scene_changed) {
         g_label_prefix = nullptr;
         g_label_value = nullptr;
         g_label_scene = scene;
+        g_frame_count = 0;
+        QueryPerformanceCounter(&g_last_time);
     }
+
+    ensure_prefix(scene);
 
     g_frame_count++;
 
@@ -96,11 +101,11 @@ static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
         g_frame_count = 0;
         g_last_time = now;
 
-        ensure_prefix(scene);
-
         char buf[16];
         snprintf(buf, sizeof(buf), "%.0f", fps);
         update_value(scene, buf);
+    } else if (scene_changed && !g_label_value) {
+        update_value(scene, "...");
     }
 }
 

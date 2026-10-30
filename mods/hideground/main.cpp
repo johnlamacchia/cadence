@@ -15,7 +15,7 @@ static void(__fastcall* orig_toggleGroundVisibility)(void* self, bool visible);
 static void(__fastcall* orig_toggleMGVisibility)(void* self, bool visible);
 static bool(__fastcall* orig_PlayLayer_init)(void* self, void* level, bool dc);
 static void(__fastcall* orig_PlayLayer_onQuit)(void* self);
-static void(__fastcall* orig_scheduler_update)(void*, float);
+static void(__fastcall* orig_drawScene)(void*);
 
 static void __fastcall hook_toggleGroundVisibility(void* self, bool visible) {
     if (g_hide) {
@@ -44,14 +44,13 @@ static void __fastcall hook_PlayLayer_onQuit(void* self) {
     orig_PlayLayer_onQuit(self);
 }
 
-static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
-    orig_scheduler_update(scheduler, dt);
-
+static void __fastcall hook_drawScene(void* director) {
     if (g_toggle_pending && g_playlayer) {
         g_toggle_pending = false;
         orig_toggleGroundVisibility(g_playlayer, !g_hide);
         orig_toggleMGVisibility(g_playlayer, !g_hide);
     }
+    orig_drawScene(director);
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
@@ -94,11 +93,11 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
 
     HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
     if (cocos) {
-        void* schedUpdate = (void*)GetProcAddress(cocos,
-            "?update@CCScheduler@cocos2d@@UEAAXM@Z");
-        if (schedUpdate) {
-            cadence::hook(schedUpdate, (void*)hook_scheduler_update,
-                (void**)&orig_scheduler_update);
+        void* drawScene = (void*)GetProcAddress(cocos,
+            "?drawScene@CCDirector@cocos2d@@QEAAXXZ");
+        if (drawScene) {
+            cadence::hook(drawScene, (void*)hook_drawScene,
+                (void**)&orig_drawScene);
         }
     }
 

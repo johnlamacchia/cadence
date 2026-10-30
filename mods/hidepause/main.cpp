@@ -27,17 +27,16 @@ static bool __fastcall hook_UILayer_init(void* self, void* layer) {
     return ret;
 }
 
-static void(__fastcall* orig_scheduler_update)(void*, float);
+static void(__fastcall* orig_drawScene)(void*);
 
-static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
-    orig_scheduler_update(scheduler, dt);
-
+static void __fastcall hook_drawScene(void* director) {
     if (g_toggle_pending) {
         g_toggle_pending = false;
         if (g_pause_btn && fn_setVisible) {
             fn_setVisible(g_pause_btn, !g_hide_pause);
         }
     }
+    orig_drawScene(director);
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
@@ -72,11 +71,11 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
         "UILayer::init(GJBaseGameLayer* layer)",
         hook_UILayer_init, &orig_UILayer_init);
 
-    void* schedUpdate = (void*)GetProcAddress(cocos,
-        "?update@CCScheduler@cocos2d@@UEAAXM@Z");
-    if (schedUpdate) {
-        cadence::hook(schedUpdate, (void*)hook_scheduler_update,
-            (void**)&orig_scheduler_update);
+    void* drawScene = (void*)GetProcAddress(cocos,
+        "?drawScene@CCDirector@cocos2d@@QEAAXXZ");
+    if (drawScene) {
+        cadence::hook(drawScene, (void*)hook_drawScene,
+            (void**)&orig_drawScene);
     }
 
     g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
