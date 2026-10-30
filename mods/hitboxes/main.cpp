@@ -26,13 +26,11 @@ static void(__fastcall* orig_PlayLayer_onQuit)(void* self);
 static void(__fastcall* orig_scheduler_update)(void*, float);
 
 static bool __fastcall hook_shouldDraw(void* self) {
-    if (g_show_hitboxes) return true;
-    return orig_shouldDraw(self);
+    return g_show_hitboxes && g_in_level;
 }
 
 static bool __fastcall hook_shouldDrawBase(void* self) {
-    if (g_show_hitboxes) return true;
-    return orig_shouldDrawBase(self);
+    return g_show_hitboxes && g_in_level;
 }
 
 static bool __fastcall hook_PlayLayer_init(void* self, void* level, bool dc) {
@@ -44,12 +42,21 @@ static bool __fastcall hook_PlayLayer_init(void* self, void* level, bool dc) {
 }
 
 static void __fastcall hook_PlayLayer_onQuit(void* self) {
-    if (g_draw_node_active && fn_toggleDebugDraw) {
-        fn_toggleDebugDraw(self);
+    if (g_draw_node_active) {
+        // Clear the draw node geometry so nothing renders during transition
+        void* drawNode = *(void**)((char*)self + 0x3870);
+        uintptr_t dn = (uintptr_t)drawNode;
+        if (drawNode && dn > 0x10000 && dn < 0x7FFFFFFFFFFF && fn_drawNodeClear) {
+            fn_drawNodeClear(drawNode);
+        }
+        // Toggle debug draw OFF in the engine
+        if (fn_toggleDebugDraw) fn_toggleDebugDraw(self);
     }
+    // Kill all state BEFORE calling original — shouldDrawDebugHitboxes
+    // will return false for any further calls during the quit sequence
+    g_show_hitboxes = false;
     g_in_level = false;
     g_draw_node_active = false;
-    g_show_hitboxes = false;
     g_playlayer = nullptr;
     orig_PlayLayer_onQuit(self);
 }
