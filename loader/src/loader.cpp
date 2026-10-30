@@ -301,13 +301,53 @@ static void load_mods(const std::filesystem::path& mods_dir) {
     }
 }
 
+static void show_reload_toast(int mod_count) {
+    HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
+    if (!cocos) return;
+
+    using sharedDirector_t = void* (*)();
+    using getRunningScene_t = void* (__fastcall*)(void*);
+    using addChild_t = void(__fastcall*)(void*, void*, int);
+
+    auto sharedDirector = (sharedDirector_t)GetProcAddress(cocos,
+        "?sharedDirector@CCDirector@cocos2d@@SAPEAV12@XZ");
+    auto getRunningScene = (getRunningScene_t)GetProcAddress(cocos,
+        "?getRunningScene@CCDirector@cocos2d@@QEAAPEAVCCScene@2@XZ");
+    auto addChild = (addChild_t)GetProcAddress(cocos,
+        "?addChild@CCNode@cocos2d@@UEAAXPEAV12@H@Z");
+
+    if (!sharedDirector || !getRunningScene || !addChild) return;
+
+    void* director = sharedDirector();
+    if (!director) return;
+    void* scene = getRunningScene(director);
+    if (!scene) return;
+
+    // TextAlertPopup::create(std::string text, float delay, float scale, int opacity, std::string font)
+    uintptr_t image_base = (uintptr_t)GetModuleHandleW(nullptr);
+    using TextAlertPopup_create_t = void* (*)(std::string*, float, float, int, std::string*);
+    auto textAlertCreate = (TextAlertPopup_create_t)(image_base + 0x3a8760);
+
+    char msg[128];
+    snprintf(msg, sizeof(msg), "Cadence: reloaded %d mod%s", mod_count, mod_count == 1 ? "" : "s");
+    std::string text(msg);
+    std::string font("bigFont.fnt");
+    void* popup = textAlertCreate(&text, 1.5f, 0.6f, 200, &font);
+    if (popup) {
+        addChild(scene, popup, 10000);
+        log("[INFO] reload toast shown");
+    }
+}
+
 void reload_mods() {
     if (!g_reload_lock_init) return;
     EnterCriticalSection(&g_reload_lock);
     log("[INFO] === hot reload triggered ===");
     unload_all_mods();
     load_mods(g_base_dir / "mods");
+    int count = (int)g_loaded_mods.size();
     log("[INFO] === hot reload complete ===");
+    show_reload_toast(count);
     LeaveCriticalSection(&g_reload_lock);
 }
 
