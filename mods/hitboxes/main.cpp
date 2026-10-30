@@ -44,7 +44,7 @@ static bool __fastcall hook_PlayLayer_init(void* self, void* level, bool dc) {
 static void __fastcall hook_PlayLayer_onQuit(void* self) {
     if (g_draw_node_active) {
         // Clear the draw node geometry so nothing renders during transition
-        void* drawNode = *(void**)((char*)self + 0x3870);
+        void* drawNode = *(void**)((char*)self + 0x35F8);
         uintptr_t dn = (uintptr_t)drawNode;
         if (drawNode && dn > 0x10000 && dn < 0x7FFFFFFFFFFF && fn_drawNodeClear) {
             fn_drawNodeClear(drawNode);
@@ -77,7 +77,7 @@ static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
                 g_draw_node_active = true;
             }
             if (!g_in_level || !g_playlayer) return;
-            void* drawNode = *(void**)((char*)pl + 0x3870);
+            void* drawNode = *(void**)((char*)pl + 0x35F8);
             uintptr_t dn = (uintptr_t)drawNode;
             if (drawNode && dn > 0x10000 && dn < 0x7FFFFFFFFFFF &&
                 fn_drawNodeClear && fn_updateDebugDraw) {
