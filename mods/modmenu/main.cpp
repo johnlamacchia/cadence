@@ -1,41 +1,30 @@
-// Mod Menu — press Tab to toggle an in-game overlay showing all loaded mods.
-// Reads mod metadata from the loader API (cadence::get_mods).
-// The overlay is a cocos2d layer added to the current scene.
+// Mod Menu — press Insert to toggle an in-game overlay showing all loaded mods.
 #include <sdk.h>
 #include <windows.h>
 
 struct CCPoint { float x, y; };
-struct _ccColor3B { unsigned char r, g, b; };
 struct _ccColor4B { unsigned char r, g, b, a; };
 
-using sharedDirector_t  = void*(*)();
-using getRunningScene_t = void*(__fastcall*)(void*);
-using getWinSize_t      = void(__fastcall*)(void*, float*, float*);
-using CCLayer_init_t    = bool(__fastcall*)(void*);
-using CCLayer_create_t  = void*(*)();
-using addChild_t        = void(__fastcall*)(void*, void*, int);
-using removeChild_t     = void(__fastcall*)(void*, void*, bool);
-using setPosition_t     = void(__fastcall*)(void*, float, float);
-using setScale_t        = void(__fastcall*)(void*, float);
-using setAnchorPoint_t  = void(__fastcall*)(void*, const CCPoint*);
-using setOpacity_t      = void(__fastcall*)(void*, unsigned char);
-using setColor_t        = void(__fastcall*)(void*, const _ccColor3B*);
+using sharedDirector_t      = void*(*)();
+using getRunningScene_t     = void*(__fastcall*)(void*);
+using addChild_t            = void(__fastcall*)(void*, void*, int);
+using removeChild_t         = void(__fastcall*)(void*, void*, bool);
+using setPosition_t         = void(__fastcall*)(void*, float, float);
+using setScale_t            = void(__fastcall*)(void*, float);
+using setAnchorPoint_t      = void(__fastcall*)(void*, const CCPoint*);
 using CCLabelBMFont_create_t = void*(*)(const char*, const char*);
 using CCLayerColor_create_t  = void*(*)(const _ccColor4B*, float, float);
 
-static sharedDirector_t  fn_sharedDirector  = nullptr;
-static getRunningScene_t fn_getRunningScene  = nullptr;
-static CCLabelBMFont_create_t fn_labelCreate = nullptr;
-static CCLayerColor_create_t fn_layerColor   = nullptr;
-static addChild_t        fn_addChild         = nullptr;
-static removeChild_t     fn_removeChild      = nullptr;
-static setPosition_t     fn_setPosition      = nullptr;
-static setScale_t        fn_setScale         = nullptr;
-static setAnchorPoint_t  fn_setAnchorPoint   = nullptr;
-static setOpacity_t      fn_setOpacity       = nullptr;
-static setColor_t        fn_setColor         = nullptr;
-
-static void* g_menu_layer = nullptr;
+static sharedDirector_t      fn_sharedDirector  = nullptr;
+static getRunningScene_t     fn_getRunningScene  = nullptr;
+static CCLabelBMFont_create_t fn_labelCreate     = nullptr;
+static CCLayerColor_create_t fn_layerColor       = nullptr;
+static addChild_t            fn_addChild         = nullptr;
+static removeChild_t         fn_removeChild      = nullptr;
+static setPosition_t         fn_setPosition      = nullptr;
+static setScale_t            fn_setScale         = nullptr;
+static setAnchorPoint_t      fn_setAnchorPoint   = nullptr;
+static void* g_panel = nullptr;
 static void* g_menu_scene = nullptr;
 static bool g_visible = false;
 static volatile bool g_toggle_pending = false;
@@ -44,22 +33,22 @@ static HANDLE g_thread = nullptr;
 
 static void(__fastcall* orig_drawScene)(void*);
 
-static void* create_label(const char* text, float x, float y, float scale, _ccColor3B color) {
-    void* label = fn_labelCreate(text, "bigFont.fnt");
+static void* make_label(const char* text, float x, float y, float scale, const char* font = "bigFont.fnt") {
+    if (!text || !text[0]) return nullptr;
+    void* label = fn_labelCreate(text, font);
     if (!label) return nullptr;
     CCPoint anchor = {0.0f, 1.0f};
     if (fn_setAnchorPoint) fn_setAnchorPoint(label, &anchor);
     if (fn_setScale) fn_setScale(label, scale);
     if (fn_setPosition) fn_setPosition(label, x, y);
-    if (fn_setColor) fn_setColor(label, &color);
     return label;
 }
 
 static void destroy_menu() {
-    if (g_menu_layer && g_menu_scene && fn_removeChild) {
-        fn_removeChild(g_menu_scene, g_menu_layer, true);
+    if (g_panel && g_menu_scene && fn_removeChild) {
+        fn_removeChild(g_menu_scene, g_panel, true);
     }
-    g_menu_layer = nullptr;
+    g_panel = nullptr;
     g_menu_scene = nullptr;
 }
 
@@ -70,62 +59,76 @@ static void build_menu(void* scene) {
     const ModEntry* mods = cadence::get_mods(&mod_count);
     if (!mods || mod_count == 0) return;
 
-    float panel_w = 340.0f;
-    float row_h = 22.0f;
-    float header_h = 32.0f;
+    float screen_h = 320.0f;
+    float margin = 8.0f;
+    float max_panel_h = screen_h - margin * 2;
     float pad = 10.0f;
-    float panel_h = header_h + (mod_count * row_h) + pad * 2;
-    if (panel_h > 500.0f) panel_h = 500.0f;
+    float header_h = 30.0f;
+    float footer_h = 20.0f;
+    float panel_w = 340.0f;
 
-    _ccColor4B bg = {0, 0, 0, 180};
-    g_menu_layer = fn_layerColor(&bg, panel_w, panel_h);
-    if (!g_menu_layer) return;
+    // Calculate row height to fit all mods on screen
+    float avail = max_panel_h - header_h - footer_h - pad;
+    float row_h = avail / (float)mod_count;
+    if (row_h > 20.0f) row_h = 20.0f;
+    if (row_h < 12.0f) row_h = 12.0f;
 
-    if (fn_setPosition) fn_setPosition(g_menu_layer, 10.0f, 320.0f - panel_h - 10.0f);
+    float panel_h = header_h + (mod_count * row_h) + footer_h + pad;
+    if (panel_h > max_panel_h) panel_h = max_panel_h;
 
-    _ccColor3B white = {255, 255, 255};
-    _ccColor3B green = {100, 255, 100};
-    _ccColor3B gray  = {150, 150, 150};
-    _ccColor3B cyan  = {100, 200, 255};
+    float label_scale = (row_h >= 18.0f) ? 0.28f : (row_h >= 14.0f) ? 0.22f : 0.18f;
+    float key_scale = label_scale * 0.8f;
 
-    // Title
+    // Dark background panel
+    if (fn_layerColor) {
+        _ccColor4B bg = {0, 0, 0, 190};
+        g_panel = fn_layerColor(&bg, panel_w, panel_h);
+    }
+    if (!g_panel) return;
+
+    if (fn_setPosition) fn_setPosition(g_panel, margin, screen_h - panel_h - margin);
+
+    // Title — gold font
     char title[64];
     snprintf(title, sizeof(title), "Cadence  [%d mods]", mod_count);
-    void* title_label = create_label(title, pad, panel_h - 6.0f, 0.35f, cyan);
-    if (title_label) fn_addChild(g_menu_layer, title_label, 1);
+    void* lbl = make_label(title, pad, panel_h - 6.0f, 0.35f, "goldFont.fnt");
+    if (lbl) fn_addChild(g_panel, lbl, 1);
 
-    // Version
-    char ver_str[32];
-    snprintf(ver_str, sizeof(ver_str), "GD %s", cadence::gd_version());
-    void* ver_label = create_label(ver_str, panel_w - 110.0f, panel_h - 6.0f, 0.25f, gray);
-    if (ver_label) fn_addChild(g_menu_layer, ver_label, 1);
+    // GD version — small, right side
+    char ver[32];
+    snprintf(ver, sizeof(ver), "GD %s", cadence::gd_version());
+    lbl = make_label(ver, panel_w - 120.0f, panel_h - 10.0f, 0.22f, "chatFont.fnt");
+    if (lbl) fn_addChild(g_panel, lbl, 1);
 
     // Mod list
-    float y = panel_h - header_h - pad;
-    for (int i = 0; i < mod_count && y > 0; i++) {
-        const ModEntry& m = mods[i];
-        const char* name = m.name ? m.name : m.filename;
+    float y = panel_h - header_h - 6.0f;
+    for (int i = 0; i < mod_count && y > footer_h; i++) {
+        const char* name = nullptr;
+        if (mods[i].name && (uintptr_t)mods[i].name > 0x10000)
+            name = mods[i].name;
+        else if (mods[i].filename && (uintptr_t)mods[i].filename > 0x10000)
+            name = mods[i].filename;
+        else
+            name = "???";
 
-        // Name
-        void* name_label = create_label(name, pad, y, 0.28f, white);
-        if (name_label) fn_addChild(g_menu_layer, name_label, 1);
+        lbl = make_label(name, pad, y, label_scale);
+        if (lbl) fn_addChild(g_panel, lbl, 1);
 
-        // Keybind (right side)
-        if (m.keybind && m.keybind[0]) {
-            char key_str[32];
-            snprintf(key_str, sizeof(key_str), "[%s]", m.keybind);
-            void* key_label = create_label(key_str, panel_w - 70.0f, y, 0.22f, green);
-            if (key_label) fn_addChild(g_menu_layer, key_label, 1);
+        if (mods[i].keybind && (uintptr_t)mods[i].keybind > 0x10000 && mods[i].keybind[0]) {
+            char key[32];
+            snprintf(key, sizeof(key), "[%s]", mods[i].keybind);
+            lbl = make_label(key, panel_w - 80.0f, y, key_scale, "goldFont.fnt");
+            if (lbl) fn_addChild(g_panel, lbl, 1);
         }
 
         y -= row_h;
     }
 
-    // "Tab to close" footer
-    void* footer = create_label("Tab to close", pad, 12.0f, 0.2f, gray);
-    if (footer) fn_addChild(g_menu_layer, footer, 1);
+    // Footer
+    lbl = make_label("Insert to close", pad, 8.0f, 0.2f, "chatFont.fnt");
+    if (lbl) fn_addChild(g_panel, lbl, 1);
 
-    fn_addChild(scene, g_menu_layer, 100000);
+    fn_addChild(scene, g_panel, 100000);
     g_menu_scene = scene;
 }
 
@@ -142,11 +145,10 @@ static void __fastcall hook_drawScene(void* director) {
         }
     }
 
-    // If scene changed while menu is open, rebuild on new scene
-    if (g_visible && g_menu_layer) {
+    if (g_visible && g_panel) {
         void* scene = fn_getRunningScene(director);
         if (scene && scene != g_menu_scene) {
-            g_menu_layer = nullptr;
+            g_panel = nullptr;
             g_menu_scene = nullptr;
             build_menu(scene);
         }
@@ -156,17 +158,20 @@ static void __fastcall hook_drawScene(void* director) {
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
+    bool was_down = false;
     while (g_running) {
-        if (GetAsyncKeyState(VK_TAB) & 1) {
+        bool is_down = (GetAsyncKeyState(VK_INSERT) & 0x8000) != 0;
+        if (is_down && !was_down) {
             g_toggle_pending = true;
         }
-        Sleep(50);
+        was_down = is_down;
+        Sleep(30);
     }
     return 0;
 }
 
 extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"({"name":"Mod Menu","desc":"In-game mod list overlay","key":"Tab","ver":"1.0"})";
+    return R"({"name":"Mod Menu","desc":"In-game mod list overlay","key":"Insert","ver":"1.0"})";
 }
 
 extern "C" __declspec(dllexport) void mod_unload() {
@@ -189,10 +194,8 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     fn_setPosition     = (setPosition_t)cadence::cocos("?setPosition@CCNode@cocos2d@@UEAAXMM@Z");
     fn_setScale        = (setScale_t)cadence::cocos("?setScale@CCNode@cocos2d@@UEAAXM@Z");
     fn_setAnchorPoint  = (setAnchorPoint_t)cadence::cocos("?setAnchorPoint@CCNode@cocos2d@@UEAAXAEBVCCPoint@2@@Z");
-    fn_setOpacity      = (setOpacity_t)cadence::cocos("?setOpacity@CCNode@cocos2d@@UEAAXE@Z");
-    fn_setColor        = (setColor_t)cadence::cocos("?setColor@CCNodeRGBA@cocos2d@@UEAAXAEBU_ccColor3B@2@@Z");
 
-    if (!fn_labelCreate || !fn_layerColor || !fn_addChild || !fn_getRunningScene) {
+    if (!fn_labelCreate || !fn_addChild || !fn_getRunningScene) {
         cadence::log("modmenu: missing cocos2d exports, aborting");
         return;
     }
@@ -203,5 +206,5 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     }
 
     g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
-    cadence::log("modmenu: initialized, press Tab to open");
+    cadence::log("modmenu: initialized, press Insert to open");
 }

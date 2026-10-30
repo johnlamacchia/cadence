@@ -44,8 +44,12 @@ static bool __fastcall hook_PlayLayer_init(void* self, void* level, bool dc) {
 }
 
 static void __fastcall hook_PlayLayer_onQuit(void* self) {
+    if (g_draw_node_active && fn_toggleDebugDraw) {
+        fn_toggleDebugDraw(self);
+    }
     g_in_level = false;
     g_draw_node_active = false;
+    g_show_hitboxes = false;
     g_playlayer = nullptr;
     orig_PlayLayer_onQuit(self);
 }
@@ -54,23 +58,30 @@ static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
     orig_scheduler_update(scheduler, dt);
 
     if (!g_in_level || !g_playlayer) return;
-    void* pl = g_playlayer;
 
-    if (g_show_hitboxes) {
-        if (!g_draw_node_active && fn_toggleDebugDraw) {
+    __try {
+        void* pl = g_playlayer;
+        if (!pl) return;
+
+        if (g_show_hitboxes) {
+            if (!g_draw_node_active && fn_toggleDebugDraw) {
+                fn_toggleDebugDraw(pl);
+                if (!g_in_level) return;
+                g_draw_node_active = true;
+            }
+            if (!g_in_level || !g_playlayer) return;
+            void* drawNode = *(void**)((char*)pl + 0x3870);
+            uintptr_t dn = (uintptr_t)drawNode;
+            if (drawNode && dn > 0x10000 && dn < 0x7FFFFFFFFFFF &&
+                fn_drawNodeClear && fn_updateDebugDraw) {
+                fn_drawNodeClear(drawNode);
+                if (g_in_level) fn_updateDebugDraw(pl);
+            }
+        } else if (g_draw_node_active && fn_toggleDebugDraw) {
             fn_toggleDebugDraw(pl);
-            if (!g_in_level) return;
-            g_draw_node_active = true;
+            g_draw_node_active = false;
         }
-        void* drawNode = *(void**)((char*)pl + 0x3870);
-        uintptr_t dn = (uintptr_t)drawNode;
-        if (drawNode && dn > 0x10000 && dn < 0x7FFFFFFFFFFF &&
-            fn_drawNodeClear && fn_updateDebugDraw) {
-            fn_drawNodeClear(drawNode);
-            if (g_in_level) fn_updateDebugDraw(pl);
-        }
-    } else if (g_draw_node_active && fn_toggleDebugDraw) {
-        fn_toggleDebugDraw(pl);
+    } __except(EXCEPTION_EXECUTE_HANDLER) {
         g_draw_node_active = false;
     }
 }

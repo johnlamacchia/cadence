@@ -95,7 +95,7 @@ static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
     QueryPerformanceCounter(&now);
     double elapsed = (double)(now.QuadPart - g_last_time.QuadPart) / (double)g_freq.QuadPart;
 
-    if (elapsed >= 1.0) {
+    if (elapsed >= 0.25) {
         double fps = g_frame_count / elapsed;
         g_frame_count = 0;
         g_last_time = now;
@@ -103,8 +103,6 @@ static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
         char buf[16];
         snprintf(buf, sizeof(buf), "%.0f", fps);
         update_value(scene, buf);
-    } else if (scene_changed && !g_label_value) {
-        update_value(scene, "...");
     }
 }
 
