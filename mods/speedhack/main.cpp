@@ -1,5 +1,6 @@
 // Speed hack — press + to speed up, - to slow down, 0 to reset.
-// Hooks CCScheduler::update and multiplies dt directly.
+// Hooks CCScheduler::update to multiply dt. The scheduler drives
+// all game updates, so this one hook speeds up everything.
 #include <sdk.h>
 #include <windows.h>
 #include <cstdio>
@@ -68,7 +69,8 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     void* schedUpdate = (void*)GetProcAddress(cocos,
         "?update@CCScheduler@cocos2d@@UEAAXM@Z");
     if (schedUpdate) {
-        cadence::hook(schedUpdate, (void*)hook_scheduler_update, (void**)&orig_scheduler_update);
+        cadence::hook(schedUpdate, (void*)hook_scheduler_update,
+            (void**)&orig_scheduler_update);
     }
 
     g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);

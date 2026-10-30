@@ -1,10 +1,13 @@
 // Hide ground — removes ground and middle-ground lines for a clean gameplay view.
 // Press V to toggle ground visibility (works live during gameplay).
+// All game function calls happen on the main thread via scheduler hook
+// to avoid crashes when the level is exited.
 #include <sdk.h>
 #include <windows.h>
 
 static bool g_hide = false;
 static void* g_playlayer = nullptr;
+static volatile bool g_toggle_pending = false;
 static volatile bool g_running = true;
 static HANDLE g_thread = nullptr;
 
@@ -12,6 +15,7 @@ static void(__fastcall* orig_toggleGroundVisibility)(void* self, bool visible);
 static void(__fastcall* orig_toggleMGVisibility)(void* self, bool visible);
 static bool(__fastcall* orig_PlayLayer_init)(void* self, void* level, bool dc);
 static void(__fastcall* orig_PlayLayer_onQuit)(void* self);
+static void(__fastcall* orig_scheduler_update)(void*, float);
 
 static void __fastcall hook_toggleGroundVisibility(void* self, bool visible) {
     if (g_hide) {
@@ -40,14 +44,21 @@ static void __fastcall hook_PlayLayer_onQuit(void* self) {
     orig_PlayLayer_onQuit(self);
 }
 
+static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
+    orig_scheduler_update(scheduler, dt);
+
+    if (g_toggle_pending && g_playlayer) {
+        g_toggle_pending = false;
+        orig_toggleGroundVisibility(g_playlayer, !g_hide);
+        orig_toggleMGVisibility(g_playlayer, !g_hide);
+    }
+}
+
 static DWORD WINAPI key_thread(LPVOID) {
     while (g_running) {
         if (GetAsyncKeyState('V') & 1) {
             g_hide = !g_hide;
-            if (g_playlayer) {
-                orig_toggleGroundVisibility(g_playlayer, !g_hide);
-                orig_toggleMGVisibility(g_playlayer, !g_hide);
-            }
+            g_toggle_pending = true;
         }
         Sleep(50);
     }
@@ -80,6 +91,16 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::hook_typed(
         "PlayLayer::onQuit()",
         hook_PlayLayer_onQuit, &orig_PlayLayer_onQuit);
+
+    HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
+    if (cocos) {
+        void* schedUpdate = (void*)GetProcAddress(cocos,
+            "?update@CCScheduler@cocos2d@@UEAAXM@Z");
+        if (schedUpdate) {
+            cadence::hook(schedUpdate, (void*)hook_scheduler_update,
+                (void**)&orig_scheduler_update);
+        }
+    }
 
     g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
 }
