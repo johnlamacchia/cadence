@@ -15,6 +15,7 @@ using setVisible_t = void(__fastcall*)(void*, bool);
 static setVisible_t fn_setVisible = nullptr;
 
 static bool(__fastcall* orig_UILayer_init)(void* self, void* layer);
+static void(__fastcall* orig_PlayLayer_onQuit)(void* self);
 
 static bool __fastcall hook_UILayer_init(void* self, void* layer) {
     bool ret = orig_UILayer_init(self, layer);
@@ -25,6 +26,11 @@ static bool __fastcall hook_UILayer_init(void* self, void* layer) {
         }
     }
     return ret;
+}
+
+static void __fastcall hook_PlayLayer_onQuit(void* self) {
+    g_pause_btn = nullptr;
+    orig_PlayLayer_onQuit(self);
 }
 
 static void(__fastcall* orig_drawScene)(void*);
@@ -73,6 +79,10 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::hook_typed(
         "UILayer::init(GJBaseGameLayer* layer)",
         hook_UILayer_init, &orig_UILayer_init);
+
+    cadence::hook_typed(
+        "PlayLayer::onQuit()",
+        hook_PlayLayer_onQuit, &orig_PlayLayer_onQuit);
 
     void* drawScene = cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ");
     if (drawScene) {

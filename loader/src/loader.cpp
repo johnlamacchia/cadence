@@ -408,9 +408,10 @@ static void show_reload_toast(void* director, int mod_count) {
     void* scene = getRunningScene(director);
     if (!scene) return;
 
-    uintptr_t image_base = (uintptr_t)GetModuleHandleW(nullptr);
     using TextAlertPopup_create_t = void* (*)(std::string*, float, float, int, std::string*);
-    auto textAlertCreate = (TextAlertPopup_create_t)(image_base + 0x3a8760);
+    auto textAlertCreate = (TextAlertPopup_create_t)api_addr(nullptr,
+        "TextAlertPopup::create(std::string text, float delay, float scale, int opacity, std::string font)");
+    if (!textAlertCreate) return;
 
     char msg[128];
     snprintf(msg, sizeof(msg), "Cadence: reloaded %d mod%s", mod_count, mod_count == 1 ? "" : "s");
@@ -441,12 +442,15 @@ void reload_mods() {
 }
 
 static DWORD WINAPI hotkey_thread(LPVOID) {
+    bool was_down = false;
     while (true) {
-        if (GetAsyncKeyState(VK_F6) & 1) {
+        bool is_down = (GetAsyncKeyState(VK_F6) & 0x8000) != 0;
+        if (is_down && !was_down) {
             g_reload_pending = true;
             Sleep(500);
         }
-        Sleep(50);
+        was_down = is_down;
+        Sleep(30);
     }
     return 0;
 }

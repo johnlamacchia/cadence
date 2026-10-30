@@ -145,9 +145,9 @@ static void __fastcall hook_drawScene(void* director) {
         }
     }
 
-    if (g_visible && g_panel) {
+    if (g_visible) {
         void* scene = fn_getRunningScene(director);
-        if (scene && scene != g_menu_scene) {
+        if (scene && (!g_panel || scene != g_menu_scene)) {
             g_panel = nullptr;
             g_menu_scene = nullptr;
             build_menu(scene);

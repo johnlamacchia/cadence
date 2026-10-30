@@ -8,6 +8,7 @@ struct CCPoint { float x, y; };
 static void* g_label_prefix = nullptr;
 static void* g_label_value = nullptr;
 static void* g_label_scene = nullptr;
+static int g_scene_gen = 0;
 static bool g_game_ready = false;
 static int g_frame_count = 0;
 static int g_warmup_frames = 0;
@@ -38,6 +39,10 @@ static bool(__fastcall* orig_MenuLayer_init)(void* self) = nullptr;
 static bool __fastcall hook_MenuLayer_init(void* self) {
     bool ret = orig_MenuLayer_init(self);
     g_game_ready = true;
+    g_label_prefix = nullptr;
+    g_label_value = nullptr;
+    g_label_scene = nullptr;
+    g_scene_gen++;
     return ret;
 }
 
@@ -83,6 +88,7 @@ static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
         g_label_prefix = nullptr;
         g_label_value = nullptr;
         g_label_scene = scene;
+        g_scene_gen++;
         g_frame_count = 0;
         QueryPerformanceCounter(&g_last_time);
     }
