@@ -19,7 +19,7 @@ No utility libraries, no framework opinions. The loader does three things: loads
 cd codegen
 python generate.py ..\..\bindings\bindings 2.2091
 
-# Build everything — loader + all 16 mods
+# Build everything — loader + all 17 mods
 cd ..
 cmake -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build --config Release
@@ -37,10 +37,11 @@ Copy to your GD folder (`C:\Program Files (x86)\Steam\steamapps\common\Geometry 
 winmm.dll                           ← loader (from build/loader/Release/)
 generated/addresses_2.2091.json     ← address database
 generated/layout_hashes_2.2091.json ← class layout hashes
-mods/                               ← create this folder
+cadence/mods/                       ← mod folder (auto-created)
   example.dll                       ← any mod DLLs you want
   noclip.dll
   speedhack.dll
+  modmenu.dll                       ← in-game mod list (Tab key)
   ...
 ```
 
@@ -214,9 +215,36 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api);
 // Clean up threads, UI elements, timers. You do NOT need to unhook.
 extern "C" __declspec(dllexport) void mod_unload();
 
+// Optional: metadata for the mod menu (JSON string)
+extern "C" __declspec(dllexport) const char* mod_info();
+
 // Optional: layout hash checking (see below)
 extern "C" __declspec(dllexport) const char* mod_layout_hashes();
 ```
+
+### Mod metadata (mod_info)
+
+Export `mod_info()` to give your mod a display name, description, keybind hint, and version. The mod menu reads this to show your mod in-game:
+
+```cpp
+extern "C" __declspec(dllexport) const char* mod_info() {
+    return R"({"name":"My Mod","desc":"Does cool stuff","key":"M","ver":"1.0"})";
+}
+```
+
+Fields (all optional): `name`, `desc`, `key` (keybind hint), `ver` (version). If `mod_info` isn't exported, the mod menu shows the DLL filename instead.
+
+### Querying loaded mods
+
+```cpp
+int count = 0;
+const ModEntry* mods = cadence::get_mods(&count);
+for (int i = 0; i < count; i++) {
+    cadence::log("mod: %s by %s", mods[i].name, mods[i].author);
+}
+```
+
+`ModEntry` fields: `filename`, `name`, `author`, `description`, `keybind`, `version`, `enabled`.
 
 ### Thread safety
 
@@ -374,7 +402,7 @@ cadence/
 |       +-- hook.h
 |       +-- crash.cpp          vectored exception handler + minidump
 |       +-- proxy.asm          180 winmm export forwarding stubs (MASM)
-+-- mods/                      16 example mods (see below)
++-- mods/                      17 example mods (see below)
 +-- tools/                     sdk update command
 ```
 
@@ -382,7 +410,7 @@ cadence/
 
 ## Example mods
 
-Cadence ships with 16 example mods covering common modding patterns. Drop any combination into your GD `mods/` folder:
+Cadence ships with 17 example mods covering common modding patterns. Drop any combination into your GD `cadence/mods/` folder:
 
 | Mod | Description | Toggle | Default |
 |-----|------------|--------|---------|
@@ -402,6 +430,7 @@ Cadence ships with 16 example mods covering common modding patterns. Drop any co
 | `noglow` | Removes glitter/glow effects from objects | always on | ON |
 | `hideground` | Hides ground and mid-ground decoration lines | **V** | OFF |
 | `hideattempts` | Hides the attempt counter label in-game | always on | ON |
+| `modmenu` | In-game overlay showing all loaded mods with keybinds | **Tab** | OFF |
 
 All mods with a toggle key can be toggled live during gameplay. Multiple mods can hook the same function — the hook engine chains them automatically.
 
@@ -412,10 +441,11 @@ All mods with a toggle key can be toggled live during gameplay. Multiple mods ca
 | Hook a GD member function | all | Basic hooking with `cadence::hook_typed` |
 | Hook a cocos2d export | fpsdisplay, speedhack, hitboxes | `GetProcAddress` + `cadence::hook` |
 | Per-frame logic via CCScheduler::update | fpsdisplay, hitboxes, speedhack | Hooking the game's frame tick |
-| Main-thread dispatch via CCDirector::drawScene | hideground, hidepause | Safe flag-based dispatch from bg thread |
+| Main-thread dispatch via CCDirector::drawScene | hideground, hidepause, modmenu | Safe flag-based dispatch from bg thread |
 | Background key polling thread | noclip, speedhack, hitboxes, hideground, hidepause | `GetAsyncKeyState` + thread safety |
-| Creating UI (labels, buttons, menus) | example, fpsdisplay | cocos2d node creation and scene management |
-| Scene change detection | fpsdisplay | Tracking `getRunningScene` to handle transitions |
+| Creating UI (labels, buttons, menus, overlays) | example, fpsdisplay, modmenu | cocos2d node creation and scene management |
+| Scene change detection | fpsdisplay, modmenu | Tracking `getRunningScene` to handle transitions |
+| Reading mod metadata via API | modmenu | `cadence::get_mods()` to list loaded mods at runtime |
 | GD class member field access | hidepause, practicemusic | Reading/writing struct offsets |
 | Intercepting + modifying args | hideground, speedhack | Changing function arguments before forwarding |
 | Clean hot-reload support | all threaded mods | `g_running` flag + `WaitForSingleObject` in `mod_unload` |
