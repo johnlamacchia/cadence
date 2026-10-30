@@ -257,6 +257,25 @@ bool remove(void* target) {
     return false;
 }
 
+int remove_by_detour_range(uintptr_t range_start, uintptr_t range_end) {
+    ensure_init();
+    int removed = 0;
+    // Collect targets first to avoid modifying list while iterating
+    void* targets[256];
+    int count = 0;
+    EnterCriticalSection(&g_lock);
+    for (auto* e = g_hooks; e && count < 256; e = e->next) {
+        uintptr_t d = (uintptr_t)e->detour;
+        if (d >= range_start && d < range_end)
+            targets[count++] = e->target;
+    }
+    LeaveCriticalSection(&g_lock);
+    for (int i = 0; i < count; i++) {
+        if (remove(targets[i])) removed++;
+    }
+    return removed;
+}
+
 void shutdown() {
     if (!g_init) return;
     while (g_hooks) {

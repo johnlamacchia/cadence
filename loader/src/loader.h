@@ -3,4 +3,5 @@
 
 namespace loader {
     bool init();
+    void reload_mods();
 }

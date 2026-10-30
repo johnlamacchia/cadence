@@ -34,6 +34,16 @@ mods/
 
 Launch GD. The loader logs to `loader.log` in the GD folder.
 
+### Hot reload
+
+Press **F6** in-game to reload all mods without restarting GD. The loader calls `mod_unload()` (if exported), removes all hooks the mod installed, unloads the DLL, then reloads and calls `mod_main()` again.
+
+### Crash handler
+
+If GD crashes, Cadence writes a crash report and minidump to the GD folder:
+- `crash_YYYYMMDD_HHMMSS.log` — human-readable: exception type, registers, stack trace with module names
+- `crash_YYYYMMDD_HHMMSS.dmp` — open in Visual Studio or WinDbg for full debugging
+
 ### Uninstall
 
 Delete `winmm.dll` from the GD folder. That's it.

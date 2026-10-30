@@ -88,11 +88,18 @@ bool hook_typed(const char* sig, Detour detour, Original* original) {
 
 #endif // __cplusplus
 
-// ── Mod metadata (optional, for layout hash checking) ─────────────────
+// ── Mod lifecycle ─────────────────────────────────────────────────────
 
-// If your mod uses GD class layouts, export this so the loader can verify
-// compatibility before calling mod_main:
-//
+// Required: entry point called after the loader resolves addresses.
+//   extern "C" void mod_main(const LoaderAPI* api);
+
+// Optional: called before your DLL is unloaded during hot reload (F6).
+// Clean up any state that would dangle (UI elements, timers, etc.).
+// You do NOT need to unhook — the loader removes your hooks automatically.
+//   extern "C" void mod_unload();
+
+// Optional: export layout hashes so the loader can refuse your mod
+// if class layouts changed between GD versions.
 //   extern "C" const char* mod_layout_hashes() {
 //       return R"({"MenuLayer":"abcd1234","FLAlertLayer":"ef567890"})";
 //   }

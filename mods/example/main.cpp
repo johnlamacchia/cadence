@@ -128,6 +128,16 @@ static bool __fastcall hook_MenuLayer_init(MenuLayer* self) {
     return true;
 }
 
+extern "C" __declspec(dllexport) void mod_unload() {
+    void* init_addr = cadence::addr("MenuLayer::init()");
+    if (init_addr) cadence::unhook(init_addr);
+    orig_MenuLayer_init = nullptr;
+    g_FLAlertLayer_create = nullptr;
+    g_FLAlertLayer_show = nullptr;
+    g_ButtonSprite_create = nullptr;
+    g_CCMenuItemSpriteExtra_create = nullptr;
+}
+
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
 

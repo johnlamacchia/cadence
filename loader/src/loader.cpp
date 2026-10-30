@@ -1,11 +1,13 @@
 #include "loader.h"
 #include "hook.h"
+#include "crash.h"
 #include <cstdio>
 #include <string>
 #include <unordered_map>
 #include <vector>
 #include <filesystem>
 #include <fstream>
+#include <psapi.h>
 
 // Minimal JSON value reader (no dependencies)
 namespace json_reader {
@@ -204,11 +206,18 @@ static bool load_layout_hashes(const std::filesystem::path& base_dir) {
 // --- Mod loading ---
 
 typedef void (*ModMainFunc)(const LoaderAPI* api);
+typedef void (*ModUnloadFunc)();
 
 struct ModInfo {
-    std::string path;
+    std::filesystem::path path;
+    std::string name;
     HMODULE handle;
 };
+
+static std::vector<ModInfo> g_loaded_mods;
+static std::filesystem::path g_base_dir;
+static CRITICAL_SECTION g_reload_lock;
+static bool g_reload_lock_init = false;
 
 static bool check_mod_hashes(HMODULE mod, const std::string& mod_name) {
     // Mod exports: const char* mod_layout_hashes() → JSON string of class→hash
@@ -228,6 +237,27 @@ static bool check_mod_hashes(HMODULE mod, const std::string& mod_name) {
         }
     }
     return true;
+}
+
+static void unload_all_mods() {
+    for (auto it = g_loaded_mods.rbegin(); it != g_loaded_mods.rend(); ++it) {
+        auto unload = (ModUnloadFunc)GetProcAddress(it->handle, "mod_unload");
+        if (unload) {
+            log("[INFO] calling mod_unload for '%s'", it->name.c_str());
+            unload();
+        }
+        MODULEINFO mi;
+        if (GetModuleInformation(GetCurrentProcess(), it->handle, &mi, sizeof(mi))) {
+            int removed = hook::remove_by_detour_range(
+                (uintptr_t)mi.lpBaseOfDll,
+                (uintptr_t)mi.lpBaseOfDll + mi.SizeOfImage);
+            if (removed > 0)
+                log("[INFO] removed %d hooks from '%s'", removed, it->name.c_str());
+        }
+        FreeLibrary(it->handle);
+        log("[INFO] unloaded '%s'", it->name.c_str());
+    }
+    g_loaded_mods.clear();
 }
 
 static void load_mods(const std::filesystem::path& mods_dir) {
@@ -266,32 +296,59 @@ static void load_mods(const std::filesystem::path& mods_dir) {
 
         log("[INFO] loading mod '%s'", mod_name.c_str());
         mod_main(&g_api);
+        g_loaded_mods.push_back({dll_path, mod_name, mod});
         log("[INFO] mod '%s' initialized", mod_name.c_str());
     }
 }
 
+void reload_mods() {
+    if (!g_reload_lock_init) return;
+    EnterCriticalSection(&g_reload_lock);
+    log("[INFO] === hot reload triggered ===");
+    unload_all_mods();
+    load_mods(g_base_dir / "mods");
+    log("[INFO] === hot reload complete ===");
+    LeaveCriticalSection(&g_reload_lock);
+}
+
+static DWORD WINAPI hotkey_thread(LPVOID) {
+    while (true) {
+        if (GetAsyncKeyState(VK_F6) & 1) {
+            reload_mods();
+            Sleep(500);
+        }
+        Sleep(50);
+    }
+    return 0;
+}
+
 bool init() {
-    // Find our base directory (where the loader DLL and GD exe live)
+    InitializeCriticalSection(&g_reload_lock);
+    g_reload_lock_init = true;
+
     wchar_t exe_path[MAX_PATH];
     GetModuleFileNameW(nullptr, exe_path, MAX_PATH);
-    std::filesystem::path base_dir = std::filesystem::path(exe_path).parent_path();
+    g_base_dir = std::filesystem::path(exe_path).parent_path();
 
-    // Open log
-    auto log_path = base_dir / "loader.log";
+    auto log_path = g_base_dir / "loader.log";
     g_log = _wfopen(log_path.c_str(), L"w");
     log("[INFO] Cadence loader starting");
 
-    // Load addresses from generated/ subfolder or same directory
-    auto gen_dir = base_dir / "generated";
-    if (!std::filesystem::exists(gen_dir)) gen_dir = base_dir;
+    crash::init();
+    log("[INFO] crash handler installed");
+
+    auto gen_dir = g_base_dir / "generated";
+    if (!std::filesystem::exists(gen_dir)) gen_dir = g_base_dir;
 
     if (!load_addresses(gen_dir)) {
         log("[ERROR] no address file found — mods will not be able to resolve functions");
     }
     load_layout_hashes(gen_dir);
 
-    // Load mods
-    load_mods(base_dir / "mods");
+    load_mods(g_base_dir / "mods");
+
+    CreateThread(nullptr, 0, hotkey_thread, nullptr, 0, nullptr);
+    log("[INFO] hot reload ready (press F6)");
 
     log("[INFO] loader init complete");
     return true;

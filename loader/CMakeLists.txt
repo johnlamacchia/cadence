@@ -30,6 +30,7 @@ add_library(loader SHARED
     src/proxy.cpp
     src/loader.cpp
     src/hook.cpp
+    src/crash.cpp
     "${PROXY_OBJ}"
 )
 
@@ -43,7 +44,7 @@ set_target_properties(loader PROPERTIES
     PREFIX ""
 )
 
-target_link_libraries(loader PRIVATE Zydis)
+target_link_libraries(loader PRIVATE Zydis dbghelp)
 target_include_directories(loader PUBLIC include)
 target_include_directories(loader PRIVATE src)
 
