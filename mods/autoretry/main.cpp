@@ -3,7 +3,7 @@
 #include <sdk.h>
 #include <windows.h>
 
-static bool g_autoretry = true;
+static bool g_autoretry = false;
 static bool g_in_level = false;
 static volatile bool g_running = true;
 static HANDLE g_thread = nullptr;

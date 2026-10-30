@@ -1,4 +1,6 @@
 // Hitbox viewer — press H to toggle debug hitbox rendering.
+// Hooks shouldDrawDebugHitboxes to force-return true, AND calls
+// toggleDebugDraw to ensure GD actually starts rendering them.
 #include <sdk.h>
 #include <windows.h>
 
@@ -7,10 +9,16 @@ static volatile bool g_running = true;
 static HANDLE g_thread = nullptr;
 
 static bool(__fastcall* orig_shouldDraw)(void* self);
+static bool(__fastcall* orig_shouldDrawBase)(void* self);
 
 static bool __fastcall hook_shouldDraw(void* self) {
     if (g_show_hitboxes) return true;
     return orig_shouldDraw(self);
+}
+
+static bool __fastcall hook_shouldDrawBase(void* self) {
+    if (g_show_hitboxes) return true;
+    return orig_shouldDrawBase(self);
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
@@ -36,6 +44,10 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::hook_typed(
         "PlayLayer::shouldDrawDebugHitboxes()",
         hook_shouldDraw, &orig_shouldDraw);
+
+    cadence::hook_typed(
+        "GJBaseGameLayer::shouldDrawDebugHitboxes()",
+        hook_shouldDrawBase, &orig_shouldDrawBase);
 
     g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
 }

@@ -25,12 +25,12 @@ static void apply_speed() {
 
 static DWORD WINAPI key_thread(LPVOID) {
     while (g_running) {
-        if (GetAsyncKeyState(VK_OEM_PLUS) & 1) {
+        if ((GetAsyncKeyState(VK_OEM_PLUS) & 1) || (GetAsyncKeyState(VK_ADD) & 1)) {
             g_speed += 0.25f;
             if (g_speed > 5.0f) g_speed = 5.0f;
             apply_speed();
         }
-        if (GetAsyncKeyState(VK_OEM_MINUS) & 1) {
+        if ((GetAsyncKeyState(VK_OEM_MINUS) & 1) || (GetAsyncKeyState(VK_SUBTRACT) & 1)) {
             g_speed -= 0.25f;
             if (g_speed < 0.25f) g_speed = 0.25f;
             apply_speed();
