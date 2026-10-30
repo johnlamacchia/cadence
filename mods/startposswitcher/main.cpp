@@ -1,10 +1,11 @@
-// Start position switcher — press [ and ] to cycle through start positions.
-// Hooks PlayLayer::init to capture the level data, uses resetLevel to apply.
+// Start position switcher — press [ and ] to quick-reset the level.
 #include <sdk.h>
 #include <windows.h>
 
 static bool g_in_level = false;
 static void* g_playlayer = nullptr;
+static volatile bool g_running = true;
+static HANDLE g_thread = nullptr;
 
 using resetLevel_t = void(__fastcall*)(void* self);
 static resetLevel_t fn_resetLevel = nullptr;
@@ -29,12 +30,12 @@ static void __fastcall hook_PlayLayer_onQuit(void* self) {
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
-    while (true) {
+    while (g_running) {
         if (g_in_level && g_playlayer && fn_resetLevel) {
-            if (GetAsyncKeyState(VK_OEM_4) & 1) { // [
+            if (GetAsyncKeyState(VK_OEM_4) & 1) {
                 fn_resetLevel(g_playlayer);
             }
-            if (GetAsyncKeyState(VK_OEM_6) & 1) { // ]
+            if (GetAsyncKeyState(VK_OEM_6) & 1) {
                 fn_resetLevel(g_playlayer);
             }
         }
@@ -44,12 +45,15 @@ static DWORD WINAPI key_thread(LPVOID) {
 }
 
 extern "C" __declspec(dllexport) void mod_unload() {
+    g_running = false;
+    if (g_thread) { WaitForSingleObject(g_thread, 2000); CloseHandle(g_thread); g_thread = nullptr; }
     g_in_level = false;
     g_playlayer = nullptr;
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
+    g_running = true;
 
     fn_resetLevel = (resetLevel_t)cadence::addr("PlayLayer::resetLevel()");
 
@@ -61,5 +65,5 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
         "PlayLayer::onQuit()",
         hook_PlayLayer_onQuit, &orig_PlayLayer_onQuit);
 
-    CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
+    g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
 }

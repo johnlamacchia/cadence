@@ -1,10 +1,10 @@
 // Speed hack — press + to speed up, - to slow down, 0 to reset.
-// Uses cocos2d's CCScheduler::setTimeScale.
 #include <sdk.h>
 #include <windows.h>
-#include <cstdio>
 
 static float g_speed = 1.0f;
+static volatile bool g_running = true;
+static HANDLE g_thread = nullptr;
 
 using getScheduler_t = void* (__fastcall*)(void*);
 using setTimeScale_t = void(__fastcall*)(void*, float);
@@ -24,7 +24,7 @@ static void apply_speed() {
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
-    while (true) {
+    while (g_running) {
         if (GetAsyncKeyState(VK_OEM_PLUS) & 1) {
             g_speed += 0.25f;
             if (g_speed > 5.0f) g_speed = 5.0f;
@@ -45,12 +45,15 @@ static DWORD WINAPI key_thread(LPVOID) {
 }
 
 extern "C" __declspec(dllexport) void mod_unload() {
+    g_running = false;
+    if (g_thread) { WaitForSingleObject(g_thread, 2000); CloseHandle(g_thread); g_thread = nullptr; }
     g_speed = 1.0f;
     apply_speed();
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
+    g_running = true;
 
     HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
     if (!cocos) return;
@@ -62,5 +65,5 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     g_setTimeScale = (setTimeScale_t)GetProcAddress(cocos,
         "?setTimeScale@CCScheduler@cocos2d@@QEAAXM@Z");
 
-    CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
+    g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
 }

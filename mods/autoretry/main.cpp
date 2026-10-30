@@ -5,6 +5,8 @@
 
 static bool g_autoretry = true;
 static bool g_in_level = false;
+static volatile bool g_running = true;
+static HANDLE g_thread = nullptr;
 
 using resetLevel_t = void(__fastcall*)(void* self);
 static resetLevel_t fn_resetLevel = nullptr;
@@ -33,7 +35,7 @@ static void __fastcall hook_PlayLayer_onQuit(void* self) {
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
-    while (true) {
+    while (g_running) {
         if (GetAsyncKeyState('T') & 1) {
             g_autoretry = !g_autoretry;
         }
@@ -43,11 +45,14 @@ static DWORD WINAPI key_thread(LPVOID) {
 }
 
 extern "C" __declspec(dllexport) void mod_unload() {
+    g_running = false;
+    if (g_thread) { WaitForSingleObject(g_thread, 2000); CloseHandle(g_thread); g_thread = nullptr; }
     g_in_level = false;
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
+    g_running = true;
 
     fn_resetLevel = (resetLevel_t)cadence::addr("PlayLayer::resetLevel()");
 
@@ -63,5 +68,5 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
         "PlayLayer::onQuit()",
         hook_PlayLayer_onQuit, &orig_PlayLayer_onQuit);
 
-    CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
+    g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
 }
