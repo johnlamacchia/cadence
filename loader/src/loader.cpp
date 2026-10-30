@@ -216,8 +216,6 @@ struct ModInfo {
 
 static std::vector<ModInfo> g_loaded_mods;
 static std::filesystem::path g_base_dir;
-static CRITICAL_SECTION g_reload_lock;
-static bool g_reload_lock_init = false;
 
 static bool check_mod_hashes(HMODULE mod, const std::string& mod_name) {
     // Mod exports: const char* mod_layout_hashes() → JSON string of class→hash
@@ -301,29 +299,27 @@ static void load_mods(const std::filesystem::path& mods_dir) {
     }
 }
 
-static void show_reload_toast(int mod_count) {
-    HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
-    if (!cocos) return;
+// --- Main-thread reload via drawScene hook ---
 
-    using sharedDirector_t = void* (*)();
+static volatile bool g_reload_pending = false;
+static void(__fastcall* orig_drawScene)(void*) = nullptr;
+
+static void show_reload_toast(void* director, int mod_count) {
     using getRunningScene_t = void* (__fastcall*)(void*);
     using addChild_t = void(__fastcall*)(void*, void*, int);
 
-    auto sharedDirector = (sharedDirector_t)GetProcAddress(cocos,
-        "?sharedDirector@CCDirector@cocos2d@@SAPEAV12@XZ");
+    HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
+    if (!cocos) return;
+
     auto getRunningScene = (getRunningScene_t)GetProcAddress(cocos,
         "?getRunningScene@CCDirector@cocos2d@@QEAAPEAVCCScene@2@XZ");
     auto addChild = (addChild_t)GetProcAddress(cocos,
         "?addChild@CCNode@cocos2d@@UEAAXPEAV12@H@Z");
+    if (!getRunningScene || !addChild) return;
 
-    if (!sharedDirector || !getRunningScene || !addChild) return;
-
-    void* director = sharedDirector();
-    if (!director) return;
     void* scene = getRunningScene(director);
     if (!scene) return;
 
-    // TextAlertPopup::create(std::string text, float delay, float scale, int opacity, std::string font)
     uintptr_t image_base = (uintptr_t)GetModuleHandleW(nullptr);
     using TextAlertPopup_create_t = void* (*)(std::string*, float, float, int, std::string*);
     auto textAlertCreate = (TextAlertPopup_create_t)(image_base + 0x3a8760);
@@ -339,22 +335,27 @@ static void show_reload_toast(int mod_count) {
     }
 }
 
+static void __fastcall hook_drawScene(void* director) {
+    if (g_reload_pending) {
+        g_reload_pending = false;
+        log("[INFO] === hot reload triggered ===");
+        unload_all_mods();
+        load_mods(g_base_dir / "mods");
+        int count = (int)g_loaded_mods.size();
+        log("[INFO] === hot reload complete ===");
+        show_reload_toast(director, count);
+    }
+    orig_drawScene(director);
+}
+
 void reload_mods() {
-    if (!g_reload_lock_init) return;
-    EnterCriticalSection(&g_reload_lock);
-    log("[INFO] === hot reload triggered ===");
-    unload_all_mods();
-    load_mods(g_base_dir / "mods");
-    int count = (int)g_loaded_mods.size();
-    log("[INFO] === hot reload complete ===");
-    show_reload_toast(count);
-    LeaveCriticalSection(&g_reload_lock);
+    g_reload_pending = true;
 }
 
 static DWORD WINAPI hotkey_thread(LPVOID) {
     while (true) {
         if (GetAsyncKeyState(VK_F6) & 1) {
-            reload_mods();
+            g_reload_pending = true;
             Sleep(500);
         }
         Sleep(50);
@@ -362,10 +363,16 @@ static DWORD WINAPI hotkey_thread(LPVOID) {
     return 0;
 }
 
-bool init() {
-    InitializeCriticalSection(&g_reload_lock);
-    g_reload_lock_init = true;
+static bool install_drawscene_hook() {
+    HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
+    if (!cocos) return false;
+    void* drawScene = (void*)GetProcAddress(cocos,
+        "?drawScene@CCDirector@cocos2d@@QEAAXXZ");
+    if (!drawScene) return false;
+    return hook::install(drawScene, (void*)hook_drawScene, (void**)&orig_drawScene);
+}
 
+bool init() {
     wchar_t exe_path[MAX_PATH];
     GetModuleFileNameW(nullptr, exe_path, MAX_PATH);
     g_base_dir = std::filesystem::path(exe_path).parent_path();
@@ -387,6 +394,9 @@ bool init() {
 
     load_mods(g_base_dir / "mods");
 
+    if (install_drawscene_hook()) {
+        log("[INFO] drawScene hook installed for main-thread reload");
+    }
     CreateThread(nullptr, 0, hotkey_thread, nullptr, 0, nullptr);
     log("[INFO] hot reload ready (press F6)");
 
