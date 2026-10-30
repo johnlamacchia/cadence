@@ -11,11 +11,26 @@
 //   4. Unhook
 //   5. Log to the shared loader.log
 //   6. Query the current GD version
+//
+// Plus two tiny header-only helpers: cadence::play_layer() (the live
+// PlayLayer, never dangling) and cadence::key_pressed() (focus-aware edge
+// detection, no polling thread needed).
 
 #pragma once
+#include <cstddef>
 #include <cstdint>
 #include <cstdarg>
 #include <cstdio>
+
+#ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#endif
 
 // ── Mod metadata ─────────────────────────────────────────────────────
 
@@ -112,6 +127,46 @@ inline const ModEntry* get_mods(int* count) {
     if (!g_api || !g_api->get_mods) { *count = 0; return nullptr; }
     return g_api->get_mods(g_api, count);
 }
+
+// ── Verified GD 2.2091 field offsets ──────────────────────────────────
+// Every value here was read out of the shipped binary (the generated headers'
+// field order is NOT reliable for offsets). `python tools/offset_probe.py`
+// re-derives them, so run it after a GD update.
+namespace off {
+    inline constexpr size_t game_manager_play_layer     = 0x230;  // GameManager::m_playLayer
+    inline constexpr size_t play_layer_is_practice_mode = 0x32E0; // PlayLayer::m_isPracticeMode
+    inline constexpr size_t ui_layer_pause_btn          = 0x238;  // UILayer::m_pauseBtn
+    inline constexpr size_t ui_layer_game_layer         = 0x258;  // UILayer::m_gameLayer
+}
+
+// The live PlayLayer, or nullptr when no level is loaded. Main thread only.
+// Prefer this over caching a pointer in PlayLayer::init/onQuit: the game
+// clears this field in ~PlayLayer, so it can never dangle.
+inline void* play_layer() {
+    using shared_t = void* (*)();
+    static shared_t shared = nullptr;
+    if (!shared) shared = (shared_t)addr("GameManager::sharedState()");
+    if (!shared) return nullptr;
+    char* gm = (char*)shared();
+    return gm ? *(void**)(gm + off::game_manager_play_layer) : nullptr;
+}
+
+#ifdef _WIN32
+// Edge-triggered key press (true once per physical press). Call it at most
+// once per frame per key from a main-thread hook such as CCDirector::drawScene.
+// Returns false while GD is not the foreground window, so typing in other
+// apps never triggers your mod. State is kept per mod DLL.
+inline bool key_pressed(int vk) {
+    static bool was_down[256] = {};
+    if (vk < 0 || vk > 255) return false;
+    DWORD pid = 0;
+    GetWindowThreadProcessId(GetForegroundWindow(), &pid);
+    bool down = pid == GetCurrentProcessId() && (GetAsyncKeyState(vk) & 0x8000) != 0;
+    bool pressed = down && !was_down[vk];
+    was_down[vk] = down;
+    return pressed;
+}
+#endif
 
 // Type-safe hook helper.
 // Usage:

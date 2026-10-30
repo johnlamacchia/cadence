@@ -27,9 +27,6 @@ static setAnchorPoint_t      fn_setAnchorPoint   = nullptr;
 static void* g_panel = nullptr;
 static void* g_menu_scene = nullptr;
 static bool g_visible = false;
-static volatile bool g_toggle_pending = false;
-static volatile bool g_running = true;
-static HANDLE g_thread = nullptr;
 
 static void(__fastcall* orig_drawScene)(void*);
 
@@ -133,8 +130,7 @@ static void build_menu(void* scene) {
 }
 
 static void __fastcall hook_drawScene(void* director) {
-    if (g_toggle_pending) {
-        g_toggle_pending = false;
+    if (cadence::key_pressed(VK_INSERT)) {
         g_visible = !g_visible;
 
         if (g_visible) {
@@ -157,33 +153,17 @@ static void __fastcall hook_drawScene(void* director) {
     orig_drawScene(director);
 }
 
-static DWORD WINAPI key_thread(LPVOID) {
-    bool was_down = false;
-    while (g_running) {
-        bool is_down = (GetAsyncKeyState(VK_INSERT) & 0x8000) != 0;
-        if (is_down && !was_down) {
-            g_toggle_pending = true;
-        }
-        was_down = is_down;
-        Sleep(30);
-    }
-    return 0;
-}
-
 extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"({"name":"Mod Menu","desc":"In-game mod list overlay","key":"Insert","ver":"1.0"})";
+    return R"({"name":"Mod Menu","desc":"In-game mod list overlay","key":"Insert","ver":"1.1"})";
 }
 
 extern "C" __declspec(dllexport) void mod_unload() {
-    g_running = false;
-    if (g_thread) { WaitForSingleObject(g_thread, 2000); CloseHandle(g_thread); g_thread = nullptr; }
     destroy_menu();
     g_visible = false;
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-    g_running = true;
 
     fn_sharedDirector  = (sharedDirector_t)cadence::cocos("?sharedDirector@CCDirector@cocos2d@@SAPEAV12@XZ");
     fn_getRunningScene = (getRunningScene_t)cadence::cocos("?getRunningScene@CCDirector@cocos2d@@QEAAPEAVCCScene@2@XZ");
@@ -205,6 +185,5 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
         cadence::hook(drawScene, (void*)hook_drawScene, (void**)&orig_drawScene);
     }
 
-    g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
     cadence::log("modmenu: initialized, press Insert to open");
 }

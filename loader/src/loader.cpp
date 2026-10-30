@@ -7,6 +7,7 @@
 #include <vector>
 #include <filesystem>
 #include <fstream>
+#include <intrin.h>
 #include <psapi.h>
 
 // Minimal JSON value reader (no dependencies)
@@ -150,8 +151,18 @@ static bool api_hook(const LoaderAPI*, void* target, void* detour, void** origin
     return hook::install(target, detour, original);
 }
 
-static bool api_unhook(const LoaderAPI*, void* target) {
-    return hook::remove(target);
+// Removes the calling mod's hooks on `target` (other mods' hooks are untouched).
+// The caller is identified by the return address, so the mod API stays unchanged.
+__declspec(noinline) static bool api_unhook(const LoaderAPI*, void* target) {
+    HMODULE caller = nullptr;
+    if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                            GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                            (LPCWSTR)_ReturnAddress(), &caller))
+        return false;
+    MODULEINFO mi;
+    if (!GetModuleInformation(GetCurrentProcess(), caller, &mi, sizeof(mi))) return false;
+    uintptr_t lo = (uintptr_t)mi.lpBaseOfDll;
+    return hook::remove_in_range(target, lo, lo + mi.SizeOfImage) > 0;
 }
 
 static const char* api_gd_version(const LoaderAPI*) {
@@ -316,6 +327,16 @@ static bool check_mod_hashes(HMODULE mod, const std::string& mod_name) {
     return true;
 }
 
+// Mods are loaded from shadow copies in mods/.cadence-cache/, so the originals
+// in mods/ are never locked and can be rebuilt while the game is running.
+static std::filesystem::path g_cache_dir;
+static int g_generation = 0;
+
+// Hot reload runs inside the drawScene hook chain, so a retired mod's own
+// detours can still be on the call stack, and UI it created (button callbacks,
+// scheduled selectors) can still point into its code. Unmapping it would turn
+// either into a crash. So a retired mod gets mod_unload() and has every hook
+// removed, but its DLL stays mapped for the rest of the session (a few KB).
 static void unload_all_mods() {
     for (auto it = g_loaded_mods.rbegin(); it != g_loaded_mods.rend(); ++it) {
         auto unload = (ModUnloadFunc)GetProcAddress(it->handle, "mod_unload");
@@ -331,8 +352,7 @@ static void unload_all_mods() {
             if (removed > 0)
                 log("[INFO] removed %d hooks from '%s'", removed, it->filename.c_str());
         }
-        FreeLibrary(it->handle);
-        log("[INFO] unloaded '%s'", it->filename.c_str());
+        log("[INFO] retired '%s'", it->filename.c_str());
     }
     g_loaded_mods.clear();
     g_mod_entries.clear();
@@ -352,9 +372,21 @@ static void load_mods(const std::filesystem::path& mods_dir) {
     }
     std::sort(dlls.begin(), dlls.end());
 
+    std::error_code ec;
+    std::filesystem::create_directories(g_cache_dir, ec);
+    g_generation++;
+
     for (auto& dll_path : dlls) {
         auto mod_name = dll_path.filename().string();
-        HMODULE mod = LoadLibraryW(dll_path.c_str());
+
+        auto shadow = g_cache_dir / (dll_path.stem().wstring() + L"." + std::to_wstring(g_generation) + L".dll");
+        std::filesystem::copy_file(dll_path, shadow, std::filesystem::copy_options::overwrite_existing, ec);
+        if (ec) {
+            log("[WARN] could not shadow-copy '%s' (%s), loading in place", mod_name.c_str(), ec.message().c_str());
+            shadow = dll_path;
+        }
+
+        HMODULE mod = LoadLibraryW(shadow.c_str());
         if (!mod) {
             log("[ERROR] failed to load mod '%s': error %lu", mod_name.c_str(), GetLastError());
             continue;
@@ -475,6 +507,14 @@ bool init() {
 
     crash::init();
     log("[INFO] crash handler installed");
+
+    g_cache_dir = g_base_dir / "mods" / ".cadence-cache";
+    {
+        // Clear shadow copies from previous sessions (locked ones just stay).
+        std::error_code ec;
+        for (auto& e : std::filesystem::directory_iterator(g_cache_dir, ec))
+            std::filesystem::remove(e.path(), ec);
+    }
 
     auto gen_dir = g_base_dir / "generated";
     if (!std::filesystem::exists(gen_dir)) gen_dir = g_base_dir;

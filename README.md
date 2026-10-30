@@ -1,457 +1,239 @@
 # Cadence
 
-Minimal mod loader + SDK for Geometry Dash 2.2091 (Windows x64).
+A minimal mod loader and SDK for **Geometry Dash 2.2091** (Windows x64).
 
-No utility libraries, no framework opinions. The loader does three things: loads mod DLLs, resolves GD function addresses, and installs hooks. Everything else is up to you.
-
-## Quick start
-
-### Requirements
-
-- **Visual Studio 2022 Build Tools** with C++ desktop workload (MSVC v143, Windows SDK)
-- **CMake 3.20+**
-- **Python 3.10+** (for codegen only)
-
-### Build
-
-```powershell
-# Generate bindings (one-time, or after updating .bro files)
-cd codegen
-python generate.py ..\..\bindings\bindings 2.2091
-
-# Build everything — loader + all 17 mods
-cd ..
-cmake -B build -G "Visual Studio 17 2022" -A x64
-cmake --build build --config Release
-```
-
-Output:
-- `build/loader/Release/winmm.dll` — the loader
-- `build/mods/<name>/Release/<name>.dll` — each mod
-
-### Install
-
-Copy to your GD folder (`C:\Program Files (x86)\Steam\steamapps\common\Geometry Dash`):
-
-```
-winmm.dll                           ← loader (from build/loader/Release/)
-generated/addresses_2.2091.json     ← address database
-generated/layout_hashes_2.2091.json ← class layout hashes
-cadence/mods/                       ← mod folder (auto-created)
-  example.dll                       ← any mod DLLs you want
-  noclip.dll
-  speedhack.dll
-  modmenu.dll                       ← in-game mod list (Tab key)
-  ...
-```
-
-Launch GD normally. The loader logs everything to `loader.log` in the GD folder.
-
-### Hot reload
-
-Press **F6** in-game to reload all mods without restarting GD. The loader:
-1. Calls `mod_unload()` on each mod (if exported)
-2. Removes all hooks the mod installed
-3. Frees the DLL
-4. Reloads all DLLs from `mods/` and calls `mod_main()` again
-
-This lets you recompile a mod, copy the DLL, and press F6 to test — no GD restart needed.
-
-### Crash handler
-
-If GD crashes, Cadence writes a crash report and minidump to the GD folder:
-- `crash_YYYYMMDD_HHMMSS.log` — human-readable: exception type, registers, stack trace with module names and offsets
-- `crash_YYYYMMDD_HHMMSS.dmp` — open in Visual Studio or WinDbg for full post-mortem debugging
-
-### Uninstall
-
-Delete `winmm.dll` from the GD folder. That's it. No registry changes, no system modifications.
-
----
-
-## Write a mod
-
-A mod is a standard Windows DLL that exports `mod_main`. That's the only requirement.
-
-### Minimal example
+The loader does three things: it loads mod DLLs, resolves GD function addresses by
+signature, and installs hooks. No event system, no settings UI, no utility library. A mod
+is one DLL with one required export, and the whole mod-facing API is one header.
 
 ```cpp
 #include <sdk.h>
 
-// Store the original function pointer so we can call through
-static bool(__fastcall* orig_MenuLayer_init)(void* self);
-
-// Your hook — same signature as the original, with __fastcall
-static bool __fastcall hook_MenuLayer_init(void* self) {
-    bool ret = orig_MenuLayer_init(self);  // call original first
-    // ... do your thing after init ...
-    return ret;
+static void(__fastcall* orig_resetLevel)(void* self);
+static void __fastcall hook_resetLevel(void* self) {
+    cadence::log("level reset");
+    orig_resetLevel(self);
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-
-    // Resolve + hook in one call
-    cadence::hook_typed("MenuLayer::init()",
-        hook_MenuLayer_init, &orig_MenuLayer_init);
+    cadence::hook_typed("PlayLayer::resetLevel()", hook_resetLevel, &orig_resetLevel);
 }
 ```
 
-### CMake setup for your mod
+- **[docs/GUIDE.md](docs/GUIDE.md)**: how to write a mod that does not crash GD (read this first)
+- **[Write a mod in five minutes](#write-a-mod)** and the **[API reference](#api-reference)**
+- **[17 example mods](#example-mods)** covering the common patterns
 
-Add a directory under `mods/` with a `CMakeLists.txt`:
+## Install
 
-```cmake
-add_library(mymod MODULE main.cpp)
-target_include_directories(mymod PRIVATE ${CMAKE_SOURCE_DIR}/loader/include)
-set_target_properties(mymod PROPERTIES
-    PREFIX ""
-    OUTPUT_NAME "mymod"
-    SUFFIX ".dll"
-)
-```
+You need Geometry Dash 2.2091 on Windows.
 
-Then add `add_subdirectory(mods/mymod)` to the root `CMakeLists.txt`.
-
----
-
-## SDK API reference
-
-The entire public API lives in one header: `loader/include/sdk.h`.
-
-### C++ API (recommended)
-
-```cpp
-#include <sdk.h>
-
-// Must be called first in mod_main
-cadence::set_api(api);
-
-// Resolve a GD function address by its Broma signature string
-void* addr = cadence::addr("PlayLayer::init(GJGameLevel* level, bool dontCreateObjects)");
-
-// Hook any function — returns true on success
-// target:   address to hook
-// detour:   your replacement function (must match calling convention)
-// original: receives a trampoline pointer to call the real function
-cadence::hook(target, (void*)my_detour, (void**)&orig_fn);
-
-// Type-safe hook — resolves address + hooks in one call
-// The original pointer type is inferred from the template
-cadence::hook_typed("MenuLayer::init()", hook_init, &orig_init);
-
-// Remove a hook (usually not needed — the loader removes hooks on unload)
-cadence::unhook(target);
-
-// Resolve a cocos2d export by mangled name (no GetModuleHandle needed)
-void* fn = cadence::cocos("?setVisible@CCNode@cocos2d@@UEAAX_N@Z");
-
-// Write to the shared loader.log (printf-style)
-cadence::log("my mod loaded, speed = %.1f", speed);
-
-// Query GD version string
-const char* ver = cadence::gd_version();  // e.g. "2.2091"
-```
-
-### C API
-
-For C mods or non-C++ languages that can call C functions:
-
-```c
-void*       api->addr(api, "ClassName::funcName(params)");
-bool        api->hook_fn(api, target, detour, &original);
-bool        api->unhook_fn(api, target);
-const char* api->gd_version_fn(api);
-void*       api->cocos_addr(api, "?mangled@name@@...");
-void        api->log_fn(api, "fmt", ...);
-```
-
-Convenience macros: `GD_ADDR(api, sig)`, `GD_HOOK(api, target, det, orig)`, `GD_UNHOOK(api, target)`, `GD_VERSION(api)`, `GD_COCOS(api, name)`.
-
-### Function signatures
-
-Signatures match the keys in `generated/addresses_2.2091.json` exactly. The file contains **6855 resolved addresses** for GD 2.2091. Examples:
-
-```
-MenuLayer::init()
-PlayLayer::init(GJGameLevel* level, bool dontCreateObjects)
-PlayLayer::onQuit()
-PlayLayer::destroyPlayer(PlayerObject* player, GameObject* object)
-PlayLayer::resetLevel()
-GJBaseGameLayer::update(float dt)
-CCScheduler::update(float dt)              ← cocos2d (use GetProcAddress instead)
-UILayer::init(GJBaseGameLayer* layer)
-FLAlertLayer::create(...)
-ButtonSprite::create(...)
-```
-
-For cocos2d functions (CCNode, CCDirector, CCScheduler, etc.), use `GetProcAddress` with the mangled export name from `libcocos2d.dll` — these are native DLL exports, not in the address JSON.
-
-### Calling conventions
-
-GD is compiled with MSVC x64. All functions use `__fastcall`:
-
-| Type | `this` | Parameters |
-|------|--------|------------|
-| Member function | `rcx` | `rdx`, `r8`, `r9`, stack |
-| Static function | — | `rcx`, `rdx`, `r8`, `r9`, stack |
-| Virtual function | `rcx` | `rdx`, `r8`, `r9`, stack |
-
-Your hook signature must match: `ReturnType __fastcall hook(void* self, ...)`.
-
-**std::string by value**: MSVC passes `std::string` by value as a hidden pointer. If a GD function takes `std::string desc`, your hook takes `std::string* desc` (pointer). See the example mod's `FLAlertLayer::create` call.
-
-### Hook chaining
-
-Multiple mods can hook the same function. The hook engine chains them automatically — each mod's `original` pointer calls through to the next mod's detour, forming a chain that ends at the real function. No special code needed in your mod.
-
-### Mod lifecycle
-
-```cpp
-// Required: called after the loader resolves addresses
-extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api);
-
-// Optional: called before your DLL is unloaded (hot reload or shutdown)
-// Clean up threads, UI elements, timers. You do NOT need to unhook.
-extern "C" __declspec(dllexport) void mod_unload();
-
-// Optional: metadata for the mod menu (JSON string)
-extern "C" __declspec(dllexport) const char* mod_info();
-
-// Optional: layout hash checking (see below)
-extern "C" __declspec(dllexport) const char* mod_layout_hashes();
-```
-
-### Mod metadata (mod_info)
-
-Export `mod_info()` to give your mod a display name, description, keybind hint, and version. The mod menu reads this to show your mod in-game:
-
-```cpp
-extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"({"name":"My Mod","desc":"Does cool stuff","key":"M","ver":"1.0"})";
-}
-```
-
-Fields (all optional): `name`, `desc`, `key` (keybind hint), `ver` (version). If `mod_info` isn't exported, the mod menu shows the DLL filename instead.
-
-### Querying loaded mods
-
-```cpp
-int count = 0;
-const ModEntry* mods = cadence::get_mods(&count);
-for (int i = 0; i < count; i++) {
-    cadence::log("mod: %s by %s", mods[i].name, mods[i].author);
-}
-```
-
-`ModEntry` fields: `filename`, `name`, `author`, `description`, `keybind`, `version`, `enabled`.
-
-### Thread safety
-
-If your mod creates background threads (e.g., for key polling), you **must**:
-
-1. Use a `volatile bool g_running` flag
-2. In `mod_unload()`, set `g_running = false` and `WaitForSingleObject(thread, 2000)` before returning
-3. **Never** call GD/cocos2d functions from a background thread — cocos2d is single-threaded. Use a flag + main-thread dispatch pattern instead:
-
-```cpp
-static volatile bool g_toggle_pending = false;
-
-// Background thread: only sets flags
-static DWORD WINAPI key_thread(LPVOID) {
-    while (g_running) {
-        if (GetAsyncKeyState('N') & 1) g_toggle_pending = true;
-        Sleep(50);
-    }
-    return 0;
-}
-
-// Main thread hook: processes flags safely
-static void __fastcall hook_drawScene(void* director) {
-    if (g_toggle_pending) {
-        g_toggle_pending = false;
-        // Safe to call GD functions here — we're on the GL thread
-        do_the_thing();
-    }
-    orig_drawScene(director);
-}
-```
-
-### Hooking cocos2d functions
-
-Use `cadence::cocos()` to resolve exports from `libcocos2d.dll` by their MSVC-mangled name:
-
-```cpp
-// CCScheduler::update — runs every frame, good for per-frame logic
-void* schedUpdate = cadence::cocos("?update@CCScheduler@cocos2d@@UEAAXM@Z");
-
-// CCDirector::drawScene — runs every frame, good for occasional dispatch
-void* drawScene = cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ");
-
-// CCNode operations
-auto fn_addChild   = (addChild_t)cadence::cocos("?addChild@CCNode@cocos2d@@UEAAXPEAV12@H@Z");
-auto fn_setPos     = (setPos_t)cadence::cocos("?setPosition@CCNode@cocos2d@@UEAAXMM@Z");
-auto fn_setVisible = (setVis_t)cadence::cocos("?setVisible@CCNode@cocos2d@@UEAAX_N@Z");
-auto fn_setScale   = (setScale_t)cadence::cocos("?setScale@CCNode@cocos2d@@UEAAXM@Z");
-auto fn_remove     = (remove_t)cadence::cocos("?removeChild@CCNode@cocos2d@@UEAAXPEAV12@_N@Z");
-
-// CCLabelBMFont::create
-auto fn_label = (label_t)cadence::cocos("?create@CCLabelBMFont@cocos2d@@SAPEAV12@PEBD0@Z");
-
-// CCDirector — for adding UI to the current scene
-auto fn_director = (dir_t)cadence::cocos("?sharedDirector@CCDirector@cocos2d@@SAPEAV12@XZ");
-auto fn_scene    = (scene_t)cadence::cocos("?getRunningScene@CCDirector@cocos2d@@QEAAPEAVCCScene@2@XZ");
-
-// CCMenu::create
-auto fn_menu = (menu_t)cadence::cocos("?create@CCMenu@cocos2d@@SAPEAV12@XZ");
-
-// Then hook it like any other function:
-cadence::hook(schedUpdate, (void*)my_hook, (void**)&orig_scheduler_update);
-```
-
-### Layout hash checking
-
-If your mod reads GD class member fields (offsets), export a layout hash so the loader can refuse to load your mod if class layouts change:
-
-```cpp
-extern "C" __declspec(dllexport) const char* mod_layout_hashes() {
-    return R"({"PlayLayer":"a1b2c3d4","UILayer":"e5f6a7b8"})";
-}
-```
-
-Get hash values from `generated/layout_hashes_2.2091.json`.
-
----
-
-## Commonly used GD offsets
-
-These are member offsets confirmed for GD 2.2091 via IDA analysis. Use layout hashes if you rely on them.
-
-| Class | Offset | Type | Field |
-|-------|--------|------|-------|
-| PlayLayer | 0x3358 | bool | m_isPracticeMode |
-| PlayLayer | 0x3870 | CCDrawNode* | debug draw node |
-| UILayer | 0x280 | CCMenuItemSpriteExtra* | m_pauseBtn |
-
----
-
-## Update after a GD patch
-
-When GD updates (e.g. 2.2091 to 2.2092):
+**From a release zip**
 
 ```powershell
-python tools/sdk_update.py --old 2.2091 --new 2.2092
+powershell -File install.ps1                          # auto-detects the Steam install
+powershell -File install.ps1 -GdDir "D:\Games\Geometry Dash"
 ```
 
-This:
-1. Copies the new exe to `binaries/2.2092/`
-2. Fingerprints and matches functions (~96% automated)
-3. Regenerates headers if bindings exist
-4. Shows which class layouts changed (update your offset assumptions!)
-5. Lists unmatched functions for manual IDA work
+**From source**
 
-### Add a missing address
+Requirements: Visual Studio 2022 Build Tools (C++ desktop workload), CMake 3.20+.
 
-If a function wasn't matched automatically, find it in IDA and add to `generated/addresses.local.json`:
-
-```json
-{
-    "SomeClass::someFunc(int param)": "0x12ab34"
-}
+```powershell
+cmake -B build -G "Visual Studio 17 2022" -A x64
+cmake --build build --config Release
+powershell -File tools/install.ps1
 ```
 
-Local overrides merge at load time. Mods reference functions by signature string — never by baked-in address — so they keep working across GD versions as long as the address JSON is updated.
-
----
-
-## How the proxy works
-
-The loader ships as `winmm.dll` (a Windows multimedia DLL). When placed in the GD folder, Windows loads it instead of the system copy via DLL search order. All 180 winmm exports are forwarded to the real `C:\Windows\System32\winmm.dll` using MASM jump stubs. The loader initializes during `DllMain`, then GD starts normally with zero overhead.
-
-The loader hooks nothing in GD itself (except `CCDirector::drawScene` for hot reload dispatch). Mods decide what to hook.
-
-### Hook engine
-
-The hook engine uses x64 trampoline hooking with [Zydis](https://github.com/zyantific/zydis) v4.1.0 for instruction decoding and relocation. Each hook:
-
-1. Decodes enough instructions at the target to fit a 14-byte absolute jump (`ff 25` + 8-byte address)
-2. Allocates a trampoline within +/-2GB of the target (for RIP-relative instruction relocation)
-3. Copies and relocates the original instructions to the trampoline
-4. Appends a jump back to the remaining original code
-5. Overwrites the target with a jump to your detour
-
-RIP-relative instructions (memory operands, branches, calls) are properly relocated. Conditional jumps use an inverted-condition-over-absolute-jump pattern.
-
----
-
-## Project structure
+This puts `winmm.dll` (the loader), `generated/` (the address database) and the example
+mods into your GD folder:
 
 ```
-cadence/
-+-- binaries/                  versioned GD exe copies
-+-- codegen/                   Broma parser + header/address generator
-+-- generated/
-|   +-- addresses_2.2091.json  6855 function addresses
-|   +-- layout_hashes_*.json   class layout fingerprints
-|   +-- include/gd/            generated C++ headers per GD class
-+-- loader/
-|   +-- include/sdk.h          entire public API (one file)
-|   +-- src/
-|       +-- loader.cpp         mod loading, address resolution, hot reload
-|       +-- hook.cpp           x64 trampoline hook engine
-|       +-- hook.h
-|       +-- crash.cpp          vectored exception handler + minidump
-|       +-- proxy.asm          180 winmm export forwarding stubs (MASM)
-+-- mods/                      17 example mods (see below)
-+-- tools/                     sdk update command
+Geometry Dash/
+  winmm.dll                        the loader
+  generated/addresses_2.2091.json  6855 function addresses
+  generated/layout_hashes_2.2091.json
+  mods/*.dll                       your mods
+  loader.log                       what the loader did (created at runtime)
 ```
 
----
+Launch GD normally. **Uninstall:** `install.ps1 -Uninstall` (deletes `winmm.dll`; no registry
+or system changes).
+
+## Write a mod
+
+```powershell
+python tools/new_mod.py my_mod                    # scaffolds mods/my_mod/
+cmake -B build -A x64
+cmake --build build --config Release --target my_mod_mod
+copy build\mods\my_mod\Release\my_mod.dll "<Geometry Dash>\mods\"
+```
+
+Press **F6** in game to load it. Edit, rebuild, copy the DLL over the old one (it is not
+locked), press F6 again. To develop outside this repo, copy `template/` and configure it with
+`-DCADENCE_SDK_DIR=<path to cadence>`.
+
+Every directory under `mods/` with a `CMakeLists.txt` is built automatically; a mod's
+CMakeLists is one line: `cadence_add_mod(my_mod main.cpp)`.
+
+## API reference
+
+All of it is in [`loader/include/sdk.h`](loader/include/sdk.h).
+
+### Lifecycle exports (your DLL)
+
+| Export | Required | Purpose |
+|---|---|---|
+| `void mod_main(const LoaderAPI*)` | yes | Called once after load. Call `cadence::set_api(api)` first. |
+| `void mod_unload()` | no | Called before a reload. Undo anything the loader cannot (hidden nodes, flipped flags). Hooks are removed for you. |
+| `const char* mod_info()` | no | JSON for the mod menu: `{"name","author","desc","key","ver"}`, all optional. |
+| `const char* mod_layout_hashes()` | no | `{"PlayLayer":"<hash>"}`; the loader refuses the mod if a class layout changed. |
+
+### Functions (`namespace cadence`)
+
+| Call | What it does |
+|---|---|
+| `addr("Class::fn(args)")` | Address of a GD function; the string is a key in `addresses_2.2091.json`. `nullptr` (and a log warning) if unknown. |
+| `hook(target, detour, &orig)` | Install a hook. `orig` receives the next function in the chain. Hooks from many mods on one function chain automatically. |
+| `hook_typed("Class::fn(args)", detour, &orig)` | `addr` + `hook` in one call. |
+| `unhook(target)` | Remove *your* hooks on `target`. Rarely needed: reload removes them. |
+| `cocos("?mangled@name@@...")` | Export from `libcocos2d.dll` (CCNode, CCDirector, CCScheduler, ...). |
+| `play_layer()` | The live `PlayLayer*`, or `nullptr` outside a level. Never stale. Game thread only. |
+| `key_pressed(vk)` | True once per physical press, only while GD is focused. Call once per key per frame from a game-thread hook. |
+| `log(fmt, ...)` | printf-style line in `loader.log`. |
+| `gd_version()` | `"2.2091"`. |
+| `get_mods(&count)` | The loaded mods: `filename, name, author, description, keybind, version, enabled`. |
+| `off::...` | Verified field offsets (see the guide). |
+
+The same functions are available as a C API on `LoaderAPI` (`addr`, `hook_fn`, `unhook_fn`,
+`cocos_addr`, `log_fn`, `gd_version_fn`, `get_mods`) with `GD_ADDR` / `GD_HOOK` / ... macros.
+
+### Calling convention
+
+GD is MSVC x64. A hook is `Ret __fastcall hook(void* self, args...)`. `std::string` by value
+is passed as `std::string*`. See the guide for the other ABI traps.
+
+## Hot reload and crash reports
+
+- **F6** unloads and reloads all mods without restarting. Mods are loaded from copies in
+  `mods/.cadence-cache/`, so `mods/*.dll` is never locked and can be rebuilt while GD runs.
+  Hook chains are relinked correctly when a mod in the middle is removed. Details in the
+  [guide](docs/GUIDE.md#hot-reload).
+- On a fatal exception the loader writes `crash_<time>.log` (exception, registers, stack with
+  module+offset) and a `.dmp` into the GD folder.
 
 ## Example mods
 
-Cadence ships with 17 example mods covering common modding patterns. Drop any combination into your GD `cadence/mods/` folder:
+Press keys while **in a level** with GD focused unless noted.
 
-| Mod | Description | Toggle | Default |
-|-----|------------|--------|---------|
-| `example` | Adds a "Hello" button to the main menu with an alert dialog | always on | ON |
-| `fpsdisplay` | On-screen FPS counter (top-left, persists across scenes) | always on | ON |
-| `noclip` | Prevents player death — pass through all obstacles | **N** | OFF |
-| `speedhack` | Change game speed (0.25x to 5x) — shows in title bar | **+/-** speed, **0** reset | 1x |
-| `practicemusic` | Plays normal music in practice mode instead of practice track | always on | ON |
-| `instantrestart` | Press R to instantly restart the current level | **R** | ON |
-| `hitboxes` | Toggle debug hitbox rendering for all game objects | **H** | OFF |
-| `autoretry` | Auto-restart on death (skips the death animation) | **T** | OFF |
-| `startposswitcher` | Quick level reset from current position | **[ / ]** | ON |
-| `pausecountdown` | 3-2-1 countdown in the title bar after unpausing | always on | ON |
-| `attemptcounter` | Tracks attempts per session, shows count on level quit | always on | ON |
-| `anticheat` | Bypasses GD's spawn abuse check | always on | ON |
-| `hidepause` | Hides the pause button for a cleaner HUD | **P** | OFF |
-| `noglow` | Removes glitter/glow effects from objects | always on | ON |
-| `hideground` | Hides ground and mid-ground decoration lines | **V** | OFF |
-| `hideattempts` | Hides the attempt counter label in-game | always on | ON |
-| `modmenu` | In-game overlay showing all loaded mods with keybinds | **Tab** | OFF |
+| Mod | What it does | Key |
+|---|---|---|
+| `example` | "Hello" button on the main menu that opens an alert | button |
+| `modmenu` | In-game overlay listing every loaded mod with its keybind | **Insert** |
+| `fpsdisplay` | FPS counter, top-left, on every scene | always on |
+| `hitboxes` | Show the game's debug hitboxes | **H** |
+| `noclip` | Survive all hazards | **N** |
+| `autoretry` | Restart immediately on death | **T** |
+| `speedhack` | Game speed 0.25x to 5x (title bar shows it) | **+** / **-** / **0** |
+| `startposswitcher` | Restart the level | **[** or **]** |
+| `instantrestart` | Restart the level | **R** |
+| `hideground` | Hide ground and mid-ground lines | **V** |
+| `hidepause` | Hide the on-screen pause button | **P** |
+| `pausecountdown` | 3-2-1 on screen after pressing Resume | always on |
+| `practicemusic` | Normal music in practice mode | always on |
+| `attemptcounter` | Counts attempts, shows the total in the title bar on quit | always on |
+| `noglow` | Remove glitter/glow effects | always on |
+| `hideattempts` | Hide the in-level attempt label | always on |
+| `anticheat` | Bypass the spawn-abuse check | always on |
 
-All mods with a toggle key can be toggled live during gameplay. Multiple mods can hook the same function — the hook engine chains them automatically.
+| Pattern | Mods |
+|---|---|
+| Hook a GD member function | most of them |
+| Hook a cocos2d export | `fpsdisplay`, `speedhack`, any `drawScene` user |
+| Per-frame logic + keys on the game thread | `noclip`, `autoretry`, `hitboxes`, `speedhack` |
+| Defer an action to the next frame | `autoretry` |
+| Ask the game for the level, never cache it | `hitboxes`, `hideground`, `startposswitcher` |
+| Timer without blocking | `pausecountdown` |
+| Build UI (labels, panel, button) | `fpsdisplay`, `modmenu`, `pausecountdown`, `example` |
+| Read/write a game field via a verified offset | `practicemusic`, `hidepause` |
+| Undo your changes in `mod_unload` | `hitboxes`, `hideground`, `hidepause`, `speedhack` |
 
-### Patterns demonstrated
+## Updating after a GD patch
 
-| Pattern | Mods using it | What it shows |
-|---------|--------------|---------------|
-| Hook a GD member function | all | Basic hooking with `cadence::hook_typed` |
-| Hook a cocos2d export | fpsdisplay, speedhack, hitboxes | `GetProcAddress` + `cadence::hook` |
-| Per-frame logic via CCScheduler::update | fpsdisplay, hitboxes, speedhack | Hooking the game's frame tick |
-| Main-thread dispatch via CCDirector::drawScene | hideground, hidepause, modmenu | Safe flag-based dispatch from bg thread |
-| Background key polling thread | noclip, speedhack, hitboxes, hideground, hidepause | `GetAsyncKeyState` + thread safety |
-| Creating UI (labels, buttons, menus, overlays) | example, fpsdisplay, modmenu | cocos2d node creation and scene management |
-| Scene change detection | fpsdisplay, modmenu | Tracking `getRunningScene` to handle transitions |
-| Reading mod metadata via API | modmenu | `cadence::get_mods()` to list loaded mods at runtime |
-| GD class member field access | hidepause, practicemusic | Reading/writing struct offsets |
-| Intercepting + modifying args | hideground, speedhack | Changing function arguments before forwarding |
-| Clean hot-reload support | all threaded mods | `g_running` flag + `WaitForSingleObject` in `mod_unload` |
+```powershell
+python tools/sdk_update.py --old 2.2091 --new 2.2092   # re-match addresses (~96% automatic)
+python tools/offset_probe.py --verify                  # re-check every cadence::off offset
+```
 
----
+Functions that do not match automatically can be added by hand in
+`generated/addresses.local.json` (merged at load):
+
+```json
+{ "SomeClass::someFunc(int param)": "0x12ab34" }
+```
+
+Mods refer to functions by signature, never by a baked-in address, so they keep working across
+versions as long as the address file is updated.
+
+To regenerate bindings and headers from `.bro` files: `python codegen/generate.py <bindings dir> 2.2091`.
+
+## Tests
+
+```powershell
+cmake --build build --config Release
+ctest --test-dir build -C Release
+```
+
+`hook_test` exercises the hook engine without launching GD: chaining, removing a hook from the
+head / middle / tail of a chain, byte-exact restore, and re-hooking after a full unhook.
+
+What is **not** covered by automated tests: anything that needs the game running (the mods
+themselves, address resolution against a live process). Those are checked by hand in game; the
+field offsets are checked against the binary with `tools/offset_probe.py --verify`.
+
+## How it works
+
+**The proxy.** The loader is `winmm.dll`. Windows loads it from the GD folder instead of the
+system copy; all 180 winmm exports are forwarded to `System32\winmm.dll` through MASM jump
+stubs. It initialises in `DllMain`, then GD starts normally.
+
+**The hook engine** (`loader/src/hook.cpp`) is an x64 trampoline hook using
+[Zydis](https://github.com/zyantific/zydis) to decode and relocate instructions:
+
+1. Decode enough instructions at the target to fit a 14-byte absolute jump.
+2. Allocate a trampoline within +/-2 GB, copy and relocate those instructions into it
+   (RIP-relative operands and branches are rewritten), and jump back to the rest of the function.
+3. Overwrite the target with a jump to your detour.
+
+Hooks on the same function form a chain per target: each hook's `original` points at the next
+older hook, and the oldest points at the trampoline. Removing a hook from anywhere in the chain
+re-points the hooks above it, and removing the last one restores the game's original bytes
+exactly. The trampoline is kept, so a function can be hooked again after a full unhook.
+
+**Address resolution.** `generated/addresses_<ver>.json` maps Broma signatures to RVAs;
+the loader rebases them at startup.
+
+## Project layout
+
+```
+loader/            winmm proxy, mod loader, hook engine, crash handler
+  include/sdk.h    the entire mod-facing API
+mods/              17 example mods (one directory each)
+template/          standalone starter mod
+cmake/             cadence_add_mod() build helper
+tests/             hook engine tests
+tools/             new_mod.py, offset_probe.py, sdk_update.py, install.ps1, package.ps1
+codegen/           Broma parser, header and address generator
+generated/         address database, layout hashes, generated headers
+docs/GUIDE.md      mod author's guide
+```
+
+`powershell -File tools/package.ps1` builds everything, runs the tests, and writes
+`dist/Cadence-2.2091.zip` (loader, address files, all mods, SDK header, template, docs, installer).
 
 ## License
 
-The bindings data (class names, function signatures, addresses) is derived from [geode-sdk/bindings](https://github.com/geode-sdk/bindings) under the Boost Software License 1.0. See `THIRD_PARTY_LICENSES.txt`.
+The bindings data (class names, function signatures, addresses) is derived from
+[geode-sdk/bindings](https://github.com/geode-sdk/bindings) under the Boost Software License 1.0.
+See `THIRD_PARTY_LICENSES.txt`.

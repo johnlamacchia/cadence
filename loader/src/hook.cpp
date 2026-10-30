@@ -2,13 +2,37 @@
 #include <windows.h>
 #include <Zydis/Zydis.h>
 #include <cstring>
+#include <vector>
 
 namespace hook {
 
 static constexpr size_t JMP_ABS_SIZE = 14;   // ff 25 00000000 + 8-byte addr
-static constexpr size_t TRAMPOLINE_MAX = 64;
+static constexpr size_t TRAMPOLINE_MAX = 128;
+static constexpr size_t SAVED_MAX = 32;
 
-static HookEntry* g_hooks = nullptr;
+// One hook in a target's chain. `next` is what this hook's `original` points
+// at: the previous (older) detour, or the trampoline for the oldest hook.
+// `slot` is the mod's own `original` variable, so we can re-point it when the
+// hook it was calling is removed.
+struct Link {
+    void* detour;
+    void** slot;
+    void* next;
+};
+
+// Everything we know about one hooked function. The trampoline and the saved
+// original bytes live as long as the process, so a target can be hooked,
+// fully unhooked and hooked again (hot reload) without reallocating.
+struct Target {
+    void* target;
+    uint8_t saved[SAVED_MAX];
+    size_t patch_size;
+    uint8_t* trampoline;
+    std::vector<Link> chain;   // [0] oldest ... back() newest, the one the target jumps to
+    Target* next;
+};
+
+static Target* g_targets = nullptr;
 static CRITICAL_SECTION g_lock;
 static bool g_init = false;
 
@@ -82,17 +106,13 @@ static bool relocate_instruction(
 
     if (operands[0].type == ZYDIS_OPERAND_TYPE_IMMEDIATE && operands[0].imm.is_relative) {
         // Relative branch: jmp/jcc/call with RIP-relative offset
-        // Rewrite as: original instruction but targeting abs_target via an indirect jump
-        // For short/near jumps and calls: replace with absolute indirect
         if (insn->mnemonic == ZYDIS_MNEMONIC_JMP) {
             write_abs_jmp(dest, (void*)abs_target);
             *out_size = JMP_ABS_SIZE;
             return true;
         }
         if (insn->mnemonic == ZYDIS_MNEMONIC_CALL) {
-            // call [rip+0]; dq abs_target  — but we can't easily do indirect call
-            // Instead: push return addr, jmp abs
-            // Simpler: just copy and fix the offset if it fits in 32 bits
+            // The trampoline is allocated within +/-2GB, so a rel32 call still reaches.
             int64_t new_disp = (int64_t)abs_target - (int64_t)(dest_addr + 5);
             if (new_disp >= INT32_MIN && new_disp <= INT32_MAX) {
                 dest[0] = 0xE8;
@@ -102,28 +122,21 @@ static bool relocate_instruction(
             }
             return false;
         }
-        // Conditional jumps: rewrite to inverted-jcc-over-abs-jmp pattern
-        // jcc_short skip; jmp abs_target; skip:
-        // Invert condition, jump over the absolute jump
-        // Both short (7x) and near (0F 8x) jcc: condition is opcode & 0x0F
+        // Conditional jumps: inverted short jcc over an absolute jmp.
         uint8_t cond = insn->opcode & 0x0F;
-        // Inverted short jcc: skip over 14-byte abs jmp
-        dest[0] = 0x70 | (cond ^ 1); // invert condition
-        dest[1] = JMP_ABS_SIZE;       // skip 14 bytes
+        dest[0] = 0x70 | (cond ^ 1);
+        dest[1] = JMP_ABS_SIZE;
         write_abs_jmp(dest + 2, (void*)abs_target);
         *out_size = 2 + JMP_ABS_SIZE;
         return true;
     }
 
-    // RIP-relative memory operand: adjust displacement
-    // Copy instruction, fix the RIP-relative displacement
+    // RIP-relative memory operand: copy and fix the displacement.
     memcpy(dest, (void*)orig_addr, insn->length);
     int64_t new_disp = (int64_t)abs_target - (int64_t)(dest_addr + insn->length);
     if (new_disp < INT32_MIN || new_disp > INT32_MAX) {
         return false;
     }
-    // Find and patch the displacement in the copied instruction
-    // The displacement is at raw.disp.offset bytes from instruction start
     if (insn->raw.disp.offset > 0) {
         *(int32_t*)(dest + insn->raw.disp.offset) = (int32_t)new_disp;
     }
@@ -131,179 +144,150 @@ static bool relocate_instruction(
     return true;
 }
 
-bool install(void* target, void* detour, void** original) {
-    ensure_init();
-    EnterCriticalSection(&g_lock);
+static Target* find_target(void* target) {
+    for (Target* t = g_targets; t; t = t->next)
+        if (t->target == target) return t;
+    return nullptr;
+}
 
-    // Check if target is already hooked — chain through the existing detour
-    for (auto* e = g_hooks; e; e = e->next) {
-        if (e->target == target) {
-            // Chain: target → new detour → old detour → trampoline → original
-            *original = e->detour;
-
-            uint8_t* func = (uint8_t*)target;
-            DWORD old_protect;
-            VirtualProtect(func, JMP_ABS_SIZE, PAGE_EXECUTE_READWRITE, &old_protect);
-            write_abs_jmp(func, detour);
-            VirtualProtect(func, JMP_ABS_SIZE, old_protect, &old_protect);
-            FlushInstructionCache(GetCurrentProcess(), func, JMP_ABS_SIZE);
-
-            auto* entry = new HookEntry{target, detour, e->detour, g_hooks};
-            g_hooks = entry;
-
-            LeaveCriticalSection(&g_lock);
-            return true;
-        }
-    }
-
+// Decode the prologue, build the trampoline and remember the original bytes.
+// Does not patch the target; the caller does that once a detour is known.
+static Target* create_target(void* target) {
     ZydisDecoder decoder;
     ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_STACK_WIDTH_64);
 
     uint8_t* func = (uint8_t*)target;
     size_t copied = 0;
-
-    // Determine how many bytes we need to overwrite (at least JMP_ABS_SIZE)
     ZydisDecodedInstruction insn;
     ZydisDecodedOperand operands[ZYDIS_MAX_OPERAND_COUNT];
     while (copied < JMP_ABS_SIZE) {
-        ZyanStatus status = ZydisDecoderDecodeFull(
-            &decoder, func + copied, 15, &insn, operands);
-        if (!ZYAN_SUCCESS(status)) {
-            LeaveCriticalSection(&g_lock);
-            return false;
-        }
+        if (!ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, func + copied, 15, &insn, operands)))
+            return nullptr;
         copied += insn.length;
     }
+    if (copied > SAVED_MAX) return nullptr;
 
-    // Allocate trampoline near the target
     uint8_t* tramp = (uint8_t*)alloc_near(target, TRAMPOLINE_MAX);
-    if (!tramp) {
-        LeaveCriticalSection(&g_lock);
-        return false;
-    }
+    if (!tramp) return nullptr;
 
-    // Build trampoline: relocated original bytes + jump back to original func
     size_t tramp_offset = 0;
     size_t src_offset = 0;
     while (src_offset < copied) {
         ZydisDecoderDecodeFull(&decoder, func + src_offset, 15, &insn, operands);
-        size_t relocated_size;
-        if (!relocate_instruction(
-                &insn, operands,
-                (uint64_t)(func + src_offset),
-                tramp + tramp_offset,
-                (uint64_t)(tramp + tramp_offset),
-                &relocated_size)) {
+        // Worst case one instruction expands to 16 bytes, plus the final jump back.
+        if (tramp_offset + 16 + JMP_ABS_SIZE > TRAMPOLINE_MAX) {
             VirtualFree(tramp, 0, MEM_RELEASE);
-            LeaveCriticalSection(&g_lock);
-            return false;
+            return nullptr;
+        }
+        size_t relocated_size;
+        if (!relocate_instruction(&insn, operands, (uint64_t)(func + src_offset),
+                                  tramp + tramp_offset, (uint64_t)(tramp + tramp_offset),
+                                  &relocated_size)) {
+            VirtualFree(tramp, 0, MEM_RELEASE);
+            return nullptr;
         }
         src_offset += insn.length;
         tramp_offset += relocated_size;
     }
-
-    // Jump back to original code after the overwritten bytes
     write_abs_jmp(tramp + tramp_offset, func + copied);
-    tramp_offset += JMP_ABS_SIZE;
+    FlushInstructionCache(GetCurrentProcess(), tramp, TRAMPOLINE_MAX);
 
-    // Patch the original function to jump to detour
+    auto* t = new Target{};
+    t->target = target;
+    memcpy(t->saved, func, copied);
+    t->patch_size = copied;
+    t->trampoline = tramp;
+    t->next = g_targets;
+    g_targets = t;
+    return t;
+}
+
+static void patch_jmp(Target* t, void* dest) {
+    uint8_t* func = (uint8_t*)t->target;
     DWORD old_protect;
-    VirtualProtect(func, JMP_ABS_SIZE, PAGE_EXECUTE_READWRITE, &old_protect);
-    write_abs_jmp(func, detour);
-    // NOP any remaining bytes
-    for (size_t i = JMP_ABS_SIZE; i < copied; i++) {
-        func[i] = 0x90;
+    VirtualProtect(func, t->patch_size, PAGE_EXECUTE_READWRITE, &old_protect);
+    write_abs_jmp(func, dest);
+    for (size_t i = JMP_ABS_SIZE; i < t->patch_size; i++) func[i] = 0x90;
+    VirtualProtect(func, t->patch_size, old_protect, &old_protect);
+    FlushInstructionCache(GetCurrentProcess(), func, t->patch_size);
+}
+
+static void restore_original(Target* t) {
+    uint8_t* func = (uint8_t*)t->target;
+    DWORD old_protect;
+    VirtualProtect(func, t->patch_size, PAGE_EXECUTE_READWRITE, &old_protect);
+    memcpy(func, t->saved, t->patch_size);
+    VirtualProtect(func, t->patch_size, old_protect, &old_protect);
+    FlushInstructionCache(GetCurrentProcess(), func, t->patch_size);
+}
+
+bool install(void* target, void* detour, void** original) {
+    if (!target || !detour || !original) return false;
+    ensure_init();
+    EnterCriticalSection(&g_lock);
+
+    Target* t = find_target(target);
+    if (!t) t = create_target(target);
+    if (!t) {
+        LeaveCriticalSection(&g_lock);
+        return false;
     }
-    VirtualProtect(func, JMP_ABS_SIZE, old_protect, &old_protect);
-    FlushInstructionCache(GetCurrentProcess(), func, copied);
 
-    *original = tramp;
-
-    // Record hook
-    auto* entry = new HookEntry{target, detour, tramp, g_hooks};
-    g_hooks = entry;
+    void* next = t->chain.empty() ? (void*)t->trampoline : t->chain.back().detour;
+    t->chain.push_back(Link{detour, original, next});
+    *original = next;
+    patch_jmp(t, detour);
 
     LeaveCriticalSection(&g_lock);
     return true;
 }
 
-bool remove(void* target) {
-    ensure_init();
-    EnterCriticalSection(&g_lock);
+// Unlink chain[idx] and fix up whatever pointed at it.
+static void remove_link(Target* t, size_t idx) {
+    Link removed = t->chain[idx];
+    bool is_head = idx + 1 == t->chain.size();
 
-    HookEntry** pp = &g_hooks;
-    while (*pp) {
-        if ((*pp)->target == target) {
-            HookEntry* entry = *pp;
-            uint8_t* func = (uint8_t*)entry->target;
-            uint8_t* tramp = (uint8_t*)entry->trampoline;
-
-            // Count how many bytes were originally copied to trampoline
-            // by scanning trampoline until we hit the absolute jump back
-            ZydisDecoder decoder;
-            ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64, ZYDIS_STACK_WIDTH_64);
-
-            // Restore original bytes from trampoline
-            // We need to relocate them BACK, but simpler: the trampoline has
-            // the original instructions (potentially relocated). For safety,
-            // we store the original bytes separately. For now, just remove the
-            // jmp from the target and write back the trampoline instructions
-            // (this works for non-RIP-relative originals; RIP-relative ones
-            // need re-relocation, which is rare enough to skip for v1).
-
-            // Find how many bytes were overwritten (JMP_ABS_SIZE + NOPs)
-            size_t patch_size = JMP_ABS_SIZE;
-            while (func[patch_size] == 0x90 && patch_size < 32) patch_size++;
-
-            // Copy original bytes back from trampoline
-            DWORD old_protect;
-            VirtualProtect(func, patch_size, PAGE_EXECUTE_READWRITE, &old_protect);
-            // The trampoline starts with the relocated original instructions
-            // For simple non-RIP-relative instructions, they're identical
-            // For RIP-relative, this is imperfect but acceptable for v1
-            memcpy(func, tramp, patch_size);
-            VirtualProtect(func, patch_size, old_protect, &old_protect);
-            FlushInstructionCache(GetCurrentProcess(), func, patch_size);
-
-            VirtualFree(tramp, 0, MEM_RELEASE);
-            *pp = entry->next;
-            delete entry;
-            LeaveCriticalSection(&g_lock);
-            return true;
-        }
-        pp = &(*pp)->next;
+    if (is_head) {
+        if (idx == 0) restore_original(t);              // last hook: put the game's bytes back
+        else patch_jmp(t, t->chain[idx - 1].detour);    // older hook becomes the entry point
+    } else {
+        // The next-newer hook was calling us; make it call what we were calling.
+        Link& newer = t->chain[idx + 1];
+        newer.next = removed.next;
+        if (newer.slot) *newer.slot = removed.next;
     }
-
-    LeaveCriticalSection(&g_lock);
-    return false;
+    t->chain.erase(t->chain.begin() + idx);
 }
 
-int remove_by_detour_range(uintptr_t range_start, uintptr_t range_end) {
-    ensure_init();
+static int remove_in_range_locked(Target* t, uintptr_t lo, uintptr_t hi) {
     int removed = 0;
-    // Collect targets first to avoid modifying list while iterating
-    void* targets[256];
-    int count = 0;
-    EnterCriticalSection(&g_lock);
-    for (auto* e = g_hooks; e && count < 256; e = e->next) {
-        uintptr_t d = (uintptr_t)e->detour;
-        if (d >= range_start && d < range_end)
-            targets[count++] = e->target;
-    }
-    LeaveCriticalSection(&g_lock);
-    for (int i = 0; i < count; i++) {
-        if (remove(targets[i])) removed++;
+    for (size_t i = t->chain.size(); i-- > 0;) {
+        uintptr_t d = (uintptr_t)t->chain[i].detour;
+        if (d >= lo && d < hi) {
+            remove_link(t, i);
+            removed++;
+        }
     }
     return removed;
 }
 
-void shutdown() {
-    if (!g_init) return;
-    while (g_hooks) {
-        remove(g_hooks->target);
-    }
-    DeleteCriticalSection(&g_lock);
-    g_init = false;
+int remove_in_range(void* target, uintptr_t lo, uintptr_t hi) {
+    ensure_init();
+    EnterCriticalSection(&g_lock);
+    Target* t = find_target(target);
+    int removed = t ? remove_in_range_locked(t, lo, hi) : 0;
+    LeaveCriticalSection(&g_lock);
+    return removed;
+}
+
+int remove_by_detour_range(uintptr_t lo, uintptr_t hi) {
+    ensure_init();
+    EnterCriticalSection(&g_lock);
+    int removed = 0;
+    for (Target* t = g_targets; t; t = t->next)
+        removed += remove_in_range_locked(t, lo, hi);
+    LeaveCriticalSection(&g_lock);
+    return removed;
 }
 
 }

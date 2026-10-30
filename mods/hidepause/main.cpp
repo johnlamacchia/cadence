@@ -1,94 +1,60 @@
-// Hide pause button — hides the pause button for a cleaner gameplay view.
-// Press P to toggle. Works live during gameplay.
-// Approach from Geode's HidePauseButton: directly hide the button node
-// rather than hooking toggleMenuVisibility (which has a setting gate).
+// Hide pause — press P in a level to hide the on-screen pause button.
 #include <sdk.h>
-#include <windows.h>
 
-static bool g_hide_pause = false;
-static void* g_pause_btn = nullptr;
-static volatile bool g_toggle_pending = false;
-static volatile bool g_running = true;
-static HANDLE g_thread = nullptr;
+static bool g_hide = false;
+static void* g_ui = nullptr;  // most recent UILayer; only used while it belongs to the live PlayLayer
 
-using setVisible_t = void(__fastcall*)(void*, bool);
-static setVisible_t fn_setVisible = nullptr;
+static void(__fastcall* fn_setVisible)(void* node, bool visible) = nullptr;
+static bool(__fastcall* orig_UILayer_init)(void* self, void* gameLayer);
+static void(__fastcall* orig_drawScene)(void* director);
 
-static bool(__fastcall* orig_UILayer_init)(void* self, void* layer);
-static void(__fastcall* orig_PlayLayer_onQuit)(void* self);
+static void* pause_button() {
+    void* pl = cadence::play_layer();
+    if (!pl || !g_ui) return nullptr;
+    // The UILayer is only trusted if it was built for the PlayLayer that is alive now.
+    if (*(void**)((char*)g_ui + cadence::off::ui_layer_game_layer) != pl) return nullptr;
+    return *(void**)((char*)g_ui + cadence::off::ui_layer_pause_btn);
+}
 
-static bool __fastcall hook_UILayer_init(void* self, void* layer) {
-    bool ret = orig_UILayer_init(self, layer);
-    if (ret) {
-        g_pause_btn = *(void**)((char*)self + 0x280);
-        if (g_hide_pause && g_pause_btn && fn_setVisible) {
-            fn_setVisible(g_pause_btn, false);
+static bool __fastcall hook_UILayer_init(void* self, void* gameLayer) {
+    bool ok = orig_UILayer_init(self, gameLayer);
+    if (ok) {
+        g_ui = self;
+        if (g_hide && fn_setVisible) {
+            void* btn = *(void**)((char*)self + cadence::off::ui_layer_pause_btn);
+            if (btn) fn_setVisible(btn, false);
         }
     }
-    return ret;
+    return ok;
 }
-
-static void __fastcall hook_PlayLayer_onQuit(void* self) {
-    g_pause_btn = nullptr;
-    orig_PlayLayer_onQuit(self);
-}
-
-static void(__fastcall* orig_drawScene)(void*);
 
 static void __fastcall hook_drawScene(void* director) {
-    if (g_toggle_pending) {
-        g_toggle_pending = false;
-        if (g_pause_btn && fn_setVisible) {
-            fn_setVisible(g_pause_btn, !g_hide_pause);
-        }
+    if (cadence::play_layer() && cadence::key_pressed('P')) {
+        g_hide = !g_hide;
+        void* btn = pause_button();
+        if (btn && fn_setVisible) fn_setVisible(btn, !g_hide);
     }
     orig_drawScene(director);
 }
 
-static DWORD WINAPI key_thread(LPVOID) {
-    bool was_down = false;
-    while (g_running) {
-        bool is_down = (GetAsyncKeyState('P') & 0x8000) != 0;
-        if (is_down && !was_down) {
-            g_hide_pause = !g_hide_pause;
-            g_toggle_pending = true;
-        }
-        was_down = is_down;
-        Sleep(30);
-    }
-    return 0;
-}
-
 extern "C" __declspec(dllexport) void mod_unload() {
-    g_running = false;
-    if (g_thread) { WaitForSingleObject(g_thread, 2000); CloseHandle(g_thread); g_thread = nullptr; }
-    g_hide_pause = false;
-    g_pause_btn = nullptr;
+    void* btn = pause_button();
+    if (g_hide && btn && fn_setVisible) fn_setVisible(btn, true);
+    g_hide = false;
+    g_ui = nullptr;
 }
 
 extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"({"name":"Hide Pause","desc":"Hides the pause button","key":"P","ver":"1.0"})";
+    return R"({"name":"Hide Pause","desc":"Hides the pause button","key":"P","ver":"1.1"})";
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-    g_running = true;
 
-    fn_setVisible = (setVisible_t)cadence::cocos("?setVisible@CCNode@cocos2d@@UEAAX_N@Z");
+    fn_setVisible = (decltype(fn_setVisible))cadence::cocos("?setVisible@CCNode@cocos2d@@UEAAX_N@Z");
 
-    cadence::hook_typed(
-        "UILayer::init(GJBaseGameLayer* layer)",
-        hook_UILayer_init, &orig_UILayer_init);
+    cadence::hook_typed("UILayer::init(GJBaseGameLayer* layer)", hook_UILayer_init, &orig_UILayer_init);
 
-    cadence::hook_typed(
-        "PlayLayer::onQuit()",
-        hook_PlayLayer_onQuit, &orig_PlayLayer_onQuit);
-
-    void* drawScene = cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ");
-    if (drawScene) {
-        cadence::hook(drawScene, (void*)hook_drawScene,
-            (void**)&orig_drawScene);
-    }
-
-    g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
+    cadence::hook(cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ"),
+                  (void*)hook_drawScene, (void**)&orig_drawScene);
 }

@@ -6,8 +6,9 @@
 #include <windows.h>
 
 static void(__fastcall* orig_startMusic)(void* self);
-// GJBaseGameLayer::m_isPracticeMode offset from generated Broma headers (GD 2.2091)
-static constexpr size_t PRACTICE_MODE_OFFSET = 0x31E8;
+// PlayLayer::m_isPracticeMode (GD 2.2091). Confirmed from the disassembly of
+// PlayLayer::togglePracticeMode / startMusic, which test byte [this+0x32E0].
+static constexpr size_t PRACTICE_MODE_OFFSET = 0x32E0;
 
 static void __fastcall hook_startMusic(void* self) {
     uint8_t* base = (uint8_t*)self;

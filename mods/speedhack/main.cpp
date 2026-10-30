@@ -1,15 +1,12 @@
-// Speed hack — press + to speed up, - to slow down, 0 to reset.
-// Hooks CCScheduler::update to multiply dt. The scheduler drives
-// all game updates, so this one hook speeds up everything.
+// Speed hack — in a level: + faster, - slower, 0 resets (0.25x - 5x).
+// Scales the dt that CCScheduler::update hands to every scheduled game update.
 #include <sdk.h>
-#include <windows.h>
 
 static float g_speed = 1.0f;
-static volatile bool g_running = true;
-static HANDLE g_thread = nullptr;
 static HWND g_hwnd = nullptr;
 
-static void(__fastcall* orig_scheduler_update)(void*, float);
+static void(__fastcall* orig_scheduler_update)(void* scheduler, float dt);
+static void(__fastcall* orig_drawScene)(void* director);
 
 static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
     orig_scheduler_update(scheduler, dt * g_speed);
@@ -26,58 +23,36 @@ static void update_title() {
     }
 }
 
-static DWORD WINAPI key_thread(LPVOID) {
-    bool was_plus = false, was_minus = false, was_reset = false;
-    while (g_running) {
-        bool changed = false;
-        bool is_plus = ((GetAsyncKeyState(VK_OEM_PLUS) & 0x8000) || (GetAsyncKeyState(VK_ADD) & 0x8000)) != 0;
-        bool is_minus = ((GetAsyncKeyState(VK_OEM_MINUS) & 0x8000) || (GetAsyncKeyState(VK_SUBTRACT) & 0x8000)) != 0;
-        bool is_reset = (GetAsyncKeyState('0') & 0x8000) != 0;
-        if (is_plus && !was_plus) {
-            g_speed += 0.25f;
-            if (g_speed > 5.0f) g_speed = 5.0f;
-            changed = true;
-        }
-        if (is_minus && !was_minus) {
-            g_speed -= 0.25f;
-            if (g_speed < 0.25f) g_speed = 0.25f;
-            changed = true;
-        }
-        if (is_reset && !was_reset) {
-            g_speed = 1.0f;
-            changed = true;
-        }
-        was_plus = is_plus;
-        was_minus = is_minus;
-        was_reset = is_reset;
-        if (changed) update_title();
-        Sleep(30);
+static void __fastcall hook_drawScene(void* director) {
+    bool plus  = cadence::key_pressed(VK_OEM_PLUS)  | cadence::key_pressed(VK_ADD);
+    bool minus = cadence::key_pressed(VK_OEM_MINUS) | cadence::key_pressed(VK_SUBTRACT);
+    bool reset = cadence::key_pressed('0');
+
+    if (cadence::play_layer() && (plus || minus || reset)) {
+        if (plus)  g_speed = g_speed + 0.25f > 5.0f  ? 5.0f  : g_speed + 0.25f;
+        if (minus) g_speed = g_speed - 0.25f < 0.25f ? 0.25f : g_speed - 0.25f;
+        if (reset) g_speed = 1.0f;
+        update_title();
     }
-    return 0;
+    orig_drawScene(director);
 }
 
 extern "C" __declspec(dllexport) void mod_unload() {
-    g_running = false;
-    if (g_thread) { WaitForSingleObject(g_thread, 2000); CloseHandle(g_thread); g_thread = nullptr; }
     g_speed = 1.0f;
-    if (g_hwnd && IsWindow(g_hwnd)) SetWindowTextA(g_hwnd, "Geometry Dash");
+    update_title();
 }
 
 extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"j({"name":"Speed Hack","desc":"Change game speed 0.25x-5x","key":"+/- 0","ver":"1.0"})j";
+    return R"j({"name":"Speed Hack","desc":"Change game speed 0.25x-5x","key":"+/- 0","ver":"1.1"})j";
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-    g_running = true;
 
     g_hwnd = FindWindowA(nullptr, "Geometry Dash");
 
-    void* schedUpdate = cadence::cocos("?update@CCScheduler@cocos2d@@UEAAXM@Z");
-    if (schedUpdate) {
-        cadence::hook(schedUpdate, (void*)hook_scheduler_update,
-            (void**)&orig_scheduler_update);
-    }
-
-    g_thread = CreateThread(nullptr, 0, key_thread, nullptr, 0, nullptr);
+    cadence::hook(cadence::cocos("?update@CCScheduler@cocos2d@@UEAAXM@Z"),
+                  (void*)hook_scheduler_update, (void**)&orig_scheduler_update);
+    cadence::hook(cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ"),
+                  (void*)hook_drawScene, (void**)&orig_drawScene);
 }
