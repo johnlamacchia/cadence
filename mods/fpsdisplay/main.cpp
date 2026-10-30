@@ -30,15 +30,19 @@ static setString_t fn_setString = nullptr;
 static setAnchorPoint_t fn_setAnchorPoint = nullptr;
 static setOpacity_t fn_setOpacity = nullptr;
 
-static void(__fastcall* orig_drawScene)(void*) = nullptr;
+using sharedDirector_t = void* (*)();
+static sharedDirector_t fn_sharedDirector = nullptr;
 
-static void ensure_label(void* director) {
-    if (!fn_getRunningScene || !fn_labelCreate || !fn_addChild) return;
+static void(__fastcall* orig_scheduler_update)(void*, float) = nullptr;
 
+static void ensure_label() {
+    if (!fn_sharedDirector || !fn_getRunningScene || !fn_labelCreate || !fn_addChild) return;
+
+    void* director = fn_sharedDirector();
+    if (!director) return;
     void* scene = fn_getRunningScene(director);
     if (!scene) return;
 
-    // If scene changed, our old label was destroyed with the old scene
     if (scene != g_label_scene) {
         g_label = nullptr;
         g_label_scene = nullptr;
@@ -61,8 +65,8 @@ static void ensure_label(void* director) {
     g_label_scene = scene;
 }
 
-static void __fastcall hook_drawScene(void* director) {
-    orig_drawScene(director);
+static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
+    orig_scheduler_update(scheduler, dt);
 
     g_frame_count++;
 
@@ -75,7 +79,7 @@ static void __fastcall hook_drawScene(void* director) {
         g_frame_count = 0;
         g_last_time = now;
 
-        ensure_label(director);
+        ensure_label();
 
         if (g_label && fn_setString) {
             char buf[32];
@@ -113,13 +117,15 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
         "?setAnchorPoint@CCNode@cocos2d@@UEAAXAEBVCCPoint@2@@Z");
     fn_setOpacity = (setOpacity_t)GetProcAddress(cocos,
         "?setOpacity@CCNodeRGBA@cocos2d@@UEAAXE@Z");
+    fn_sharedDirector = (sharedDirector_t)GetProcAddress(cocos,
+        "?sharedDirector@CCDirector@cocos2d@@SAPEAV12@XZ");
 
     QueryPerformanceFrequency(&g_freq);
     QueryPerformanceCounter(&g_last_time);
 
-    void* drawScene = (void*)GetProcAddress(cocos,
-        "?drawScene@CCDirector@cocos2d@@QEAAXXZ");
-    if (drawScene) {
-        cadence::hook(drawScene, (void*)hook_drawScene, (void**)&orig_drawScene);
+    void* schedUpdate = (void*)GetProcAddress(cocos,
+        "?update@CCScheduler@cocos2d@@UEAAXM@Z");
+    if (schedUpdate) {
+        cadence::hook(schedUpdate, (void*)hook_scheduler_update, (void**)&orig_scheduler_update);
     }
 }
