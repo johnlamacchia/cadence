@@ -1,0 +1,64 @@
+#pragma once
+
+class PlatformFileDelegate;
+class cocos2d;
+
+class PlatformToolbox {
+public:
+    static void activateGameCenter();
+    static bool copyToClipboard(std::string str);
+    static bool doesFileExist(std::string path);
+    static void downloadAndSavePromoImage(std::string url, std::string path);
+    static void gameDidSave();
+    static std::string getClipboardString();
+    static float getDeviceRefreshRate();
+    static cocos2d::CCSize getDisplaySize();
+    static std::string getRawPath(char const* path);
+    static std::string getUniqueUserID();
+    static std::string getUserID();
+    static void hideCursor();
+    static bool isControllerConnected();
+    static bool isHD();
+    static bool isLocalPlayerAuthenticated();
+    static bool isLowMemoryDevice();
+    static bool isNetworkAvailable();
+    static bool isSignedInGooglePlay();
+    static void loadAndDecryptFileToString(char const* dirPath, char const* fileName, std::string& str);
+    static void logEvent(char const* event);
+    static void onGameLaunch();
+    static void onNativePause();
+    static void onNativeResume();
+    static void onToggleKeyboard();
+    static void openAppPage();
+    static void platformShutdown();
+    static void refreshWindow();
+    static void reportAchievementWithID(char const* key, int percent);
+    static void reportLoadingFinished();
+    static void resizeWindow(float width, float height);
+    static void saveAndEncryptStringToFile(std::string& str, char const* fileName, char const* dirPath);
+    static void sendMail(char const* title, char const* content, char const* address);
+    static void setBlockBackButton(bool block);
+    static void setKeyboardState(bool state);
+    static bool shouldResumeSound();
+    static void showAchievements();
+    static void showCursor();
+    static void signInGooglePlay();
+    static void signOutGooglePlay();
+    static cocos2d::CCSprite* spriteFromSavedFile(std::string path);
+    static void toggleCallGLFinish(bool enable);
+    static void toggleCPUSleepMode(bool enable);
+    static void toggleForceTimer(bool enable);
+    static void toggleFullScreen(bool fullscreen, bool borderless, bool fix);
+    static void toggleLockCursor(bool isLocked);
+    static void toggleMouseControl(bool enable);
+    static void toggleSmoothFix(bool enable);
+    static void toggleVerticalSync(bool enable);
+    static void tryShowRateDialog(std::string gameName);
+    static void updateMouseControl();
+    static void updateWindowedSize(float width, float height);
+
+    void /* TodoReturn */ pickImportFiles(PlatformFileDelegate*);
+    void setKeyboardInputFlags(int);
+    void /* TodoReturn */ shareFiles(std::vector<std::string> const&, PlatformFileDelegate*);
+
+};

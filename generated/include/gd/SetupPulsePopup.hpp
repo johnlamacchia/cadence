@@ -1,0 +1,107 @@
+#pragma once
+
+class CCMenuItemSpriteExtra;
+class CCMenuItemToggler;
+class CCTextInputNode;
+class ConfigureHSVWidget;
+class EffectGameObject;
+class GJSpecialColorSelect;
+class GameObject;
+class Slider;
+class cocos2d;
+
+class SetupPulsePopup : public SetupTriggerPopup, public cocos2d::extension::ColorPickerDelegate, public GJSpecialColorSelectDelegate {
+public:
+    virtual ~SetupPulsePopup();
+    virtual void show();
+    virtual void determineStartValues();
+    virtual void onClose(cocos2d::CCObject* sender);
+    virtual void textChanged(CCTextInputNode* node);
+    virtual void colorValueChanged(cocos2d::ccColor3B color);
+    virtual void textInputOpened(CCTextInputNode* node);
+    virtual void colorSelectClosed(GJSpecialColorSelect* select, int id);
+
+    static SetupPulsePopup* create(EffectGameObject* object, cocos2d::CCArray* objects);
+
+    cocos2d::ccColor3B getColorValue();
+    bool init(EffectGameObject* object, cocos2d::CCArray* objects);
+    void onCopy(cocos2d::CCObject* sender);
+    void onExclusive(cocos2d::CCObject* sender);
+    void onGroupMainOnly(cocos2d::CCObject* sender);
+    void onGroupSecondaryOnly(cocos2d::CCObject* sender);
+    void onHSVLegacyMode(cocos2d::CCObject* sender);
+    void onPaste(cocos2d::CCObject* sender);
+    void onSelectPulseMode(cocos2d::CCObject* sender);
+    void onSelectSpecialColor(cocos2d::CCObject* sender);
+    void onSelectSpecialTargetID(cocos2d::CCObject* sender);
+    void onSelectTargetMode(cocos2d::CCObject* sender);
+    void onUpdateCopyColor(cocos2d::CCObject* sender);
+    void selectColor(cocos2d::ccColor3B color);
+    void sliderChanged(cocos2d::CCObject* sender);
+    void updateColorLabels();
+    void updateColorValue();
+    void updateCopyColor();
+    void updateCopyColorTextInputLabel();
+    void updateFadeInLabel(bool decimals);
+    void updateFadeInTime();
+    void updateFadeOutLabel(bool decimals);
+    void updateFadeOutTime();
+    void updateGroupMainOnly();
+    void updateGroupSecondaryOnly();
+    void updateHoldLabel(bool decimals);
+    void updateHoldTime();
+    void updateHSVValue();
+    void updatePulseMode();
+    void updatePulseTargetType();
+    void updateTargetID();
+    void updateTextInputLabel();
+
+    cocos2d::extension::CCControlColourPicker* m_colorPicker;
+    bool m_unk3c0;
+    cocos2d::CCArray* m_colorObjects;
+    cocos2d::CCArray* m_hsvObjects;
+    Slider* m_fadeInSlider;
+    Slider* m_holdSlider;
+    Slider* m_fadeOutSlider;
+    CCMenuItemSpriteExtra* m_channelButton;
+    CCMenuItemSpriteExtra* m_groupButton;
+    cocos2d::CCLabelBMFont* m_idLabel;
+    cocos2d::ccColor3B m_originalColor;
+    cocos2d::CCSprite* m_currentColorSprite;
+    cocos2d::CCSprite* m_originalColorSprite;
+    cocos2d::ccColor3B m_currentColor;
+    CCMenuItemSpriteExtra* m_colorButton;
+    CCMenuItemSpriteExtra* m_hsvButton;
+    ConfigureHSVWidget* m_hsvWidget;
+    CCMenuItemSpriteExtra* m_specialColorButton;
+    CCTextInputNode* m_fadeInInput;
+    CCTextInputNode* m_holdInput;
+    CCTextInputNode* m_fadeOutInput;
+    CCTextInputNode* m_idInput;
+    CCTextInputNode* m_colorIDInput;
+    CCMenuItemToggler* m_mainOnlyToggler;
+    CCMenuItemToggler* m_secondaryOnlyToggler;
+    CCMenuItemToggler* m_staticHSVToggler;
+    cocos2d::CCLabelBMFont* m_mainOnlyLabel;
+    cocos2d::CCLabelBMFont* m_secondaryOnlyLabel;
+    cocos2d::CCLabelBMFont* m_staticHSVLabel;
+    bool m_groupMainOnly;
+    bool m_groupSecondaryOnly;
+    bool m_staticHSV;
+    int m_targetGroupID;
+    int m_copyColorID;
+    bool m_colorInitializing;
+    float m_fadeInTime;
+    float m_holdTime;
+    float m_fadeOutTime;
+    int m_pulseMode;
+    int m_pulseTargetType;
+    bool m_modesInitializing;
+    bool m_pulseExclusive;
+    cocos2d::ccHSVValue m_hsv;
+    CCTextInputNode* m_rInput;
+    CCTextInputNode* m_gInput;
+    CCTextInputNode* m_bInput;
+    CCTextInputNode* m_hexInput;
+
+};

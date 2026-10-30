@@ -1,0 +1,105 @@
+#pragma once
+
+class CCMenuItemToggler;
+class CCTextInputNode;
+class ColorAction;
+class ColorSelectDelegate;
+class ConfigureHSVWidget;
+class EffectGameObject;
+class GJSpecialColorSelect;
+class GameObject;
+class Slider;
+class cocos2d;
+
+class ColorSelectPopup : public SetupTriggerPopup, public cocos2d::extension::ColorPickerDelegate, public GJSpecialColorSelectDelegate {
+public:
+    virtual void show();
+    virtual void determineStartValues();
+    virtual void textChanged(CCTextInputNode* node);
+    virtual void colorValueChanged(cocos2d::ccColor3B color);
+    virtual void colorSelectClosed(GJSpecialColorSelect* select, int id);
+    virtual void keyBackClicked();
+
+    static std::string colorToHex(cocos2d::ccColor3B color);
+    static ColorSelectPopup* create(ColorAction* action);
+    static ColorSelectPopup* create(cocos2d::ccColor3B color);
+    static ColorSelectPopup* create(EffectGameObject* effect, cocos2d::CCArray* array);
+    static ColorSelectPopup* create(EffectGameObject* effect, cocos2d::CCArray* array, ColorAction* action);
+    static cocos2d::ccColor3B hexToColor(std::string hex);
+
+    ColorSelectPopup();
+    ~ColorSelectPopup();
+    void closeColorSelect(cocos2d::CCObject* sender);
+    cocos2d::ccColor3B getColorValue();
+    bool init(EffectGameObject* object, cocos2d::CCArray* objects, ColorAction* action);
+    void onCopy(cocos2d::CCObject* sender);
+    void onCopyOpacity(cocos2d::CCObject* sender);
+    void onDefault(cocos2d::CCObject* sender);
+    void onHSVLegacyMode(cocos2d::CCObject* sender);
+    void onPaste(cocos2d::CCObject* sender);
+    void onPlayerColor1(cocos2d::CCObject* sender);
+    void onPlayerColor2(cocos2d::CCObject* sender);
+    void onSelectSpecialColor(cocos2d::CCObject* sender);
+    void onTintGround(cocos2d::CCObject* sender);
+    void onToggleHSVMode(cocos2d::CCObject* sender);
+    void onToggleTintMode(cocos2d::CCObject* sender);
+    void onUpdateCopyColor(cocos2d::CCObject* sender);
+    void onUpdateCustomColor(cocos2d::CCObject* sender);
+    void selectColor(cocos2d::ccColor3B color);
+    void sliderChanged(cocos2d::CCObject* sender);
+    void updateColorLabels();
+    void updateColorValue();
+    void updateCopyColor();
+    void updateCopyColorTextInputLabel();
+    void updateCustomColorIdx();
+    void updateDuration();
+    void updateDurLabel();
+    void updateHSVMode();
+    void updateHSVValue();
+    void updateOpacity();
+    void updateOpacityLabel();
+    void updateTextInputLabel();
+
+    cocos2d::extension::CCControlColourPicker* m_colorPicker;
+    bool m_unk3c0;
+    cocos2d::CCLabelBMFont* m_opacityLabel;
+    Slider* m_fadeTimeSlider;
+    Slider* m_opacitySlider;
+    CCMenuItemToggler* m_playerColor1Toggle;
+    CCMenuItemToggler* m_playerColor2Toggle;
+    cocos2d::ccColor3B m_originalColor;
+    cocos2d::CCSprite* m_currentColorSprite;
+    cocos2d::CCSprite* m_originalColorSprite;
+    cocos2d::ccColor3B m_currentColor;
+    ColorSelectDelegate* m_delegate;
+    float m_fadeTime;
+    int m_playerColor;
+    int m_blending;
+    float m_opacity;
+    ColorAction* m_colorAction;
+    CCTextInputNode* m_colorInput;
+    bool m_backgroundTrigger;
+    bool m_tintGround;
+    bool m_legacyHSV;
+    bool m_colorTrigger;
+    bool m_noChannel;
+    bool m_newColorTrigger;
+    int m_colorID;
+    bool m_initializing;
+    int m_copyColorID;
+    bool m_copyOpacity;
+    ConfigureHSVWidget* m_hsvWidget;
+    cocos2d::ccHSVValue m_hsv;
+    cocos2d::CCArray* m_colorObjects;
+    cocos2d::CCArray* m_copyObjects;
+    CCTextInputNode* m_copyColorInput;
+    CCTextInputNode* m_fadeTimeInput;
+    void* m_unk488;
+    void* m_unk490;
+    bool m_showCopyObjects;
+    CCTextInputNode* m_rInput;
+    CCTextInputNode* m_gInput;
+    CCTextInputNode* m_bInput;
+    CCTextInputNode* m_hexInput;
+
+};

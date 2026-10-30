@@ -1,0 +1,106 @@
+#pragma once
+
+class CCMenuItemSpriteExtra;
+class CCTextInputNode;
+class GJComment;
+class GJCommentListLayer;
+class LoadingCircle;
+class LoadingCircleSprite;
+class SFXBrowserDelegate;
+class SFXFolderPickerPopup;
+class SFXSearchResult;
+class SelectSFXSortLayer;
+class SetTextPopup;
+class TableView;
+class TableViewCell;
+class cocos2d;
+
+class SFXBrowser : public FLAlertLayer, public MusicDownloadDelegate, public TableViewCellDelegate, public SelectSFXSortDelegate, public SetTextPopupDelegate, public FLAlertLayerProtocol, public SFXFolderPickerDelegate {
+public:
+    virtual void registerWithTouchDispatcher();
+    virtual void keyBackClicked();
+    virtual void musicActionFinished(GJMusicAction action);
+    virtual void musicActionFailed(GJMusicAction action);
+    virtual void sortSelectClosed(SelectSFXSortLayer* layer);
+    virtual void setTextPopupClosed(SetTextPopup* popup, std::string text);
+    virtual bool cellPerformedAction(TableViewCell* cell, int listType, CellAction action, cocos2d::CCNode* parent);
+    virtual int getSelectedCellIdx();
+    virtual bool shouldSnapToSelected();
+    virtual void rebuildContent();
+    virtual void sfxFolderPicked(SFXFolderPickerPopup*, int, std::string const&);
+    virtual void sfxFoldersPicked(SFXFolderPickerPopup*, std::set<int> const&);
+    virtual void FLAlert_Clicked(FLAlertLayer*, bool);
+    virtual void textChanged(CCTextInputNode*);
+    virtual void /* TodoReturn */ getSelectedCellCustomIdx();
+    virtual void /* TodoReturn */ allowsCustomSFXActions();
+    virtual bool isCustomIDSelected(int);
+    virtual void /* TodoReturn */ inCustomSFXTree();
+    virtual void /* TodoReturn */ showsSFXInfoButton();
+
+    static SFXBrowser* create(int, int);
+
+    SFXBrowser();
+    ~SFXBrowser();
+    void /* TodoReturn */ currentListScrollY();
+    void /* TodoReturn */ executeBatchDelete();
+    void /* TodoReturn */ fitFolderPath();
+    bool init(int, int);
+    void onBatchDelete(cocos2d::CCObject* sender);
+    void onChangelog(cocos2d::CCObject* sender);
+    void onClearSearchText(cocos2d::CCObject* sender);
+    void onClose(cocos2d::CCObject* sender);
+    void onExitFolder(cocos2d::CCObject* sender);
+    void onExportFile(cocos2d::CCObject* sender);
+    void onImportFile(cocos2d::CCObject* sender);
+    void onImportSetup(cocos2d::CCObject* sender);
+    void onMoveToFolder(cocos2d::CCObject* sender);
+    void onNewFolder(cocos2d::CCObject* sender);
+    void onPage(cocos2d::CCObject* sender);
+    void onReplaceSetup(cocos2d::CCObject* sender);
+    void onSelectAll(cocos2d::CCObject* sender);
+    void onSettings(cocos2d::CCObject* sender);
+    void onShareSetup(cocos2d::CCObject* sender);
+    void onSorting(cocos2d::CCObject* sender);
+    void onToggleCompactMode(cocos2d::CCObject* sender);
+    void onToggleSearch(cocos2d::CCObject* sender);
+    void onToggleView(cocos2d::CCObject* sender);
+    void onUpdateLibrary(cocos2d::CCObject* sender);
+    void /* TodoReturn */ refreshCustomList();
+    void /* TodoReturn */ refreshLevelIDList(SFXSearchResult*);
+    void /* TodoReturn */ restoreListScroll(float);
+    void /* TodoReturn */ searchSettingsChanged();
+    void setupList(SFXSearchResult* result);
+    void setupSFXBrowser();
+    void /* TodoReturn */ switchToView(AudioViewType);
+    void trySetupSFXBrowser();
+    void updatePageLabel();
+    void /* TodoReturn */ updateSelectionUI();
+    void /* TodoReturn */ updateShareItem();
+    void /* TodoReturn */ updateViewItems();
+
+    SFXSearchResult* m_searchResult;
+    cocos2d::CCArray* m_sfxObjects;
+    GJCommentListLayer* m_listLayer;
+    cocos2d::CCLabelBMFont* m_nameLabel;
+    cocos2d::CCLabelBMFont* m_pathLabel;
+    cocos2d::CCLabelBMFont* m_infoLabel;
+    cocos2d::CCLabelBMFont* m_pageLabel;
+    cocos2d::CCLabelBMFont* m_searchLabel;
+    CCMenuItemSpriteExtra* m_prevButton;
+    CCMenuItemSpriteExtra* m_nextButton;
+    CCMenuItemSpriteExtra* m_backButton;
+    CCMenuItemSpriteExtra* m_refreshButton;
+    CCMenuItemSpriteExtra* m_clearSearchButton;
+    LoadingCircleSprite* m_circleSprite;
+    int m_sfxID;
+    int m_libraryVersion;
+    int m_cellAmount;
+    bool m_gettingURL;
+    bool m_selectedCell;
+    bool m_snapToSelected;
+    bool m_compactMode;
+    AudioSortType m_sortType;
+    SFXBrowserDelegate* m_delegate;
+    bool m_autoUpdating;
+
+};

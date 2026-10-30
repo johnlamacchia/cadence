@@ -1,0 +1,106 @@
+#pragma once
+
+class CCMenuItemSpriteExtra;
+class GJComment;
+class GJCommentListLayer;
+class GJUserScore;
+class LoadingCircle;
+class UploadActionPopup;
+class cocos2d;
+
+class ProfilePage : public FLAlertLayer, public FLAlertLayerProtocol, public LevelCommentDelegate, public CommentUploadDelegate, public UserInfoDelegate, public UploadActionDelegate, public UploadPopupDelegate, public LeaderboardManagerDelegate, public FollowUserDelegate {
+public:
+    virtual ~ProfilePage();
+    virtual void registerWithTouchDispatcher();
+    virtual void keyBackClicked();
+    virtual void show();
+    virtual void FLAlert_Clicked(FLAlertLayer* layer, bool btn2);
+    virtual void updateUserScoreFinished();
+    virtual void updateUserScoreFailed();
+    virtual void getUserInfoFinished(GJUserScore* score);
+    virtual void getUserInfoFailed(int id);
+    virtual void userInfoChanged(GJUserScore* score);
+    virtual void loadCommentsFinished(cocos2d::CCArray* comments, char const* key);
+    virtual void loadCommentsFailed(char const* key);
+    virtual void setupPageInfo(std::string info, char const* key);
+    virtual void commentUploadFinished(int parentID);
+    virtual void commentUploadFailed(int parentID, CommentError errorType);
+    virtual void commentDeleteFailed(int id, int parentID);
+    virtual void onClosePopup(UploadActionPopup* popup);
+    virtual void uploadActionFinished(int id, int response);
+    virtual void uploadActionFailed(int id, int response);
+    virtual bool ownsTouchPrio();
+    virtual void followUserFinished(int, bool);
+    virtual void followUserFailed(int, bool);
+
+    static ProfilePage* create(int accountID, bool ownProfile);
+
+    void blockUser();
+    void /* TodoReturn */ createOfflineNotice();
+    FLAlertLayer* createUnfriendAlert(FLAlertLayerProtocol*, std::string);
+    bool init(int accountID, bool ownProfile);
+    bool isCorrect(char const* key);
+    bool isOnWatchlist(int id);
+    void loadPage(int page);
+    void loadPageFromUserInfo(GJUserScore* score);
+    void onAdminPanel(cocos2d::CCObject* sender);
+    void onBlockUser(cocos2d::CCObject* sender);
+    void onClose(cocos2d::CCObject* sender);
+    void onComment(cocos2d::CCObject* sender);
+    void onCommentHistory(cocos2d::CCObject* sender);
+    void onCopyName(cocos2d::CCObject* sender);
+    void onFollow(cocos2d::CCObject* sender);
+    void onFriend(cocos2d::CCObject* sender);
+    void onFriends(cocos2d::CCObject* sender);
+    void onIconInfo(cocos2d::CCObject* sender);
+    void onInfo(cocos2d::CCObject* sender);
+    void onMessages(cocos2d::CCObject* sender);
+    void onModInfo(cocos2d::CCObject* sender);
+    void onModNotes(cocos2d::CCObject* sender);
+    void onMyLevels(cocos2d::CCObject* sender);
+    void onMyLists(cocos2d::CCObject* sender);
+    void onMyStuff(cocos2d::CCObject* sender);
+    void onNextPage(cocos2d::CCObject* sender);
+    void onNotifications(cocos2d::CCObject* sender);
+    void onPrevPage(cocos2d::CCObject* sender);
+    void onReportUser(cocos2d::CCObject* sender);
+    void onRequests(cocos2d::CCObject* sender);
+    void onSendMessage(cocos2d::CCObject* sender);
+    void onSettings(cocos2d::CCObject* sender);
+    void onSocialPage(cocos2d::CCObject* sender);
+    void onStatInfo(cocos2d::CCObject* sender);
+    void onUnblockUser(cocos2d::CCObject* sender);
+    void onUpdate(cocos2d::CCObject* sender);
+    void setupAccountButtons();
+    void setupComments();
+    void setupCommentsBrowser(cocos2d::CCArray* comments);
+    void toggleMainPageVisibility(bool visible);
+    void /* TodoReturn */ unblockUser();
+    void /* TodoReturn */ updateFollowButton(bool);
+    void updateLevelsLabel();
+    void updatePageArrows();
+
+    GJUserScore* m_score;
+    int m_accountID;
+    bool m_ownProfile;
+    std::string m_profileKey;
+    cocos2d::CCLabelBMFont* m_somethingWentWrong;
+    cocos2d::CCLabelBMFont* m_usernameLabel;
+    GJCommentListLayer* m_list;
+    CCMenuItemSpriteExtra* m_rightArrow;
+    CCMenuItemSpriteExtra* m_leftArrow;
+    CCMenuItemSpriteExtra* m_followBtn;
+    cocos2d::CCSprite* m_followHint;
+    bool m_unk;
+    cocos2d::CCArray* m_buttons;
+    cocos2d::CCArray* m_arrayWithUsernameLabel;
+    int m_itemCount;
+    int m_pageStartIdx;
+    int m_pageEndIdx;
+    int m_page;
+    LoadingCircle* m_circle;
+    UploadActionPopup* m_popupDelegate;
+    CCMenuItemSpriteExtra* m_refreshBtn;
+    int m_unk2;
+
+};

@@ -1,0 +1,106 @@
+#pragma once
+
+class CCTextInputNode;
+class ConfigureValuePopup;
+class GameObject;
+class IDNameInput;
+class ScrollableContentLayer;
+class cocos2d;
+
+class SetGroupIDLayer : public FLAlertLayer, public ConfigureValuePopupDelegate {
+public:
+    virtual void keyBackClicked();
+    virtual void valuePopupClosed(ConfigureValuePopup* popup, float value);
+    virtual void textInputClosed(CCTextInputNode* node);
+    virtual void textChanged(CCTextInputNode* node);
+    virtual bool ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
+    virtual void ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
+    virtual void ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
+    virtual void ccTouchCancelled(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
+
+    static SetGroupIDLayer* create(GameObject* object, cocos2d::CCArray* objects);
+
+    SetGroupIDLayer();
+    ~SetGroupIDLayer();
+    void addGroupID(int id);
+    void callRemoveFromGroup(float dt);
+    CCTextInputNode* createTextInput(cocos2d::CCPoint position, int tag, int length, std::string placeholder, float width, int arrow);
+    void determineStartValues();
+    bool init(GameObject* obj, cocos2d::CCArray* objs);
+    void onAddGroup(cocos2d::CCObject* sender);
+    void onAddGroupParent(cocos2d::CCObject* sender);
+    void onAnim(cocos2d::CCObject* sender);
+    void onArrow(int tag, int increment);
+    void onArrowLeft(cocos2d::CCObject* sender);
+    void onArrowRight(cocos2d::CCObject* sender);
+    void onClose(cocos2d::CCObject* sender);
+    void onCopy(cocos2d::CCObject* sender);
+    void onExtra(cocos2d::CCObject* sender);
+    void onExtra2(cocos2d::CCObject* sender);
+    void onGroupIDOptions(cocos2d::CCObject* sender);
+    void onNextFreeEditorLayer1(cocos2d::CCObject* sender);
+    void onNextFreeEditorLayer2(cocos2d::CCObject* sender);
+    void onNextFreeOrderChannel(cocos2d::CCObject* sender);
+    void onNextGroupID1(cocos2d::CCObject* sender);
+    void onPaste(cocos2d::CCObject* sender);
+    void onRemoveFromGroup(cocos2d::CCObject* sender);
+    void onSmoothEase(cocos2d::CCObject* sender);
+    void onToggleGuide(cocos2d::CCObject* sender);
+    void onToggleSelectedOrder(cocos2d::CCObject* sender);
+    void onToggleTraceIn(cocos2d::CCObject* sender);
+    void onToggleTraceOut(cocos2d::CCObject* sender);
+    void onZLayer(cocos2d::CCObject* sender);
+    void onZLayerShift(cocos2d::CCObject* sender);
+    void removeGroupID(int id);
+    void updateEditorLabel();
+    void updateEditorLabel2();
+    void updateEditorLayerID();
+    void updateEditorLayerID2();
+    void updateEditorOrder();
+    void updateEditorOrderLabel();
+    void updateGroupIDButtons();
+    void updateGroupIDLabel();
+    void updateOrderChannel();
+    void updateOrderChannelLabel();
+    void updateZLayerButtons();
+    void updateZOrder();
+    void updateZOrderLabel();
+
+    GameObject* m_targetObject;
+    cocos2d::CCArray* m_targetObjects;
+    cocos2d::CCArray* m_zLayerButtons;
+    cocos2d::CCArray* m_groupIDObjects;
+    CCTextInputNode* m_editorLayerInput;
+    CCTextInputNode* m_editorLayer2Input;
+    CCTextInputNode* m_zOrderInput;
+    CCTextInputNode* m_groupIDInput;
+    CCTextInputNode* m_orderInput;
+    CCTextInputNode* m_channelInput;
+    bool m_showChannelOrder;
+    int m_channelValue;
+    bool m_channelUpdated;
+    int m_groupIDValue;
+    int m_editorLayerValue;
+    int m_editorLayer2Value;
+    int m_zOrderValue;
+    int m_zOrderRelated;
+    bool m_useDefaultZLayer;
+    ZLayer m_zLayerValue;
+    int m_orderValue;
+    bool m_channelOrderEdited;
+    bool m_editorLayerEdited;
+    bool m_removeGroupsLock;
+    int m_groupToRemove;
+    bool m_addedGroup;
+    bool m_hasTargetObjects;
+    bool m_unk2ff;
+    bool m_unk300;
+    int m_nextFreeID;
+    cocos2d::CCDictionary* m_parentGroups;
+    cocos2d::CCDictionary* m_childGroups;
+    ScrollableContentLayer* m_scrollableContentLayer;
+    cocos2d::CCMenu* m_groupIDMenu;
+    bool m_scrolling;
+    IDNameInput* m_idNameInput;
+
+};
