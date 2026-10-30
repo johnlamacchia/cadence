@@ -6,3 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(loader)
 add_subdirectory(mods/example)
+add_subdirectory(mods/noclip)
+add_subdirectory(mods/speedhack)
+add_subdirectory(mods/fpsdisplay)
+add_subdirectory(mods/practicemusic)
+add_subdirectory(mods/instantrestart)
