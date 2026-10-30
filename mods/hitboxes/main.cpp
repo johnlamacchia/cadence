@@ -87,11 +87,14 @@ static void __fastcall hook_scheduler_update(void* scheduler, float dt) {
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
+    bool was_down = false;
     while (g_running) {
-        if (GetAsyncKeyState('H') & 1) {
+        bool is_down = (GetAsyncKeyState('H') & 0x8000) != 0;
+        if (is_down && !was_down) {
             g_show_hitboxes = !g_show_hitboxes;
         }
-        Sleep(50);
+        was_down = is_down;
+        Sleep(30);
     }
     return 0;
 }

@@ -40,12 +40,15 @@ static void __fastcall hook_drawScene(void* director) {
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
+    bool was_down = false;
     while (g_running) {
-        if (GetAsyncKeyState('P') & 1) {
+        bool is_down = (GetAsyncKeyState('P') & 0x8000) != 0;
+        if (is_down && !was_down) {
             g_hide_pause = !g_hide_pause;
             g_toggle_pending = true;
         }
-        Sleep(50);
+        was_down = is_down;
+        Sleep(30);
     }
     return 0;
 }

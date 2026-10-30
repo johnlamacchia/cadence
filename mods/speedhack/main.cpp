@@ -27,24 +27,31 @@ static void update_title() {
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
+    bool was_plus = false, was_minus = false, was_reset = false;
     while (g_running) {
         bool changed = false;
-        if ((GetAsyncKeyState(VK_OEM_PLUS) & 1) || (GetAsyncKeyState(VK_ADD) & 1)) {
+        bool is_plus = ((GetAsyncKeyState(VK_OEM_PLUS) & 0x8000) || (GetAsyncKeyState(VK_ADD) & 0x8000)) != 0;
+        bool is_minus = ((GetAsyncKeyState(VK_OEM_MINUS) & 0x8000) || (GetAsyncKeyState(VK_SUBTRACT) & 0x8000)) != 0;
+        bool is_reset = (GetAsyncKeyState('0') & 0x8000) != 0;
+        if (is_plus && !was_plus) {
             g_speed += 0.25f;
             if (g_speed > 5.0f) g_speed = 5.0f;
             changed = true;
         }
-        if ((GetAsyncKeyState(VK_OEM_MINUS) & 1) || (GetAsyncKeyState(VK_SUBTRACT) & 1)) {
+        if (is_minus && !was_minus) {
             g_speed -= 0.25f;
             if (g_speed < 0.25f) g_speed = 0.25f;
             changed = true;
         }
-        if (GetAsyncKeyState('0') & 1) {
+        if (is_reset && !was_reset) {
             g_speed = 1.0f;
             changed = true;
         }
+        was_plus = is_plus;
+        was_minus = is_minus;
+        was_reset = is_reset;
         if (changed) update_title();
-        Sleep(50);
+        Sleep(30);
     }
     return 0;
 }

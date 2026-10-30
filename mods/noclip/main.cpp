@@ -29,11 +29,14 @@ static void __fastcall hook_PlayLayer_onQuit(void* self) {
 }
 
 static DWORD WINAPI key_thread(LPVOID) {
+    bool was_down = false;
     while (g_running) {
-        if (GetAsyncKeyState('N') & 1) {
+        bool is_down = (GetAsyncKeyState('N') & 0x8000) != 0;
+        if (is_down && !was_down) {
             g_noclip = !g_noclip;
         }
-        Sleep(50);
+        was_down = is_down;
+        Sleep(30);
     }
     return 0;
 }
