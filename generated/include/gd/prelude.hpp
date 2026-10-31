@@ -6,6 +6,7 @@
 #include <array>
 #include <atomic>
 #include <deque>
+#include <type_traits>
 #include <functional>
 #include <list>
 #include <map>
@@ -46,9 +47,34 @@ using TodoReturn = TodoReturnPlaceholder;
 
 
 namespace cocos2d {
-struct CCPoint { float x, y; };
-struct CCSize { float width, height; };
-struct CCRect { CCPoint origin; CCSize size; };
+// cocos2d's point, size and rect classes have user-provided copy constructors, so MSVC
+// passes them to functions by hidden reference and returns them through a hidden
+// pointer, even though they are only 8 or 16 bytes. A plain aggregate would be passed
+// in registers instead, and every hook or call taking one would be wrong.
+struct CCPoint {
+    float x, y;
+    CCPoint() : x(0), y(0) {}
+    CCPoint(float x_, float y_) : x(x_), y(y_) {}
+    CCPoint(const CCPoint& o) : x(o.x), y(o.y) {}
+    CCPoint& operator=(const CCPoint& o) { x = o.x; y = o.y; return *this; }
+};
+struct CCSize {
+    float width, height;
+    CCSize() : width(0), height(0) {}
+    CCSize(float w, float h) : width(w), height(h) {}
+    CCSize(const CCSize& o) : width(o.width), height(o.height) {}
+    CCSize& operator=(const CCSize& o) { width = o.width; height = o.height; return *this; }
+};
+struct CCRect {
+    CCPoint origin;
+    CCSize size;
+    CCRect() {}
+    CCRect(float x, float y, float w, float h) : origin(x, y), size(w, h) {}
+    CCRect(const CCRect& o) : origin(o.origin), size(o.size) {}
+    CCRect& operator=(const CCRect& o) { origin = o.origin; size = o.size; return *this; }
+};
+static_assert(sizeof(CCPoint) == 8 && sizeof(CCSize) == 8 && sizeof(CCRect) == 16, "cocos2d value type sizes");
+static_assert(!std::is_trivially_copyable_v<CCPoint>, "CCPoint must be passed by reference like the game's");
 struct ccColor3B { unsigned char r, g, b; };
 struct ccColor4B { unsigned char r, g, b, a; };
 struct ccColor4F { float r, g, b, a; };

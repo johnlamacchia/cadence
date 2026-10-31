@@ -1,6 +1,7 @@
-#include "hook.h"
+﻿#include "hook.h"
 #include <windows.h>
 #include <Zydis/Zydis.h>
+#include <algorithm>
 #include <cstring>
 #include <memory>
 #include <mutex>
@@ -44,26 +45,43 @@ static void write_abs_jmp(uint8_t* buf, void* target) {
     *(uint64_t*)(buf + 6) = (uint64_t)target;
 }
 
+// Executable memory as close to `target` as possible, so rel32 displacements in the
+// relocated prologue (RIP-relative loads of globals, calls) still reach. Searches
+// upward from the target first, then downward, within +/-2 GB. Starting from the far
+// end of that window would put the trampoline up to 2 GB away, out of reach of a
+// global only a few MB from the function.
 static void* alloc_near(void* target, size_t size) {
     SYSTEM_INFO si;
     GetSystemInfo(&si);
-    uintptr_t addr = (uintptr_t)target;
-    uintptr_t min_addr = addr > 0x7FFF0000 ? addr - 0x7FFF0000 : (uintptr_t)si.lpMinimumApplicationAddress;
-    uintptr_t max_addr = addr + 0x7FFF0000;
-    if (max_addr > (uintptr_t)si.lpMaximumApplicationAddress)
-        max_addr = (uintptr_t)si.lpMaximumApplicationAddress;
+    const uintptr_t gran = si.dwAllocationGranularity;
+    const uintptr_t addr = reinterpret_cast<uintptr_t>(target);
+    const uintptr_t window = 0x7FFF0000;
+    const uintptr_t lo = addr > window ? addr - window : reinterpret_cast<uintptr_t>(si.lpMinimumApplicationAddress);
+    const uintptr_t hi = (std::min<uintptr_t>)(addr + window, reinterpret_cast<uintptr_t>(si.lpMaximumApplicationAddress));
+    constexpr DWORD kAlloc = MEM_RESERVE | MEM_COMMIT;
 
     MEMORY_BASIC_INFORMATION mbi;
-    uintptr_t search = min_addr;
-    while (search < max_addr) {
-        if (VirtualQuery((void*)search, &mbi, sizeof(mbi)) == 0) break;
-        if (mbi.State == MEM_FREE && mbi.RegionSize >= size) {
-            void* p = VirtualAlloc((void*)search, size, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-            if (p) return p;
+    for (uintptr_t p = addr & ~(gran - 1); p < hi;) {
+        if (!VirtualQuery(reinterpret_cast<void*>(p), &mbi, sizeof(mbi))) break;
+        uintptr_t base = reinterpret_cast<uintptr_t>(mbi.BaseAddress), end = base + mbi.RegionSize;
+        if (mbi.State == MEM_FREE) {
+            uintptr_t start = ((std::max)(base, p) + gran - 1) & ~(gran - 1);
+            if (start + size <= end && start + size <= hi)
+                if (void* m = VirtualAlloc(reinterpret_cast<void*>(start), size, kAlloc, PAGE_EXECUTE_READWRITE)) return m;
         }
-        search = (uintptr_t)mbi.BaseAddress + mbi.RegionSize;
+        p = end;
     }
-    return VirtualAlloc(nullptr, size, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+    for (uintptr_t p = addr & ~(gran - 1); p > lo;) {
+        if (!VirtualQuery(reinterpret_cast<void*>(p - 1), &mbi, sizeof(mbi))) break;
+        uintptr_t base = reinterpret_cast<uintptr_t>(mbi.BaseAddress), end = base + mbi.RegionSize;
+        if (mbi.State == MEM_FREE && end >= size) {
+            uintptr_t start = ((std::min)(end, p) - size) & ~(gran - 1);
+            if (start >= base && start >= lo)
+                if (void* m = VirtualAlloc(reinterpret_cast<void*>(start), size, kAlloc, PAGE_EXECUTE_READWRITE)) return m;
+        }
+        p = base;
+    }
+    return VirtualAlloc(nullptr, size, kAlloc, PAGE_EXECUTE_READWRITE);
 }
 
 static bool relocate_instruction(
@@ -158,6 +176,17 @@ static Target* create_target(void* target) {
         if (!ZYAN_SUCCESS(ZydisDecoderDecodeFull(&decoder, func + copied, 15, &insn, operands)))
             return nullptr;
         copied += insn.length;
+
+        // A function shorter than the patch would have its neighbour overwritten.
+        // That is only safe if what follows is alignment padding.
+        bool ends = insn.mnemonic == ZYDIS_MNEMONIC_RET || insn.mnemonic == ZYDIS_MNEMONIC_JMP ||
+                    insn.mnemonic == ZYDIS_MNEMONIC_INT3 || insn.mnemonic == ZYDIS_MNEMONIC_UD2;
+        if (ends && copied < JMP_ABS_SIZE) {
+            for (size_t i = copied; i < JMP_ABS_SIZE; i++)
+                if (func[i] != 0xCC) return nullptr;
+            copied = JMP_ABS_SIZE;    // patch the padding too; the trampoline copies the real code only
+            break;
+        }
     }
     if (copied > SAVED_MAX) return nullptr;
 

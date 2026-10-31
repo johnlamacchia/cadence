@@ -76,6 +76,26 @@ int main() {
     CHECK(n == 1, "range removal removed %d", n);
     CHECK(call_target(5) == base, "after range removal: got %d", call_target(5));
 
+    // A function shorter than the 14-byte patch must be refused when real code follows it
+    // (the patch would overwrite the neighbour), and accepted when only padding does.
+    auto* mem = static_cast<uint8_t*>(VirtualAlloc(nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE));
+    CHECK(mem != nullptr, "VirtualAlloc");
+    if (mem) {
+        const uint8_t tiny[] = {0xB8, 0x01, 0x00, 0x00, 0x00, 0xC3};    // mov eax, 1 ; ret
+        void* unused = nullptr;
+
+        memset(mem, 0x90, 128);                                         // a "neighbour" right after it
+        memcpy(mem, tiny, sizeof(tiny));
+        CHECK(!hook::install(mem, (void*)detour_a, &unused), "tiny function followed by code must be refused");
+        CHECK(mem[sizeof(tiny)] == 0x90, "the neighbour was overwritten");
+
+        uint8_t* padded = mem + 256;
+        memset(padded, 0xCC, 64);
+        memcpy(padded, tiny, sizeof(tiny));
+        CHECK(hook::install(padded, (void*)detour_a, &unused), "tiny function followed by padding should hook");
+        VirtualFree(mem, 0, MEM_RELEASE);
+    }
+
     printf(g_failed ? "hook_test: %d FAILED\n" : "hook_test: all passed\n", g_failed);
     return g_failed ? 1 : 0;
 }
