@@ -304,6 +304,7 @@ until exit, because their detours can still be on the call stack and UI they bui
 loader/            winmm proxy, mod loader, hook engine, crash handler
   include/sdk.h        the entire mod-facing API
   include/sdk_extras.h optional helpers
+  include/sdk_ui.h     optional GD-style popups, buttons, checkboxes
   include/cadence_abi.h LoaderAPI / ModEntry, shared by the loader and sdk.h
 mods/              example mods (one directory each)
 template/          standalone starter mod
@@ -319,6 +320,8 @@ docs/              GUIDE.md, ADDRESS_VERIFICATION.md
 `powershell -File tools/package.ps1` builds everything, runs the tests and writes `dist/Cadence-2.2091.zip`.
 
 ## License
+
+Cadence is released under the [MIT License](LICENSE).
 
 The bindings data (class names, signatures, member lists, addresses, enums) is derived from
 [geode-sdk/bindings](https://github.com/geode-sdk/bindings) under the Boost Software License 1.0.
