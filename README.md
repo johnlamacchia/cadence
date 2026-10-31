@@ -117,12 +117,18 @@ system changes).
 
 ## Write a mod
 
+From the unzipped release, a complete standalone project (this is the usual way):
+
 ```powershell
-python tools/new_mod.py my_mod                    # scaffolds mods/my_mod/
-cmake -B build -A x64
-cmake --build build --config Release --target my_mod_mod
-copy build\mods\my_mod\Release\my_mod.dll "<Geometry Dash>\mods\"
+python <unzipped>\sdk\tools\new_mod.py my_mod     # creates .\my_mod\ with CMakeLists.txt and main.cpp
+cd my_mod
+cmake -B build -G "Visual Studio 17 2022" -A x64
+cmake --build build --config Release
+copy build\Release\my_mod.dll "<Geometry Dash>\mods\"
 ```
+
+Or, inside a checkout of this repo, `python tools/new_mod.py my_mod` makes `mods/my_mod/`, which the root build finds by itself
+(`cmake --build build --config Release --target my_mod_mod`; the DLL is in `build\mods\my_mod\Release\`).
 
 Press **F6** in game to load it. Edit, rebuild, copy the DLL over the old one (it is not locked),
 press F6 again. To develop outside this repo, copy `template/` and configure it with

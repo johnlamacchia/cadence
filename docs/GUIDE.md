@@ -18,6 +18,22 @@ about how Geometry Dash behaves, because that is where mods go wrong.
 
 ## Your first mod
 
+**With the release zip** (the usual way): unzip it, then from any folder you want your project in:
+
+```powershell
+python <unzipped>\sdk\tools\new_mod.py my_mod       # a complete standalone project in .\my_mod\
+cd my_mod
+cmake -B build -G "Visual Studio 17 2022" -A x64
+cmake --build build --config Release
+copy build\Release\my_mod.dll "<Geometry Dash>\mods\"
+```
+
+The project it makes has the whole `CMakeLists.txt` (it points at the SDK it was made from; override with
+`-DCADENCE_SDK_DIR=<path>` if you move it), a starter `main.cpp` and a `.gitignore`. Options:
+`--author`, `--description`, `--key`, `--display-name`.
+
+**Inside a repo checkout** the same script makes a mod the root build finds by itself:
+
 ```powershell
 python tools/new_mod.py my_mod                 # creates mods/my_mod/
 cmake -B build -A x64
@@ -28,8 +44,7 @@ copy build\mods\my_mod\Release\my_mod.dll "<Geometry Dash>\mods\"
 Press **F6** in game to load it. After that, edit, rebuild, copy the DLL over the old one
 (it is not locked, see [Hot reload](#hot-reload)) and press F6 again.
 
-Prefer to keep your mod outside this repo? Copy `template/` anywhere, rename `MY_MOD`,
-and configure with `-DCADENCE_SDK_DIR=<path to cadence>` (or the `sdk/` folder of a release zip).
+You can also copy `template/` by hand, rename `MY_MOD`, and configure with `-DCADENCE_SDK_DIR=<path>`.
 
 A complete mod:
 

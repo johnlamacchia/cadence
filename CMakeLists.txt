@@ -65,5 +65,11 @@ if(CADENCE_BASH)
     set_tests_properties(install_sh PROPERTIES ENVIRONMENT "CONFIG=$<CONFIG>")
 endif()
 
+# Scaffolds a standalone mod with tools/new_mod.py and builds it (the first thing every mod author runs).
+find_package(Python3 QUIET COMPONENTS Interpreter)
+add_test(NAME new_mod
+    COMMAND powershell -NoProfile -ExecutionPolicy Bypass -File "${CMAKE_SOURCE_DIR}/tests/run_new_mod_test.ps1"
+            -Repo "${CMAKE_SOURCE_DIR}" -WorkDir "${CMAKE_BINARY_DIR}/new_mod_test")
+
 add_test(NAME loader_smoke
     COMMAND powershell -NoProfile -File "${CMAKE_SOURCE_DIR}/tests/run_loader_smoke.ps1" -BuildDir "${CMAKE_BINARY_DIR}")
