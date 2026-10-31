@@ -1,4 +1,13 @@
 cmake_minimum_required(VERSION 3.20)
+# Before project(): the loader is a Windows DLL (MSVC, MASM, windows.h), so on anything else say so now instead of
+# failing later with a compiler error about windows.h.
+if(NOT CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+    message(FATAL_ERROR
+        "Cadence builds only on Windows (Visual Studio 2022 and MASM): it produces Windows DLLs.\n"
+        "On Linux / Steam Deck you do not build anything: download the release zip and run install.sh "
+        "(see the README, Install > Linux). Geometry Dash runs through Proton as the same Windows binary.")
+endif()
+
 project(cadence LANGUAGES C CXX ASM_MASM)
 
 set(CMAKE_CXX_STANDARD 20)

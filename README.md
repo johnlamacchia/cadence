@@ -86,7 +86,10 @@ powershell -File install.ps1                          # auto-detects the Steam i
 powershell -File install.ps1 -GdDir "D:\Games\Geometry Dash"
 ```
 
-**From source**
+**From source (Windows only)**
+
+Cadence builds only on Windows: it produces Windows DLLs, and the build needs MSVC and MASM. On Linux do not try to
+build it (`windows.h` is not found); use the release zip and `install.sh` above.
 
 Requirements: Visual Studio 2022 Build Tools (C++ desktop workload), CMake 3.20+, Python 3.10+.
 
