@@ -54,6 +54,31 @@ removes exactly what it installed and leaves your own mods, settings and logs al
 Close Geometry Dash first. If Windows warns about an unsigned program, that is because the exe is not code-signed. For
 a script-friendly install: `CadenceInstaller.exe --silent` (also `--uninstall`, `--gd-dir <folder>`, `--no-mods`).
 
+**Linux / Steam Deck (Geometry Dash through Proton)** (untested under real Proton, see below)
+
+GD runs through Proton as the same Windows binary, so the loader is the same file. From the unzipped release:
+
+```bash
+bash install.sh                       # finds Steam's copy (native, Flatpak, Steam Deck, extra library drives)
+bash install.sh --gd-dir "/path/to/Geometry Dash"
+bash install.sh --uninstall
+```
+
+**One more step or nothing loads:** Proton uses its own `winmm.dll` unless told otherwise. In Steam, open Geometry Dash >
+Properties > General > Launch Options and set:
+
+```
+WINEDLLOVERRIDES="winmm=n,b" %command%
+```
+
+`install.sh` and `CadenceInstaller.exe` write the same `cadence_install.txt`, so either can uninstall what the other
+installed. `CadenceInstaller.exe` is not meant for Linux: it finds Steam through the Windows registry, which a Wine
+prefix does not have.
+
+What is tested: `install.sh` against fake Steam folder trees. What is **not** tested: the loader and the mods under
+Wine or Proton (whether our `winmm.dll` forwarding, the hook engine's memory placement, and F6 key polling behave the
+same). If you try it, `loader.log` in the game folder is the thing to send back. Building mods still needs Windows
+(Visual Studio 2022 and MASM).
 **From a release zip (mod developers)**
 
 ```powershell

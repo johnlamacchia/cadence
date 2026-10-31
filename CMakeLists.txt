@@ -44,5 +44,17 @@ add_test(NAME installer
     COMMAND powershell -NoProfile -ExecutionPolicy Bypass -File "${CMAKE_SOURCE_DIR}/tests/run_installer_test.ps1"
             -Installer "$<TARGET_FILE:CadenceInstaller>")
 
+# tools/install.sh against throwaway Steam folder trees (native, Flatpak, extra library drive).
+find_program(CADENCE_BASH bash HINTS "C:/Program Files/Git/bin" "C:/Program Files (x86)/Git/bin" NO_DEFAULT_PATH)
+if(NOT CADENCE_BASH AND NOT WIN32)
+    find_program(CADENCE_BASH bash)
+endif()
+if(CADENCE_BASH)
+    add_test(NAME install_sh
+        COMMAND "${CADENCE_BASH}" tests/test_install_sh.sh "${CMAKE_BINARY_DIR}" "$<TARGET_FILE:CadenceInstaller>"
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+    set_tests_properties(install_sh PROPERTIES ENVIRONMENT "CONFIG=$<CONFIG>")
+endif()
+
 add_test(NAME loader_smoke
     COMMAND powershell -NoProfile -File "${CMAKE_SOURCE_DIR}/tests/run_loader_smoke.ps1" -BuildDir "${CMAKE_BINARY_DIR}")

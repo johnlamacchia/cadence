@@ -43,6 +43,9 @@ Copy-Item tools\offset_probe.py, tools\layout_check.py, tools\rtti_sizes.py, too
 Copy-Item README.md, LICENSE, THIRD_PARTY_LICENSES.txt $stage
 Copy-Item docs "$stage\docs" -Recurse
 Copy-Item tools\install.ps1 $stage
+# install.sh must have LF endings or bash cannot run it (git on Windows may have checked it out with CRLF).
+$sh = [System.IO.File]::ReadAllText("$root\tools\install.sh") -replace "`r`n", "`n"
+[System.IO.File]::WriteAllText("$stage\install.sh", $sh, (New-Object System.Text.UTF8Encoding($false)))
 
 $zip = Join-Path $root "dist\Cadence-$ver.zip"
 if (Test-Path $zip) { Remove-Item $zip }
