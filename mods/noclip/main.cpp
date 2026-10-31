@@ -1,14 +1,14 @@
-// Noclip — press N in a level to toggle surviving every hazard.
-#include <sdk.h>
+// Noclip: press N in a level to toggle surviving every hazard.
+#include <sdk_extras.h>
+#include <gd/PlayLayer.hpp>
 
 static bool g_noclip = false;
 
-static void(__fastcall* orig_destroyPlayer)(void* self, void* player, void* object);
 static void(__fastcall* orig_drawScene)(void* director);
 
-static void __fastcall hook_destroyPlayer(void* self, void* player, void* object) {
+static void __fastcall hook_destroyPlayer(PlayLayer* self, PlayerObject* player, GameObject* object) {
     if (g_noclip) return;
-    orig_destroyPlayer(self, player, object);
+    cadence::original<&PlayLayer::destroyPlayer>(self, player, object);
 }
 
 static void __fastcall hook_drawScene(void* director) {
@@ -16,18 +16,13 @@ static void __fastcall hook_drawScene(void* director) {
     orig_drawScene(director);
 }
 
-extern "C" __declspec(dllexport) void mod_unload() { g_noclip = false; }
-
-extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"({"name":"Noclip","desc":"Prevents player death","key":"N","ver":"1.1"})";
+extern "C" __declspec(dllexport) void mod_unload() {
+    g_noclip = false;
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-
-    cadence::hook_typed("PlayLayer::destroyPlayer(PlayerObject* player, GameObject* object)",
-                        hook_destroyPlayer, &orig_destroyPlayer);
-
+    cadence::hook<&PlayLayer::destroyPlayer>(hook_destroyPlayer);
     cadence::hook(cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ"),
                   (void*)hook_drawScene, (void**)&orig_drawScene);
 }

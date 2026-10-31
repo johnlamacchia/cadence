@@ -1,405 +1,379 @@
+#!/usr/bin/env python3
 """
-gdport — carry GD function addresses from one exe version to the next.
+gdport: carry function addresses from one GeometryDash.exe to the next.
 
-Fingerprints functions by strings, byte patterns (addresses masked),
-opcode shapes, and call graph, then matches against the new binary.
+    pip install capstone
+    python gdport.py <old.exe> <old addresses.json> <new.exe> [-o addresses_new.json]
+
+It never guesses. A function is only reported when exactly one candidate fits, and
+every result is checked for consistency before it is written; anything doubtful goes
+to the `unmatched` list for a human.
+
+How it works (see README.md for the measured results):
+  1. Function boundaries. Every x64 function that needs unwind data is listed in the
+     exe's .pdata; leaf functions are found from the int3 padding between functions.
+  2. Fingerprints. Each function gets an exact hash (its bytes with relative branch
+     targets and RIP-relative displacements masked), a shape hash (its mnemonics),
+     the string literals it references, and the functions it calls.
+  3. Unique matches. A function is matched when its fingerprint occurs exactly once in
+     the old exe and exactly once in the new one: exact bytes, then strings + shape,
+     then shape alone (for functions of 10+ instructions).
+  4. Propagation. Matched functions anchor the rest: an unmatched function is matched
+     through the call graph (everything it calls or is called by that is already matched
+     must agree on one candidate), and through layout order (the functions between two
+     matched neighbours, when old and new have the same number of them).
+  5. Validation. Matches must be one-to-one and keep the exe's layout order; matches
+     that cross the dominant ordering are rejected.
 """
 import argparse
+import bisect
+import hashlib
 import json
-import struct
 import re
+import struct
 import sys
-from collections import defaultdict
+import time
+from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
+BRANCHES = {
+    "call", "jmp", "jo", "jno", "jb", "jae", "je", "jne", "jbe", "ja", "js", "jns", "jp", "jnp",
+    "jl", "jge", "jle", "jg", "jcxz", "jecxz", "jrcxz", "loop", "loope", "loopne",
+}
+MIN_EXACT_INSNS = 4           # a 2-3 instruction function can be byte-identical to its sibling
+MIN_SHAPE_INSNS = 10          # shape-only matching is too weak below this
+MAX_ROUNDS = 10
+
+
+# --------------------------------------------------------------------------- PE
+
+class Image:
+    """A PE32+ file mapped the way the loader maps it, so an RVA indexes `mem` directly."""
+
+    def __init__(self, path):
+        raw = Path(path).read_bytes()
+        e = struct.unpack_from("<I", raw, 0x3C)[0]
+        nsec, = struct.unpack_from("<H", raw, e + 6)
+        opt_size, = struct.unpack_from("<H", raw, e + 20)
+        opt = e + 24
+        if struct.unpack_from("<H", raw, opt)[0] != 0x20B:
+            raise SystemExit(f"{path}: not a 64-bit PE")
+        self.base, = struct.unpack_from("<Q", raw, opt + 24)
+        size_of_image, size_of_headers = struct.unpack_from("<II", raw, opt + 56)
+        self.exception = struct.unpack_from("<II", raw, opt + 112 + 3 * 8)    # data directory 3
+        self.mem = bytearray(size_of_image)
+        self.mem[:size_of_headers] = raw[:size_of_headers]
+        self.sections = []
+        sec = opt + opt_size
+        for i in range(nsec):
+            vsize, va, rawsize, rawoff = struct.unpack_from("<IIII", raw, sec + i * 40 + 8)
+            flags, = struct.unpack_from("<I", raw, sec + i * 40 + 36)
+            n = min(rawsize, vsize)
+            self.mem[va:va + n] = raw[rawoff:rawoff + n]
+            self.sections.append((va, va + vsize, flags))
+        self.exec = [(lo, hi) for lo, hi, f in self.sections if f & 0x20000000]
+        self.data = [(lo, hi) for lo, hi, f in self.sections if not f & 0x20000000]
+
+    def exec_end(self, rva):
+        for lo, hi in self.exec:
+            if lo <= rva < hi:
+                return hi
+        return None
+
+    def in_data(self, rva):
+        return any(lo <= rva < hi for lo, hi in self.data)
+
+
+def pdata_ranges(img):
+    rva, size = img.exception
+    out = []
+    for i in range(size // 12):
+        b, e, _ = struct.unpack_from("<III", img.mem, rva + i * 12)
+        if b and e > b and img.exec_end(b):
+            out.append((b, e))
+    return sorted(out)
+
+
+def find_starts(img, extra=()):
+    """Function start addresses: .pdata entries, plus leaf functions found after int3 padding."""
+    ranges = pdata_ranges(img)
+    begins = [b for b, _ in ranges]
+    starts = set(begins) | set(extra)
+    for lo, hi in img.exec:
+        for m in re.finditer(rb"\xCC+", bytes(img.mem[lo:hi])):
+            p = lo + m.end()
+            if p >= hi or img.mem[p] == 0xCC:
+                continue
+            i = bisect.bisect_right(begins, p) - 1
+            if i >= 0 and begins[i] < p < ranges[i][1]:
+                continue                       # inside a function that has unwind data
+            starts.add(p)
+    return sorted(s for s in starts if img.exec_end(s))
+
+
+# ------------------------------------------------------------------ fingerprints
 
 @dataclass
-class Function:
-    rva: int
+class Fn:
+    start: int
     size: int
-    strings: list[str] = field(default_factory=list)
-    masked_bytes: bytes = b""
-    opcodes: list[int] = field(default_factory=list)
-    call_targets: list[int] = field(default_factory=list)
-    callers: list[int] = field(default_factory=list)
+    ninsn: int
+    exact: bytes
+    shape: bytes
+    strings: frozenset
+    calls: list = field(default_factory=list)      # absolute targets of direct calls / tail jumps
 
 
-def read_pe(path: str) -> tuple[bytes, int, list[tuple[int, int, int]]]:
-    """Read PE file, return (data, image_base, sections[(rva, vsize, raw_off)])."""
-    data = open(path, "rb").read()
-    e_lfanew = struct.unpack_from("<I", data, 0x3c)[0]
-    sig = e_lfanew
-    file_hdr = sig + 4
-    num_sections = struct.unpack_from("<H", data, file_hdr + 2)[0]
-    opt_hdr_off = file_hdr + 20
-    magic = struct.unpack_from("<H", data, opt_hdr_off)[0]
-    if magic == 0x20b:  # PE32+
-        image_base = struct.unpack_from("<Q", data, opt_hdr_off + 24)[0]
-    else:
-        image_base = struct.unpack_from("<I", data, opt_hdr_off + 28)[0]
-
-    opt_hdr_size = struct.unpack_from("<H", data, file_hdr + 16)[0]
-    sections_off = opt_hdr_off + opt_hdr_size
-    sections = []
-    for i in range(num_sections):
-        s = sections_off + i * 40
-        vsize = struct.unpack_from("<I", data, s + 8)[0]
-        rva = struct.unpack_from("<I", data, s + 12)[0]
-        raw_size = struct.unpack_from("<I", data, s + 16)[0]
-        raw_off = struct.unpack_from("<I", data, s + 20)[0]
-        sections.append((rva, vsize, raw_off))
-    return data, image_base, sections
+def digest(b):
+    return hashlib.blake2b(b, digest_size=12).digest()
 
 
-def rva_to_offset(rva: int, sections: list) -> int:
-    for s_rva, s_vsize, s_raw in sections:
-        if s_rva <= rva < s_rva + s_vsize:
-            return s_raw + (rva - s_rva)
-    return -1
+def read_string(img, rva):
+    mem = img.mem
+    end = rva
+    while end < len(mem) and end - rva < 200 and 0x20 <= mem[end] < 0x7F:
+        end += 1
+    if end - rva >= 4 and end < len(mem) and mem[end] == 0:
+        return bytes(mem[rva:end]).decode("ascii")
+    return None
 
 
-def find_strings_at(data: bytes, sections: list, rva: int, size: int) -> list[str]:
-    """Find string references in a function's bytes."""
-    strings = []
-    off = rva_to_offset(rva, sections)
-    if off < 0:
-        return strings
-
-    func_bytes = data[off:off + size]
-    # Look for LEA instructions with RIP-relative addressing that point to .rdata
-    # Pattern: 48 8D xx xx xx xx xx (LEA reg, [rip+disp32])
-    for i in range(len(func_bytes) - 6):
-        # LEA with RIP-relative: 48 8D [0x05,0x0D,0x15,0x1D,0x25,0x2D,0x35,0x3D] + disp32
-        if func_bytes[i] in (0x48, 0x4C) and func_bytes[i + 1] == 0x8D:
-            modrm = func_bytes[i + 2]
-            if (modrm & 0xC7) == 0x05:  # mod=00, rm=101 (RIP-relative)
-                disp = struct.unpack_from("<i", func_bytes, i + 3)[0]
-                target_rva = rva + i + 7 + disp
-                target_off = rva_to_offset(target_rva, sections)
-                if 0 <= target_off < len(data):
-                    # Try to read a string
-                    end = target_off
-                    while end < len(data) and end - target_off < 256 and data[end] != 0:
-                        if data[end] < 0x20 or data[end] > 0x7E:
-                            break
-                        end += 1
-                    if end > target_off + 3 and data[end] == 0:
-                        s = data[target_off:end].decode("ascii", errors="ignore")
-                        strings.append(s)
-    return strings
-
-
-def mask_addresses(data: bytes, sections: list, rva: int, size: int) -> bytes:
-    """Create masked byte pattern: replace RIP-relative displacements with wildcards."""
-    off = rva_to_offset(rva, sections)
-    if off < 0:
-        return b""
-    func_bytes = bytearray(data[off:off + size])
-
-    # Mask call/jmp rel32 targets
-    i = 0
-    while i < len(func_bytes) - 4:
-        if func_bytes[i] == 0xE8 or func_bytes[i] == 0xE9:  # CALL/JMP rel32
-            func_bytes[i + 1:i + 5] = b'\x00\x00\x00\x00'
-            i += 5
+def analyze(img, starts):
+    try:
+        import capstone
+    except ImportError:
+        sys.exit("gdport needs capstone: pip install capstone")
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+    md.detail = True
+    mem = img.mem
+    out = {}
+    for idx, s in enumerate(starts):
+        e = starts[idx + 1] if idx + 1 < len(starts) else img.exec_end(s)
+        e = min(e, img.exec_end(s))
+        while e > s and mem[e - 1] == 0xCC:
+            e -= 1
+        if e <= s:
             continue
-        # Mask RIP-relative displacements in LEA and MOV
-        if i < len(func_bytes) - 6:
-            if func_bytes[i] in (0x48, 0x4C, 0x44, 0x42) and func_bytes[i + 1] in (0x8D, 0x8B, 0x89, 0x3B, 0x39):
-                modrm = func_bytes[i + 2]
-                if (modrm & 0xC7) == 0x05:
-                    func_bytes[i + 3:i + 7] = b'\x00\x00\x00\x00'
-                    i += 7
-                    continue
-        # Conditional jumps: 0F 8x rel32
-        if func_bytes[i] == 0x0F and i + 5 < len(func_bytes):
-            if 0x80 <= func_bytes[i + 1] <= 0x8F:
-                func_bytes[i + 2:i + 6] = b'\x00\x00\x00\x00'
-                i += 6
+        code = bytes(mem[s:e])
+        masked = bytearray(code)
+        mnemonics, strings, calls = [], set(), []
+        for ins in md.disasm(code, s):
+            m = ins.mnemonic
+            mnemonics.append(m)
+            off = ins.address - s
+            if m in BRANCHES:
+                if ins.imm_size == 4 and ins.op_str.startswith("0x"):
+                    masked[off + ins.imm_offset:off + ins.imm_offset + 4] = b"\0\0\0\0"
+                    tgt = int(ins.op_str, 16)
+                    if m == "call" or (m == "jmp" and not s <= tgt < e):
+                        calls.append(tgt)
+            elif ins.disp_size == 4 and (ins.modrm & 0xC7) == 0x05:        # [rip + disp32]
+                d, = struct.unpack_from("<i", code, off + ins.disp_offset)
+                masked[off + ins.disp_offset:off + ins.disp_offset + 4] = b"\0\0\0\0"
+                tgt = ins.address + ins.size + d
+                if img.in_data(tgt):
+                    t = read_string(img, tgt)
+                    if t:
+                        strings.add(t)
+        out[s] = Fn(s, e - s, len(mnemonics), digest(bytes(masked)), digest(" ".join(mnemonics).encode()),
+                    frozenset(strings), calls)
+    return out
+
+
+# ----------------------------------------------------------------- the matcher
+
+def lis_keep(pairs):
+    """pairs: [(old, new)] sorted by old. Return the largest subset whose `new` strictly increases."""
+    tails, tail_idx, prev = [], [], [-1] * len(pairs)
+    for i, (_, n) in enumerate(pairs):
+        k = bisect.bisect_left(tails, n)
+        if k == len(tails):
+            tails.append(n)
+            tail_idx.append(i)
+        else:
+            tails[k] = n
+            tail_idx[k] = i
+        prev[i] = tail_idx[k - 1] if k else -1
+    keep, i = set(), tail_idx[-1] if tail_idx else -1
+    while i != -1:
+        keep.add(pairs[i][0])
+        i = prev[i]
+    return keep
+
+
+class Matcher:
+    def __init__(self, old, new, log):
+        self.old, self.new, self.log = old, new, log
+        self.match = {}                # old start -> new start
+        self.how = {}                  # old start -> method
+        self.rejected = set()
+        self.used_new = set()
+        self.old_starts = sorted(old)
+        self.new_starts = sorted(new)
+        self.callees_old = {s: [t for t in f.calls if t in old and t != s] for s, f in old.items()}
+        self.callees_new = {s: [t for t in f.calls if t in new and t != s] for s, f in new.items()}
+        self.callers_old, self.callers_new = defaultdict(set), defaultdict(set)
+        for s, ts in self.callees_old.items():
+            for t in ts:
+                self.callers_old[t].add(s)
+        for s, ts in self.callees_new.items():
+            for t in ts:
+                self.callers_new[t].add(s)
+
+    def add(self, o, n, how):
+        if o in self.match or n in self.used_new or o in self.rejected:
+            return False
+        self.match[o] = n
+        self.how[o] = how
+        self.used_new.add(n)
+        return True
+
+    # ---- unique fingerprints ----
+    def unique_pass(self, name, key, eligible=lambda f: True):
+        oi, ni = defaultdict(list), defaultdict(list)
+        for s, f in self.old.items():
+            if s not in self.match and eligible(f):
+                oi[key(f)].append(s)
+        for s, f in self.new.items():
+            if s not in self.used_new and eligible(f):
+                ni[key(f)].append(s)
+        added = 0
+        for k, olds in oi.items():
+            news = ni.get(k)
+            if len(olds) == 1 and news and len(news) == 1:
+                added += self.add(olds[0], news[0], name)
+        return added
+
+    # ---- plausibility of a propagated candidate ----
+    def compatible(self, o, n):
+        fo, fn = self.old[o], self.new[n]
+        if fo.strings and fn.strings and fo.strings != fn.strings:
+            return False
+        lo, hi = sorted((fo.ninsn, fn.ninsn))
+        return hi <= 2 * lo + 4
+
+    # ---- call graph ----
+    def callgraph_round(self):
+        added = 0
+        for o in self.old_starts:
+            if o in self.match or o in self.rejected:
                 continue
-        i += 1
-    return bytes(func_bytes)
+            evidence = []
+            for c in self.callees_old[o]:
+                if c in self.match:
+                    evidence.append(self.callers_new[self.match[c]])
+            for c in self.callers_old[o]:
+                if c in self.match:
+                    evidence.append(set(self.callees_new[self.match[c]]))
+            if not evidence:
+                continue
+            votes = Counter(n for ev in evidence for n in ev if n not in self.used_new and self.compatible(o, n))
+            if not votes:
+                continue
+            best, score = votes.most_common(1)[0]
+            tied = [n for n, v in votes.items() if v == score]
+            if len(tied) != 1 or score < len(evidence):
+                continue                                           # must agree with ALL matched neighbours
+            if score >= 2 or self.old[o].shape == self.new[best].shape:
+                added += self.add(o, best, "callgraph")
+        return added
 
+    # ---- layout order ----
+    def neighbour_round(self):
+        added = 0
+        anchors = sorted(self.match)
+        for a, b in zip(anchors, anchors[1:]):
+            na, nb = self.match[a], self.match[b]
+            if nb <= na:
+                continue
+            olds = self.old_starts[bisect.bisect_right(self.old_starts, a):bisect.bisect_left(self.old_starts, b)]
+            news = self.new_starts[bisect.bisect_right(self.new_starts, na):bisect.bisect_left(self.new_starts, nb)]
+            if not olds or len(olds) != len(news) or len(olds) > 40:
+                continue
+            todo = [(o, n) for o, n in zip(olds, news) if o not in self.match and o not in self.rejected]
+            if todo and all(self.compatible(o, n) for o, n in zip(olds, news)):
+                for o, n in todo:
+                    added += self.add(o, n, "neighbour")
+        return added
 
-def extract_opcodes(data: bytes, sections: list, rva: int, size: int) -> list[int]:
-    """Extract just the opcode bytes (first byte of each instruction-ish)."""
-    off = rva_to_offset(rva, sections)
-    if off < 0:
-        return []
-    func_bytes = data[off:off + min(size, 256)]
-    # Simplified: just take first 64 bytes as opcode signature
-    return list(func_bytes[:64])
+    # ---- validation ----
+    def purge(self):
+        pairs = sorted(self.match.items())
+        keep = lis_keep(pairs)
+        bad = [o for o, _ in pairs if o not in keep]
+        for o in bad:
+            self.used_new.discard(self.match.pop(o))
+            self.how.pop(o, None)
+            self.rejected.add(o)
+        return len(bad)
 
-
-def find_call_targets(data: bytes, sections: list, rva: int, size: int) -> list[int]:
-    """Find CALL rel32 targets."""
-    off = rva_to_offset(rva, sections)
-    if off < 0:
-        return []
-    func_bytes = data[off:off + size]
-    targets = []
-    for i in range(len(func_bytes) - 4):
-        if func_bytes[i] == 0xE8:
-            disp = struct.unpack_from("<i", func_bytes, i + 1)[0]
-            target = rva + i + 5 + disp
-            targets.append(target)
-    return targets
-
-
-def find_functions_heuristic(data: bytes, sections: list) -> list[tuple[int, int]]:
-    """Find function boundaries heuristically (look for common prologues)."""
-    # Find the .text section
-    text_rva, text_vsize, text_raw = sections[0]  # assume first section is .text
-    text_bytes = data[text_raw:text_raw + text_vsize]
-
-    funcs = []
-    prologues = [
-        b'\x48\x89\x5C\x24',       # mov [rsp+...], rbx
-        b'\x48\x83\xEC',             # sub rsp, imm8
-        b'\x48\x81\xEC',             # sub rsp, imm32
-        b'\x40\x53',                 # push rbx
-        b'\x40\x55',                 # push rbp
-        b'\x40\x56',                 # push rsi
-        b'\x40\x57',                 # push rdi
-        b'\x41\x54',                 # push r12
-        b'\x41\x55',                 # push r13
-        b'\x41\x56',                 # push r14
-        b'\x41\x57',                 # push r15
-        b'\x53',                     # push rbx
-        b'\x55',                     # push rbp
-        b'\x56',                     # push rsi
-        b'\x57',                     # push rdi
-    ]
-
-    i = 0
-    while i < len(text_bytes) - 4:
-        for p in prologues:
-            if text_bytes[i:i + len(p)] == p:
-                rva = text_rva + i
-                # Estimate size: scan forward for next prologue or INT3 padding
-                end = i + 16
-                while end < len(text_bytes) - 4:
-                    if text_bytes[end] == 0xCC:  # INT3
-                        break
-                    # Check for next function prologue
-                    is_prologue = False
-                    for p2 in prologues:
-                        if text_bytes[end:end + len(p2)] == p2:
-                            is_prologue = True
-                            break
-                    if is_prologue and end - i > 8:
-                        break
-                    end += 1
-                size = end - i
-                funcs.append((rva, min(size, 0x10000)))
-                i = end
+    def run(self):
+        t = lambda s: self.log(f"  {s}")
+        n = self.unique_pass("exact", lambda f: f.exact, lambda f: f.ninsn >= MIN_EXACT_INSNS)
+        n += self.unique_pass("strings+shape", lambda f: (f.shape, f.strings),
+                              lambda f: bool(f.strings) and f.ninsn >= MIN_EXACT_INSNS)
+        n += self.unique_pass("shape", lambda f: f.shape, lambda f: f.ninsn >= MIN_SHAPE_INSNS)
+        t(f"unique fingerprints: {n} matched")
+        t(f"order check rejected {self.purge()}")
+        for r in range(1, MAX_ROUNDS + 1):
+            c, nb = self.callgraph_round(), self.neighbour_round()
+            rej = self.purge()
+            t(f"round {r}: call graph +{c}, layout order +{nb}, order check rejected {rej}")
+            if not (c or nb):
                 break
+
+
+def port(old_exe, old_addrs, new_exe, log=print):
+    t0 = time.time()
+    old_img, new_img = Image(old_exe), Image(new_exe)
+    known = {sig: int(a, 16) for sig, a in old_addrs.items()}
+    log("Finding functions...")
+    old_starts = find_starts(old_img, extra=known.values())
+    new_starts = find_starts(new_img)
+    log(f"  {len(old_starts)} functions in the old exe, {len(new_starts)} in the new")
+    log("Fingerprinting...")
+    old, new = analyze(old_img, old_starts), analyze(new_img, new_starts)
+    log("Matching...")
+    m = Matcher(old, new, log)
+    m.run()
+
+    addresses, unmatched = {}, []
+    for sig, rva in known.items():
+        if rva in m.match:
+            addresses[sig] = m.match[rva]
         else:
-            i += 1
-    return funcs
-
-
-def fingerprint_known_functions(
-    exe_path: str,
-    addresses: dict[str, str]
-) -> dict[str, Function]:
-    """Fingerprint all known functions in the old exe."""
-    data, image_base, sections = read_pe(exe_path)
-    functions = {}
-
-    # Build a reverse map: rva → signature
-    rva_to_sig = {}
-    for sig, addr_str in addresses.items():
-        rva = int(addr_str, 16)
-        rva_to_sig[rva] = sig
-
-    # For each known function, estimate its size and fingerprint it
-    rvas = sorted(rva_to_sig.keys())
-    for idx, rva in enumerate(rvas):
-        # Estimate size from next function
-        if idx + 1 < len(rvas):
-            size = min(rvas[idx + 1] - rva, 0x10000)
-        else:
-            size = 256
-        if size <= 0:
-            size = 16
-
-        sig = rva_to_sig[rva]
-        func = Function(rva=rva, size=size)
-        func.strings = find_strings_at(data, sections, rva, size)
-        func.masked_bytes = mask_addresses(data, sections, rva, size)
-        func.opcodes = extract_opcodes(data, sections, rva, size)
-        func.call_targets = find_call_targets(data, sections, rva, size)
-        functions[sig] = func
-
-    # Build caller info
-    rva_set = set(rva_to_sig.keys())
-    sig_by_rva = {v.rva: k for k, v in functions.items()}
-    for sig, func in functions.items():
-        for target in func.call_targets:
-            if target in sig_by_rva:
-                functions[sig_by_rva[target]].callers.append(func.rva)
-
-    return functions
-
-
-def match_functions(
-    old_funcs: dict[str, Function],
-    new_exe_path: str
-) -> tuple[dict[str, int], list[str]]:
-    """Match old functions to addresses in the new exe."""
-    data, image_base, sections = read_pe(new_exe_path)
-    new_funcs = find_functions_heuristic(data, sections)
-
-    print(f"  Found {len(new_funcs)} function candidates in new exe")
-
-    matched = {}
-    unmatched = []
-
-    # Build string→new_rva index
-    string_index: dict[str, list[int]] = defaultdict(list)
-    for rva, size in new_funcs:
-        strs = find_strings_at(data, sections, rva, size)
-        for s in strs:
-            string_index[s].append(rva)
-
-    # Phase 1: String matching (highest confidence)
-    for sig, func in old_funcs.items():
-        if not func.strings:
-            continue
-        candidates = defaultdict(int)
-        for s in func.strings:
-            for rva in string_index.get(s, []):
-                candidates[rva] += 1
-
-        if candidates:
-            best_rva = max(candidates, key=candidates.get)
-            best_score = candidates[best_rva]
-            if best_score >= len(func.strings) * 0.5 and best_score >= 1:
-                matched[sig] = best_rva
-
-    print(f"  Phase 1 (strings): {len(matched)} matched")
-
-    # Phase 2: Exact masked bytes
-    new_masked: dict[bytes, int] = {}
-    for rva, size in new_funcs:
-        if rva in set(matched.values()):
-            continue
-        mb = mask_addresses(data, sections, rva, size)
-        if len(mb) > 16:
-            new_masked[mb] = rva
-
-    for sig, func in old_funcs.items():
-        if sig in matched:
-            continue
-        if func.masked_bytes and func.masked_bytes in new_masked:
-            matched[sig] = new_masked[func.masked_bytes]
-
-    print(f"  Phase 2 (exact bytes): {len(matched)} matched")
-
-    # Phase 3: Opcode shape
-    new_opcodes: dict[tuple, list[int]] = defaultdict(list)
-    for rva, size in new_funcs:
-        if rva in set(matched.values()):
-            continue
-        ops = extract_opcodes(data, sections, rva, size)
-        if ops:
-            new_opcodes[tuple(ops)].append(rva)
-
-    for sig, func in old_funcs.items():
-        if sig in matched:
-            continue
-        key = tuple(func.opcodes)
-        if key and key in new_opcodes and len(new_opcodes[key]) == 1:
-            matched[sig] = new_opcodes[key][0]
-
-    print(f"  Phase 3 (opcode shape): {len(matched)} matched")
-
-    # Phase 4: Call graph neighbors
-    old_rva_to_sig = {f.rva: s for s, f in old_funcs.items()}
-    matched_old_to_new = {old_funcs[s].rva: new_rva for s, new_rva in matched.items()}
-
-    for sig, func in old_funcs.items():
-        if sig in matched:
-            continue
-        # Check if most call targets are matched
-        if not func.call_targets:
-            continue
-        matched_targets = [matched_old_to_new.get(t) for t in func.call_targets if t in matched_old_to_new]
-        if len(matched_targets) < 2:
-            continue
-
-        # Look for a new function that calls the same set of new addresses
-        best_match = None
-        best_score = 0
-        for rva, size in new_funcs:
-            if rva in set(matched.values()):
-                continue
-            new_targets = find_call_targets(data, sections, rva, size)
-            overlap = len(set(new_targets) & set(matched_targets))
-            if overlap > best_score:
-                best_score = overlap
-                best_match = rva
-
-        if best_match and best_score >= len(matched_targets) * 0.5:
-            matched[sig] = best_match
-
-    print(f"  Phase 4 (call graph): {len(matched)} matched")
-
-    # Collect unmatched
-    for sig in old_funcs:
-        if sig not in matched:
             unmatched.append(sig)
-
-    return matched, unmatched
+    methods = Counter(m.how[known[s]] for s in addresses)
+    log(f"Done in {time.time() - t0:.0f}s")
+    return addresses, unmatched, dict(methods), len(m.rejected)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Port GD function addresses to a new exe version")
-    parser.add_argument("old_exe", help="Path to old GeometryDash.exe")
-    parser.add_argument("old_addresses", help="Path to addresses JSON for old version")
-    parser.add_argument("new_exe", help="Path to new GeometryDash.exe")
-    parser.add_argument("-o", "--output", help="Output addresses JSON", default="addresses_new.json")
-    args = parser.parse_args()
+    ap = argparse.ArgumentParser(description="Port GD function addresses to a new exe version")
+    ap.add_argument("old_exe")
+    ap.add_argument("old_addresses", help="addresses_<old>.json")
+    ap.add_argument("new_exe")
+    ap.add_argument("-o", "--output", default="addresses_new.json")
+    args = ap.parse_args()
 
-    print("Loading old addresses...")
-    with open(args.old_addresses) as f:
-        old_data = json.load(f)
-    old_addrs = old_data["addresses"]
-    old_version = old_data.get("version", "unknown")
-    print(f"  {len(old_addrs)} functions from GD {old_version}")
+    data = json.load(open(args.old_addresses))
+    old_addrs = data["addresses"]
+    print(f"{len(old_addrs)} functions from GD {data.get('version', '?')}")
+    addresses, unmatched, methods, rejected = port(args.old_exe, old_addrs, args.new_exe, print)
 
-    print("Fingerprinting old exe...")
-    old_funcs = fingerprint_known_functions(args.old_exe, old_addrs)
-    funcs_with_strings = sum(1 for f in old_funcs.values() if f.strings)
-    print(f"  {len(old_funcs)} fingerprinted ({funcs_with_strings} with string refs)")
-
-    print("Matching against new exe...")
-    matched, unmatched = match_functions(old_funcs, args.new_exe)
-
-    print(f"\nResults:")
-    print(f"  Matched: {len(matched)} / {len(old_funcs)} ({100*len(matched)/len(old_funcs):.1f}%)")
-    print(f"  Unmatched: {len(unmatched)}")
-
-    # Write output
-    output = {
+    print(f"\nPlaced {len(addresses)} / {len(old_addrs)} ({100 * len(addresses) / len(old_addrs):.1f}%)  by {methods}")
+    print(f"Left for a human: {len(unmatched)}   (order check rejected {rejected} doubtful matches)")
+    out = {
         "version": "new",
-        "ported_from": old_version,
-        "count": len(matched),
-        "addresses": {sig: f"0x{rva:x}" for sig, rva in sorted(matched.items())},
+        "ported_from": data.get("version", "unknown"),
+        "count": len(addresses),
+        "stats": {"by_method": methods, "order_check_rejected": rejected},
+        "addresses": {sig: f"0x{rva:x}" for sig, rva in sorted(addresses.items())},
         "unmatched": sorted(unmatched),
     }
-    with open(args.output, "w") as f:
-        json.dump(output, f, indent=2)
-    print(f"  Written to {args.output}")
-
-    if unmatched:
-        print(f"\nUnmatched functions (find manually in IDA):")
-        for sig in sorted(unmatched)[:20]:
-            print(f"  {sig}")
-        if len(unmatched) > 20:
-            print(f"  ... and {len(unmatched) - 20} more")
+    Path(args.output).write_text(json.dumps(out, indent=2), encoding="utf-8")
+    print(f"Written to {args.output}")
 
 
 if __name__ == "__main__":

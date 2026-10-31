@@ -2,28 +2,43 @@
 
 A minimal mod loader and SDK for **Geometry Dash 2.2091** (Windows x64).
 
-The loader does three things: it loads mod DLLs, resolves GD function addresses by
-signature, and installs hooks. No event system, no settings UI, no utility library. A mod
-is one DLL with one required export, and the whole mod-facing API is one header.
+The loader does three things: it loads mod DLLs, resolves GD function addresses by signature,
+and installs hooks. No event system, no settings UI, no utility library, no wrapping of GD or
+cocos2d. A mod is one DLL with one required export; the whole mod-facing API is one header
+you can read in five minutes.
 
 ```cpp
 #include <sdk.h>
+#include <gd/PlayLayer.hpp>
 
-static void(__fastcall* orig_resetLevel)(void* self);
-static void __fastcall hook_resetLevel(void* self) {
-    cadence::log("level reset");
-    orig_resetLevel(self);
+static void __fastcall my_reset(PlayLayer* self) {
+    cadence::log("level reset, practice mode: %d", self->m_isPracticeMode);
+    cadence::original<&PlayLayer::resetLevel>(self);
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-    cadence::hook_typed("PlayLayer::resetLevel()", hook_resetLevel, &orig_resetLevel);
+    cadence::hook<&PlayLayer::resetLevel>(my_reset);   // wrong signature = compile error
 }
 ```
 
 - **[docs/GUIDE.md](docs/GUIDE.md)**: how to write a mod that does not crash GD (read this first)
-- **[Write a mod in five minutes](#write-a-mod)** and the **[API reference](#api-reference)**
-- **[17 example mods](#example-mods)** covering the common patterns
+- **[docs/ADDRESS_VERIFICATION.md](docs/ADDRESS_VERIFICATION.md)**: how many addresses check out against the real exe
+- [Install](#install) · [Write a mod](#write-a-mod) · [API](#api) · [Updating GD](#updating-to-a-new-gd-version) · [Example mods](#example-mods) · [Tests](#tests-and-verification)
+
+## What the loader does, and refuses to do
+
+| Situation | What happens |
+|---|---|
+| Startup | Loads every `mods/*.dll`, alphabetically, calls `mod_main`. No manifest, no dependency resolution. |
+| A function has no known address (missing, or the bindings mark it `win inline`) | That hook is skipped and a line goes to `loader.log`. GD is not touched. |
+| An address is not inside `GeometryDash.exe`'s code (the bindings' `0x9999999` placeholder, a typo in a local override) | Ignored at load, with an example in `loader.log`. |
+| A mod was built against a class whose layout changed | **The mod is refused, and the log names the class.** Other mods load. |
+| Two mods hook the same function | They chain. Removing either one, in any order, leaves the other working. |
+| A mod hook crashes GD | `crash_<time>.log` and a `.dmp` are written next to the exe. |
+
+The loader hooks nothing in GD. Its one hook, on `CCDirector::drawScene`, exists only to run
+hot reload on the game thread.
 
 ## Install
 
@@ -38,7 +53,7 @@ powershell -File install.ps1 -GdDir "D:\Games\Geometry Dash"
 
 **From source**
 
-Requirements: Visual Studio 2022 Build Tools (C++ desktop workload), CMake 3.20+.
+Requirements: Visual Studio 2022 Build Tools (C++ desktop workload), CMake 3.20+, Python 3.10+.
 
 ```powershell
 cmake -B build -G "Visual Studio 17 2022" -A x64
@@ -46,20 +61,21 @@ cmake --build build --config Release
 powershell -File tools/install.ps1
 ```
 
-This puts `winmm.dll` (the loader), `generated/` (the address database) and the example
-mods into your GD folder:
+This puts `winmm.dll` (the loader), `generated/` (address and layout data) and the example mods
+into your GD folder:
 
 ```
 Geometry Dash/
-  winmm.dll                        the loader
-  generated/addresses_2.2091.json  6855 function addresses
+  winmm.dll                          the loader
+  generated/addresses_2.2091.json    function signature -> address
   generated/layout_hashes_2.2091.json
-  mods/*.dll                       your mods
-  loader.log                       what the loader did (created at runtime)
+  generated/addresses.local.json     your own additions (optional)
+  mods/*.dll                         your mods
+  loader.log                         what the loader did (created at runtime)
 ```
 
-Launch GD normally. **Uninstall:** `install.ps1 -Uninstall` (deletes `winmm.dll`; no registry
-or system changes).
+Launch GD normally. **Uninstall:** `install.ps1 -Uninstall` (deletes `winmm.dll`; no registry or
+system changes).
 
 ## Write a mod
 
@@ -70,58 +86,122 @@ cmake --build build --config Release --target my_mod_mod
 copy build\mods\my_mod\Release\my_mod.dll "<Geometry Dash>\mods\"
 ```
 
-Press **F6** in game to load it. Edit, rebuild, copy the DLL over the old one (it is not
-locked), press F6 again. To develop outside this repo, copy `template/` and configure it with
+Press **F6** in game to load it. Edit, rebuild, copy the DLL over the old one (it is not locked),
+press F6 again. To develop outside this repo, copy `template/` and configure it with
 `-DCADENCE_SDK_DIR=<path to cadence>`.
 
-Every directory under `mods/` with a `CMakeLists.txt` is built automatically; a mod's
-CMakeLists is one line: `cadence_add_mod(my_mod main.cpp)`.
+A mod's `CMakeLists.txt` is one call. Its arguments become the mod's metadata, baked into the
+DLL by the build, so there is nothing to keep in sync by hand:
 
-## API reference
+```cmake
+cadence_add_mod(my_mod main.cpp NAME "My Mod" AUTHOR "me" DESCRIPTION "Does a thing" KEY "M" VERSION "1.0")
+```
+
+Every directory under `mods/` with a `CMakeLists.txt` is built automatically.
+
+## API
 
 All of it is in [`loader/include/sdk.h`](loader/include/sdk.h).
 
-### Lifecycle exports (your DLL)
+### What the loader gives you (`LoaderAPI`)
+
+| C API | `namespace cadence` | |
+|---|---|---|
+| `addr(api, "Class::fn(args)")` | `addr("...")` | Address of a GD function; the string is a key in `addresses_<ver>.json`. `nullptr` and a log warning if unknown. |
+| `hook_fn(api, target, detour, &orig)` | `hook(target, detour, &orig)` | Install an x64 hook. `orig` receives the next function in the chain. |
+| `unhook_fn(api, target)` | `unhook(target)` | Remove *your* hooks on `target`. You rarely need it: reload removes them. |
+| `gd_version_fn(api)` | `gd_version()` | `"2.2091"`. |
+| `log_fn(api, fmt, ...)` | `log(fmt, ...)` | A printf-style line in `loader.log`. |
+| `get_mods(api, &n)` | `get_mods(&n)` | The loaded mods and their metadata. |
+
+### Typed layer (header-only, compiles down to the calls above)
+
+```cpp
+cadence::hook<&PlayLayer::resetLevel>(detour);     // detour: void(__fastcall*)(PlayLayer*), checked at compile time
+cadence::original<&PlayLayer::resetLevel>(self);   // the next function in the chain, typed
+auto f = cadence::fn<&PlayLayer::resetLevel>();    // the game's own function, to call it
+```
+
+`cadence::hook_typed("Class::fn(args)", detour, &orig)` is the string-keyed variant for functions
+you declare yourself. `cadence::cocos("?mangled@name@@...")` is `GetProcAddress` on `libcocos2d.dll`.
+
+### Optional helpers (`sdk_extras.h`; the loader and `sdk.h` do not need them)
+
+`cadence::play_layer()` returns the live `PlayLayer*` (nullptr outside a level, never stale);
+`cadence::key_pressed(vk)` is a focus-aware, once-per-press key check that needs no thread.
+
+### Your DLL's exports
 
 | Export | Required | Purpose |
 |---|---|---|
 | `void mod_main(const LoaderAPI*)` | yes | Called once after load. Call `cadence::set_api(api)` first. |
 | `void mod_unload()` | no | Called before a reload. Undo anything the loader cannot (hidden nodes, flipped flags). Hooks are removed for you. |
-| `const char* mod_info()` | no | JSON for the mod menu: `{"name","author","desc","key","ver"}`, all optional. |
-| `const char* mod_layout_hashes()` | no | `{"PlayLayer":"<hash>"}`; the loader refuses the mod if a class layout changed. |
+| `mod_info()`, `mod_layout_hashes()` | generated | Metadata and the layout hashes of the classes you included. Never written by hand. |
 
-### Functions (`namespace cadence`)
+## Bindings and generated files
 
-| Call | What it does |
+`codegen/` reads the Broma bindings (`geode-sdk/bindings`, BSL-1.0; no Geode code is used) and writes,
+under `generated/`:
+
+| File | Contents |
 |---|---|
-| `addr("Class::fn(args)")` | Address of a GD function; the string is a key in `addresses_2.2091.json`. `nullptr` (and a log warning) if unknown. |
-| `hook(target, detour, &orig)` | Install a hook. `orig` receives the next function in the chain. Hooks from many mods on one function chain automatically. |
-| `hook_typed("Class::fn(args)", detour, &orig)` | `addr` + `hook` in one call. |
-| `unhook(target)` | Remove *your* hooks on `target`. Rarely needed: reload removes them. |
-| `cocos("?mangled@name@@...")` | Export from `libcocos2d.dll` (CCNode, CCDirector, CCScheduler, ...). |
-| `play_layer()` | The live `PlayLayer*`, or `nullptr` outside a level. Never stale. Game thread only. |
-| `key_pressed(vk)` | True once per physical press, only while GD is focused. Call once per key per frame from a game-thread hook. |
-| `log(fmt, ...)` | printf-style line in `loader.log`. |
-| `gd_version()` | `"2.2091"`. |
-| `get_mods(&count)` | The loaded mods: `filename, name, author, description, keybind, version, enabled`. |
-| `off::...` | Verified field offsets (see the guide). |
+| `addresses_<ver>.json` | Signature -> Windows address (6,841 for 2.2091). Functions marked `win inline` are not hookable and are left out, as are addresses that cannot be function starts: the bindings' `0x9999999` placeholder (35) and addresses that fall in the middle of another function according to the exe's own unwind table (3, all `CCTexturePVR`). |
+| `addresses_rejected_<ver>.json` | The addresses dropped by that check, and why. |
+| `layout_hashes_<ver>.json` | A hash of each class's exact byte layout (size, every member's offset and type). |
+| `layout_report_<ver>.json` | Per class: `verified` / `tail-padded` / `unverified` / `incomplete`, and why. |
+| `class_sizes_<ver>.json` | `sizeof` of 185 classes, read out of the game binary. |
+| `include/gd/**` | One header per class: declarations and member layout only, with `static_assert`s on `sizeof` and every member's offset. |
 
-The same functions are available as a C API on `LoaderAPI` (`addr`, `hook_fn`, `unhook_fn`,
-`cocos_addr`, `log_fn`, `gd_version_fn`, `get_mods`) with `GD_ADDR` / `GD_HOOK` / ... macros.
+The headers are compiled as part of the tests, so a mistake in the layout model fails the build
+instead of showing up in game. How far to trust a layout, by status, is in
+[docs/GUIDE.md](docs/GUIDE.md#class-layouts-and-how-far-to-trust-them).
 
-### Calling convention
+cocos2d: `libcocos2d.dll` exports its functions by name, so use `cadence::cocos()`. The bindings'
+cocos2d classes are used for layout and inheritance only.
 
-GD is MSVC x64. A hook is `Ret __fastcall hook(void* self, args...)`. `std::string` by value
-is passed as `std::string*`. See the guide for the other ABI traps.
+### Verification
 
-## Hot reload and crash reports
+`tools/layout_check.py` and `tools/verify_addresses.py` check the generated data against the real
+`GeometryDash.exe`; results are in [docs/ADDRESS_VERIFICATION.md](docs/ADDRESS_VERIFICATION.md). In
+short, for 2.2091: every address is inside the exe's code, a random sample of 400 is 100% referenced
+and 100% decodes as code, and the code behaves like its name in 99.3% of `create` functions and
+99.9% of vtable neighbourhoods. The same check found 38 addresses in the bindings that were wrong
+(placeholders and mid-function), now dropped.
 
-- **F6** unloads and reloads all mods without restarting. Mods are loaded from copies in
-  `mods/.cadence-cache/`, so `mods/*.dll` is never locked and can be rebuilt while GD runs.
-  Hook chains are relinked correctly when a mod in the middle is removed. Details in the
-  [guide](docs/GUIDE.md#hot-reload).
-- On a fatal exception the loader writes `crash_<time>.log` (exception, registers, stack with
-  module+offset) and a `.dmp` into the GD folder.
+## Updating to a new GD version
+
+```powershell
+python tools/sdk_update.py --old 2.2091 --new 2.2092
+```
+
+One command that:
+
+1. copies the new `GeometryDash.exe` to `binaries/2.2092/`;
+2. runs [gdport](gdport/README.md) to carry every address over (fingerprinting each function and
+   matching by strings, exact bytes, instruction shape and call graph, then validating);
+3. reads each class's `sizeof` out of the new exe;
+4. regenerates the headers and layout hashes (from the new bindings if they exist, otherwise the old layouts are
+   carried over and flagged);
+5. prints which class layouts changed and which functions it could not place, for a human to find in IDA.
+
+gdport places a function only when one candidate fits and validates every match. Measured on the
+6,841 functions here (`python gdport/selftest.py`): **0 wrong placements** whether the new exe is
+identical or has an instruction changed in 30% of its functions, 99.2% of functions placed, the
+rest listed for a human. Details and limits in [gdport/README.md](gdport/README.md); in short, it has
+been tested on identical and altered copies of 2.2091, not yet on two real GD releases (none has
+come out since 2.2091 was installed here), so run `tools/verify_addresses.py` on a real result.
+
+### Add a missing address yourself
+
+If a function was not placed (or the bindings do not have it), find it in IDA and add it to
+`generated/addresses.local.json`:
+
+```json
+{ "SomeClass::someFunc(int param)": "0x12ab34" }
+```
+
+The loader merges this file over the official one at startup, so nobody waits for an update. The
+address must point into `GeometryDash.exe`'s code or it is ignored with a warning.
 
 ## Example mods
 
@@ -129,7 +209,7 @@ Press keys while **in a level** with GD focused unless noted.
 
 | Mod | What it does | Key |
 |---|---|---|
-| `example` | "Hello" button on the main menu that opens an alert | button |
+| `example` | Clicking the RobTop logo on the main menu shows "Hello" in GD's own `FLAlertLayer` | click |
 | `modmenu` | In-game overlay listing every loaded mod with its keybind | **Insert** |
 | `fpsdisplay` | FPS counter, top-left, on every scene | always on |
 | `hitboxes` | Show the game's debug hitboxes | **H** |
@@ -147,93 +227,79 @@ Press keys while **in a level** with GD focused unless noted.
 | `hideattempts` | Hide the in-level attempt label | always on |
 | `anticheat` | Bypass the spawn-abuse check | always on |
 
-| Pattern | Mods |
-|---|---|
-| Hook a GD member function | most of them |
-| Hook a cocos2d export | `fpsdisplay`, `speedhack`, any `drawScene` user |
-| Per-frame logic + keys on the game thread | `noclip`, `autoretry`, `hitboxes`, `speedhack` |
-| Defer an action to the next frame | `autoretry` |
-| Ask the game for the level, never cache it | `hitboxes`, `hideground`, `startposswitcher` |
-| Timer without blocking | `pausecountdown` |
-| Build UI (labels, panel, button) | `fpsdisplay`, `modmenu`, `pausecountdown`, `example` |
-| Read/write a game field via a verified offset | `practicemusic`, `hidepause` |
-| Undo your changes in `mod_unload` | `hitboxes`, `hideground`, `hidepause`, `speedhack` |
+The example mod hooks `MenuLayer::onRobTop` rather than `onMoreGames`: the bindings give
+`onMoreGames` no Windows address in 2.2091, so it cannot be hooked (trying to is a compile error that says so).
 
-## Updating after a GD patch
-
-```powershell
-python tools/sdk_update.py --old 2.2091 --new 2.2092   # re-match addresses (~96% automatic)
-python tools/offset_probe.py --verify                  # re-check every cadence::off offset
-```
-
-Functions that do not match automatically can be added by hand in
-`generated/addresses.local.json` (merged at load):
-
-```json
-{ "SomeClass::someFunc(int param)": "0x12ab34" }
-```
-
-Mods refer to functions by signature, never by a baked-in address, so they keep working across
-versions as long as the address file is updated.
-
-To regenerate bindings and headers from `.bro` files: `python codegen/generate.py <bindings dir> 2.2091`.
-
-## Tests
+## Tests and verification
 
 ```powershell
 cmake --build build --config Release
-ctest --test-dir build -C Release
+ctest --test-dir build -C Release                                  # hook engine + loader smoke test
+cmake --build build --config Release --target gd_headers_check     # compiles every generated header and its static_asserts
+python tools/layout_check.py check <bindings>                       # computed layouts vs the game binary
+python tools/verify_addresses.py --sample 400                       # addresses vs the game binary
 ```
 
-`hook_test` exercises the hook engine without launching GD: chaining, removing a hook from the
-head / middle / tail of a chain, byte-exact restore, and re-hooking after a full unhook.
+- `hook_test`: chaining; removing a hook from the head, middle or tail of a chain; byte-exact restore; re-hooking.
+- `loader_smoke`: loads the real loader and all 17 mods in a scratch folder: load order, shadow copies, missing and
+  invalid addresses skipped without touching memory, a stale layout hash refusing exactly the mods that use the class.
+- `gd_headers`: all 1,104 generated headers compile under MSVC, with every `static_assert` passing.
+- `python gdport/selftest.py <exe> <addresses.json>`: the address porter against known truth (identical and altered exe).
 
-What is **not** covered by automated tests: anything that needs the game running (the mods
-themselves, address resolution against a live process). Those are checked by hand in game; the
-field offsets are checked against the binary with `tools/offset_probe.py --verify`.
+**Not covered by automated tests:** anything that needs the game running. The mods themselves, hot reload (F6),
+and the hook engine against real GD functions are checked by hand in game.
 
 ## How it works
 
-**The proxy.** The loader is `winmm.dll`. Windows loads it from the GD folder instead of the
-system copy; all 180 winmm exports are forwarded to `System32\winmm.dll` through MASM jump
-stubs. It initialises in `DllMain`, then GD starts normally.
+**The proxy.** The loader is `winmm.dll`. GD always loads `fmod.dll`, which imports `winmm.dll`; `winmm.dll` is not in
+Windows' KnownDLLs list, so a copy next to `GeometryDash.exe` is found before the one in System32. All 180 winmm
+exports are forwarded to the real DLL through MASM jump stubs, and the loader initialises in `DllMain`. The only other
+proxyable system DLL GD imports is `xinput1_4.dll` (via `libcocos2d.dll`); it would also work and has far fewer exports.
 
-**The hook engine** (`loader/src/hook.cpp`) is an x64 trampoline hook using
-[Zydis](https://github.com/zyantific/zydis) to decode and relocate instructions:
+**The hook engine** (`loader/src/hook.cpp`) is an x64 trampoline hook, using [Zydis](https://github.com/zyantific/zydis)
+to decode and relocate instructions:
 
 1. Decode enough instructions at the target to fit a 14-byte absolute jump.
-2. Allocate a trampoline within +/-2 GB, copy and relocate those instructions into it
-   (RIP-relative operands and branches are rewritten), and jump back to the rest of the function.
-3. Overwrite the target with a jump to your detour.
+2. Allocate a trampoline within +/-2 GB, copy and relocate those instructions into it (RIP-relative operands and
+   branches are rewritten), and jump back into the rest of the function.
+3. Overwrite the target with a jump to the newest detour.
 
-Hooks on the same function form a chain per target: each hook's `original` points at the next
-older hook, and the oldest points at the trampoline. Removing a hook from anywhere in the chain
-re-points the hooks above it, and removing the last one restores the game's original bytes
-exactly. The trampoline is kept, so a function can be hooked again after a full unhook.
+Hooks on one function form a chain per target: each hook's `original` points at the next older hook, the oldest at
+the trampoline. Removing a hook from anywhere re-points the hooks above it, and removing the last one restores the
+game's original bytes exactly. The trampoline is kept, so a function can be hooked again after a full unhook.
 
-**Address resolution.** `generated/addresses_<ver>.json` maps Broma signatures to RVAs;
-the loader rebases them at startup.
+**Hot reload** (F6, for development): each mod's `mod_unload()` runs, its hooks are removed, and every `mods/*.dll` is
+copied to `mods/.cadence-cache/` and loaded from the copy, so the originals are never locked. Old copies stay mapped
+until exit, because their detours can still be on the call stack and UI they built can still point into them.
+
+## Limits
+
+- Geometry Dash **2.2091** only. Other versions need `sdk_update.py` and the matching bindings.
+- Layouts: see the table in the guide. Most classes' layouts come from the bindings and are not independently verified.
+- Virtual calls through the headers rely on the bindings listing virtual functions in vtable order; not verified class by class.
+- Build mods in **Release**; the headers refuse the debug STL.
 
 ## Project layout
 
 ```
 loader/            winmm proxy, mod loader, hook engine, crash handler
-  include/sdk.h    the entire mod-facing API
+  include/sdk.h        the entire mod-facing API
+  include/sdk_extras.h optional helpers
 mods/              17 example mods (one directory each)
 template/          standalone starter mod
 cmake/             cadence_add_mod() build helper
-tests/             hook engine tests
-tools/             new_mod.py, offset_probe.py, sdk_update.py, install.ps1, package.ps1
-codegen/           Broma parser, header and address generator
-generated/         address database, layout hashes, generated headers
-docs/GUIDE.md      mod author's guide
+codegen/           Broma parser, layout calculator, header + data generator
+generated/         addresses, layout hashes and report, class sizes, include/gd/** headers
+gdport/            address porting between GD versions
+tests/             hook engine, loader smoke test, header compile check
+tools/             new_mod, sdk_update, layout_check, verify_addresses, offset_probe, install, package
+docs/              GUIDE.md, ADDRESS_VERIFICATION.md
 ```
 
-`powershell -File tools/package.ps1` builds everything, runs the tests, and writes
-`dist/Cadence-2.2091.zip` (loader, address files, all mods, SDK header, template, docs, installer).
+`powershell -File tools/package.ps1` builds everything, runs the tests and writes `dist/Cadence-2.2091.zip`.
 
 ## License
 
-The bindings data (class names, function signatures, addresses) is derived from
+The bindings data (class names, signatures, member lists, addresses, enums) is derived from
 [geode-sdk/bindings](https://github.com/geode-sdk/bindings) under the Boost Software License 1.0.
 See `THIRD_PARTY_LICENSES.txt`.

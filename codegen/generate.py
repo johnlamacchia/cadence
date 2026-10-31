@@ -1,255 +1,132 @@
 """
-Code generator: takes parsed Broma data and outputs:
-1. C++ headers for GD classes
-2. addresses_<version>.json
-3. layout_hashes_<version>.json
+Code generator: takes the Broma bindings and outputs, under generated/:
+
+  addresses_<ver>.json      function signature -> Windows address
+  layout_hashes_<ver>.json  per-class hash of the exact byte layout
+  layout_report_<ver>.json  per-class layout status (verified / tail-padded / unverified / incomplete)
+  include/gd/**             C++ headers: declarations + member layouts + static_asserts
+
+Usage: generate.py <bindings_dir> [version]
+  bindings_dir: path to geode-sdk/bindings' bindings/ folder
 """
 import json
-import os
 import sys
 from pathlib import Path
 
-from broma_parser import parse_version, ClassDecl, FuncDecl, MemberDecl
-
-
-KNOWN_TYPE_SIZES_WIN64 = {
-    "bool": 1,
-    "char": 1,
-    "unsigned char": 1,
-    "int8_t": 1,
-    "uint8_t": 1,
-    "short": 2,
-    "unsigned short": 2,
-    "int16_t": 2,
-    "uint16_t": 2,
-    "int": 4,
-    "unsigned int": 4,
-    "int32_t": 4,
-    "uint32_t": 4,
-    "float": 4,
-    "double": 8,
-    "long long": 8,
-    "unsigned long long": 8,
-    "int64_t": 8,
-    "uint64_t": 8,
-    "size_t": 8,
-    "uintptr_t": 8,
-    "intptr_t": 8,
-    "gd::string": 40,  # MSVC std::string with SSO
-    "std::string": 40,
-    "std::string const&": 8,
-}
-
-
-def format_return_type(rt: str) -> str:
-    if rt == "TodoReturn":
-        return "void /* TodoReturn */"
-    return rt
-
-
-def format_params_for_header(params: str) -> str:
-    return params
+from broma_parser import parse_version
+import headergen
 
 
 def generate_address_json(parser, version: str, out_dir: Path):
-    """Generate addresses_<version>.json mapping signatures to win addresses."""
+    """Generate addresses_<version>.json mapping signatures to win addresses.
+    Functions marked `win inline` have no address on Windows and are left out."""
     addresses = {}
 
     for cls in parser.classes.values():
         for func in cls.functions:
             if func.addrs.has_win():
-                key = func.full_key()
-                addresses[key] = f"0x{func.addrs.win:x}"
+                addresses[func.full_key()] = f"0x{func.addrs.win:x}"
 
     for func in parser.free_functions:
         if func.addrs.has_win():
-            key = func.full_key()
-            addresses[key] = f"0x{func.addrs.win:x}"
+            addresses[func.full_key()] = f"0x{func.addrs.win:x}"
 
     out_path = out_dir / f"addresses_{version}.json"
-    data = {
-        "version": version,
-        "count": len(addresses),
-        "addresses": addresses,
-    }
+    data = {"version": version, "count": len(addresses), "addresses": addresses}
     out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
     print(f"  addresses: {len(addresses)} entries -> {out_path}")
     return addresses
 
 
-def generate_layout_hashes(parser, version: str, out_dir: Path):
-    """Generate layout_hashes_<version>.json."""
-    hashes = {}
+def reject_bad_addresses(parser, version: str, out_dir: Path):
+    """
+    Check every Windows address against the real GeometryDash.exe and drop the ones that
+    cannot be function starts: outside executable code, or strictly inside a function the
+    exe's own unwind table (.pdata) says begins earlier. Hooking such an address would
+    corrupt the game, and the bindings do contain a few. Dropped addresses are written to
+    addresses_rejected_<version>.json so nothing disappears silently.
+    """
+    exe = out_dir.parent / "binaries" / version / "GeometryDash.exe"
+    if not exe.exists():
+        print(f"  address check: skipped ({exe} not found; addresses are taken from the bindings as they are)")
+        return
+    sys.path.insert(0, str(out_dir.parent / "gdport"))
+    import bisect
+    from gdport import Image, pdata_ranges
+
+    img = Image(exe)
+    ranges = pdata_ranges(img)
+    begins = [b for b, _ in ranges]
+    rejected = {}
     for cls in parser.classes.values():
-        if cls.members:
-            hashes[cls.name] = cls.layout_hash()
-
-    out_path = out_dir / f"layout_hashes_{version}.json"
-    data = {
-        "version": version,
-        "count": len(hashes),
-        "hashes": hashes,
-    }
-    out_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
-    print(f"  layout hashes: {len(hashes)} entries -> {out_path}")
-    return hashes
-
-
-def generate_headers(parser, out_dir: Path):
-    """Generate C++ headers for all GD classes."""
-    include_dir = out_dir / "include" / "gd"
-    include_dir.mkdir(parents=True, exist_ok=True)
-
-    all_class_names = set(parser.classes.keys())
-    generated_files = []
-
-    for cls_name, cls in parser.classes.items():
-        header_path = include_dir / f"{cls_name}.hpp"
-        content = generate_class_header(cls, all_class_names)
-        header_path.write_text(content, encoding="utf-8")
-        generated_files.append(cls_name)
-
-    # Generate umbrella header
-    umbrella = include_dir.parent / "gd.hpp"
-    lines = ["#pragma once\n"]
-    for name in sorted(generated_files):
-        lines.append(f'#include "gd/{name}.hpp"')
-    lines.append("")
-    umbrella.write_text("\n".join(lines), encoding="utf-8")
-    print(f"  headers: {len(generated_files)} classes -> {include_dir}")
-
-
-def generate_class_header(cls: ClassDecl, all_classes: set[str]) -> str:
-    lines = []
-    lines.append("#pragma once")
-    lines.append("")
-
-    # Collect forward declarations needed
-    fwd = collect_forward_decls(cls, all_classes)
-    for f in sorted(fwd):
-        if "::" in f:
-            # namespace::class
-            ns, name = f.rsplit("::", 1)
-            lines.append(f"namespace {ns} {{ class {name}; }}")
-        else:
-            lines.append(f"class {f};")
-    if fwd:
-        lines.append("")
-
-    # Class declaration
-    base_str = ""
-    if cls.bases:
-        bases = ", ".join(f"public {b}" for b in cls.bases)
-        base_str = f" : {bases}"
-    lines.append(f"class {cls.name}{base_str} {{")
-    lines.append("public:")
-
-    # Virtual functions first (order matters for vtable)
-    virtuals = [f for f in cls.functions if f.is_virtual]
-    if virtuals:
-        for f in virtuals:
-            lines.append(f"    {format_func_decl(f)};")
-        lines.append("")
-
-    # Static functions
-    statics = [f for f in cls.functions if f.is_static]
-    if statics:
-        for f in statics:
-            lines.append(f"    {format_func_decl(f)};")
-        lines.append("")
-
-    # Regular member functions
-    regular = [f for f in cls.functions if not f.is_virtual and not f.is_static]
-    if regular:
-        for f in regular:
-            lines.append(f"    {format_func_decl(f)};")
-        lines.append("")
-
-    # Member variables
-    if cls.members:
-        for m in cls.members:
-            if m.is_pad:
-                lines.append(f"    char {m.name}[{m.pad_size}];")
+        for f in cls.functions:
+            if not f.addrs.has_win():
+                continue
+            rva = f.addrs.win
+            reason = None
+            if not img.exec_end(rva):
+                reason = "outside executable code"
             else:
-                lines.append(f"    {m.type} {m.name};")
-        lines.append("")
-
-    lines.append("};")
-    lines.append("")
-    return "\n".join(lines)
-
-
-def format_func_decl(func: FuncDecl) -> str:
-    parts = []
-    if func.is_virtual:
-        parts.append("virtual")
-    if func.is_static:
-        parts.append("static")
-
-    ret = format_return_type(func.return_type)
-    if ret:
-        parts.append(ret)
-
-    params = format_params_for_header(func.params)
-    parts.append(f"{func.name}({params})")
-    return " ".join(parts)
+                i = bisect.bisect_right(begins, rva) - 1
+                if i >= 0 and begins[i] < rva < ranges[i][1]:
+                    reason = f"inside the function that starts at {begins[i]:#x}"
+            if reason:
+                rejected[f.full_key()] = {"address": f"0x{rva:x}", "reason": reason}
+                f.addrs.win = None
+    path = out_dir / f"addresses_rejected_{version}.json"
+    path.write_text(json.dumps({"version": version, "rejected": rejected}, indent=2), encoding="utf-8")
+    print(f"  address check: {len(rejected)} address(es) are not function starts in the exe and were dropped -> {path.name}")
 
 
-def collect_forward_decls(cls: ClassDecl, all_classes: set[str]) -> set[str]:
-    """Collect types that need forward declarations."""
-    fwd = set()
-    # We only forward-declare GD classes referenced in function params/returns
-    # and member types. Don't forward-declare bases (they need full defs).
-    base_names = set()
-    for b in cls.bases:
-        # Extract the class name from possibly qualified name
-        base_names.add(b.split("::")[-1])
-        base_names.add(b)
-
-    def check_type(t: str):
-        # Look for class names in the type string
-        for name in all_classes:
-            if name in t and name != cls.name and name not in base_names:
-                fwd.add(name)
-
-    for f in cls.functions:
-        check_type(f.return_type)
-        check_type(f.params)
-    for m in cls.members:
-        if not m.is_pad:
-            check_type(m.type)
-
-    return fwd
+def generate_layout_hashes(hashes: dict, version: str, out_dir: Path):
+    out_path = out_dir / f"layout_hashes_{version}.json"
+    data = {"version": version, "count": len(hashes), "hashes": hashes}
+    out_path.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
+    print(f"  layout hashes: {len(hashes)} entries -> {out_path}")
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: generate.py <bindings_dir> [version]")
-        print("  bindings_dir: path to bindings/bindings/")
-        print("  version: GD version (default: 2.2091)")
-        sys.exit(1)
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("bindings_dir", help="geode-sdk/bindings' bindings/ folder")
+    ap.add_argument("version", nargs="?", default="2.2091", help="GD version to generate for")
+    ap.add_argument("--bindings-version", help="parse this version's .bro files instead (when bindings for a new GD "
+                                               "version do not exist yet: carries the old layouts over)")
+    ap.add_argument("--keep-addresses", action="store_true", help="do not overwrite addresses_<version>.json "
+                                                                  "(use after gdport has produced it)")
+    args = ap.parse_args()
 
-    bindings_dir = Path(sys.argv[1])
-    version = sys.argv[2] if len(sys.argv) > 2 else "2.2091"
+    bindings_dir = Path(args.bindings_dir)
+    version = args.version
     out_dir = Path(__file__).parent.parent / "generated"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Parsing bindings for GD {version}...")
-    parser = parse_version(bindings_dir, version)
+    source_version = args.bindings_version or version
+    print(f"Parsing bindings for GD {source_version}" + (f" (generating for {version})" if source_version != version else "") + "...")
+    parser = parse_version(bindings_dir, source_version)
     print(f"  {len(parser.classes)} classes, {len(parser.free_functions)} free functions")
 
-    print("Generating...")
-    addresses = generate_address_json(parser, version, out_dir)
-    hashes = generate_layout_hashes(parser, version, out_dir)
-    generate_headers(parser, out_dir)
+    sizes_path = out_dir / f"class_sizes_{version}.json"
+    sizes = json.loads(sizes_path.read_text())["sizes"] if sizes_path.exists() else {}
+    if sizes:
+        print(f"  {len(sizes)} class sizes read from the game binary ({sizes_path.name})")
+    else:
+        print(f"  no {sizes_path.name}: layouts will be 'unverified' (run tools/layout_check.py harvest)")
 
-    # Summary
-    win_hookable = sum(
-        1 for cls in parser.classes.values()
-        for f in cls.functions if f.addrs.has_win()
-    )
-    win_hookable += sum(1 for f in parser.free_functions if f.addrs.has_win())
-    print(f"\nDone. {win_hookable} hookable Windows functions.")
+    print("Generating...")
+    if not args.keep_addresses:        # a ported address file was checked by gdport already
+        reject_bad_addresses(parser, version, out_dir)
+    if args.keep_addresses:
+        print(f"  addresses: kept existing addresses_{version}.json")
+    else:
+        generate_address_json(parser, version, out_dir)
+    hashes, _ = headergen.generate(parser, bindings_dir, version, out_dir, sizes)
+    generate_layout_hashes(hashes, version, out_dir)
+
+    hookable = sum(1 for c in parser.classes.values() for f in c.functions if f.addrs.has_win())
+    hookable += sum(1 for f in parser.free_functions if f.addrs.has_win())
+    inline = sum(1 for c in parser.classes.values() for f in c.functions if f.addrs.win_inline)
+    print(f"\nDone. {hookable} hookable Windows functions ({inline} marked `win inline`: not hookable).")
 
 
 if __name__ == "__main__":

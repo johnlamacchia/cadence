@@ -1,15 +1,22 @@
 """
-sdk update — port addresses to a new GD version and regenerate headers.
+sdk update: carry Cadence to a new Geometry Dash version.
 
-Usage:
-    python sdk_update.py --old 2.2091 --new 2.2092
+    python tools/sdk_update.py --old 2.2091 --new 2.2092 [--gd-dir <folder with the new GeometryDash.exe>]
 
 Steps:
-    1. Copy the new GeometryDash.exe to binaries/<new_version>/
-    2. Run gdport to carry addresses from old → new
-    3. Regenerate headers from the (possibly updated) bindings
-    4. Show a diff of which class layouts changed
-    5. List functions that couldn't be matched
+  1. Copy the new GeometryDash.exe to binaries/<new>/.
+  2. Run gdport: fingerprint every function in the old exe and find it in the new
+     one, writing generated/addresses_<new>.json (plus the functions it could not
+     place).
+  3. Read each class's sizeof out of the new exe (tools/layout_check.py harvest).
+  4. Regenerate headers and layout hashes. If geode-sdk/bindings has a <new>
+     folder, use it (its addresses are the official ones). If not, carry the old
+     layouts over and keep the gdport addresses; step 5 tells you what to recheck.
+  5. Report which class layouts changed (hash diff, plus sizeof changes seen
+     directly in the binary) and which functions need a human in IDA.
+
+Add addresses you find by hand to generated/addresses.local.json; the loader
+merges that file at startup, so nobody has to wait for an official update.
 """
 import argparse
 import json
@@ -18,119 +25,99 @@ import subprocess
 import sys
 from pathlib import Path
 
-SDK_ROOT = Path(__file__).parent.parent
-GD_DIR = Path(r"C:\Program Files (x86)\Steam\steamapps\common\Geometry Dash")
+SDK_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_GD_DIR = Path(r"C:\Program Files (x86)\Steam\steamapps\common\Geometry Dash")
+
+
+def run(cmd):
+    print("  $", " ".join(str(c) for c in cmd))
+    return subprocess.run([str(c) for c in cmd]).returncode
+
+
+def load_json(path):
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Update Cadence to a new GD version")
-    parser.add_argument("--old", required=True, help="Old GD version (e.g. 2.2091)")
-    parser.add_argument("--new", required=True, help="New GD version (e.g. 2.2092)")
-    parser.add_argument("--gd-dir", default=str(GD_DIR), help="GD install directory")
-    args = parser.parse_args()
+    ap = argparse.ArgumentParser(description="Update Cadence to a new GD version")
+    ap.add_argument("--old", required=True, help="old GD version, e.g. 2.2091")
+    ap.add_argument("--new", required=True, help="new GD version, e.g. 2.2092")
+    ap.add_argument("--gd-dir", default=str(DEFAULT_GD_DIR), help="folder containing the NEW GeometryDash.exe")
+    ap.add_argument("--bindings", default=str(SDK_ROOT.parent / "bindings" / "bindings"),
+                    help="geode-sdk/bindings' bindings/ folder")
+    args = ap.parse_args()
 
-    old_ver = args.old
-    new_ver = args.new
-    gd_dir = Path(args.gd_dir)
+    old_ver, new_ver = args.old, args.new
+    binaries, generated = SDK_ROOT / "binaries", SDK_ROOT / "generated"
+    bindings = Path(args.bindings)
 
-    binaries_dir = SDK_ROOT / "binaries"
-    generated_dir = SDK_ROOT / "generated"
-    gdport_script = SDK_ROOT / "gdport" / "gdport.py"
-    codegen_script = SDK_ROOT / "codegen" / "generate.py"
-    bindings_dir = SDK_ROOT.parent / "bindings" / "bindings"
-
-    # 1. Copy new exe
-    new_bin_dir = binaries_dir / new_ver
-    new_bin_dir.mkdir(parents=True, exist_ok=True)
-    new_exe = gd_dir / "GeometryDash.exe"
-    if not new_exe.exists():
-        print(f"ERROR: {new_exe} not found")
-        sys.exit(1)
-
-    dest_exe = new_bin_dir / "GeometryDash.exe"
+    # 1. new exe
+    new_exe = Path(args.gd_dir) / "GeometryDash.exe"
+    dest_exe = binaries / new_ver / "GeometryDash.exe"
+    dest_exe.parent.mkdir(parents=True, exist_ok=True)
     if not dest_exe.exists():
-        print(f"Copying {new_exe} to {dest_exe}...")
+        if not new_exe.exists():
+            sys.exit(f"ERROR: {new_exe} not found")
+        print(f"Copying {new_exe} -> {dest_exe}")
         shutil.copy2(new_exe, dest_exe)
     else:
         print(f"Using existing {dest_exe}")
 
-    # 2. Run gdport
-    old_exe = binaries_dir / old_ver / "GeometryDash.exe"
-    old_addresses = generated_dir / f"addresses_{old_ver}.json"
-    new_addresses = generated_dir / f"addresses_{new_ver}.json"
+    old_exe = binaries / old_ver / "GeometryDash.exe"
+    old_addr, new_addr = generated / f"addresses_{old_ver}.json", generated / f"addresses_{new_ver}.json"
+    for p in (old_exe, old_addr):
+        if not p.exists():
+            sys.exit(f"ERROR: {p} not found")
 
-    if not old_exe.exists():
-        print(f"ERROR: {old_exe} not found")
-        sys.exit(1)
-    if not old_addresses.exists():
-        print(f"ERROR: {old_addresses} not found")
-        sys.exit(1)
+    # 2. gdport
+    print(f"\nPorting addresses {old_ver} -> {new_ver} with gdport...")
+    if run([sys.executable, SDK_ROOT / "gdport" / "gdport.py", old_exe, old_addr, dest_exe, "-o", new_addr]):
+        sys.exit("ERROR: gdport failed")
 
-    print(f"\nPorting addresses from {old_ver} → {new_ver}...")
-    result = subprocess.run([
-        sys.executable, str(gdport_script),
-        str(old_exe), str(old_addresses),
-        str(dest_exe),
-        "-o", str(new_addresses),
-    ])
-    if result.returncode != 0:
-        print("ERROR: gdport failed")
-        sys.exit(1)
+    # 3. class sizes straight from the new binary
+    print("\nReading class sizes from the new exe...")
+    if run([sys.executable, SDK_ROOT / "tools" / "layout_check.py", "harvest", "--exe", dest_exe, "--addresses", new_addr]):
+        print("  (could not read class sizes; layouts will be marked unverified)")
 
-    # 3. Regenerate headers if bindings exist for new version
-    if (bindings_dir / new_ver).exists():
-        print(f"\nRegenerating headers for {new_ver}...")
-        subprocess.run([
-            sys.executable, str(codegen_script),
-            str(bindings_dir), new_ver,
-        ])
-    else:
-        print(f"\nNo bindings found for {new_ver}, skipping header regeneration")
-        print(f"  (add bindings to {bindings_dir / new_ver}/ and re-run)")
+    # 4. regenerate
+    have_bindings = (bindings / new_ver).exists()
+    print(f"\nRegenerating headers and layout hashes ({'from the new bindings' if have_bindings else 'carrying the ' + old_ver + ' layouts over'})...")
+    cmd = [sys.executable, SDK_ROOT / "codegen" / "generate.py", bindings, new_ver]
+    if not have_bindings:
+        cmd += ["--bindings-version", old_ver, "--keep-addresses"]
+    if run(cmd):
+        sys.exit("ERROR: codegen failed")
 
-    # 4. Diff layout hashes
-    old_hashes_path = generated_dir / f"layout_hashes_{old_ver}.json"
-    new_hashes_path = generated_dir / f"layout_hashes_{new_ver}.json"
+    # 5. what changed
+    print("\n=== Layout changes ===")
+    old_h = load_json(generated / f"layout_hashes_{old_ver}.json").get("hashes", {})
+    new_h = load_json(generated / f"layout_hashes_{new_ver}.json").get("hashes", {})
+    changed = [c for c in sorted(set(old_h) | set(new_h)) if old_h.get(c) != new_h.get(c)]
+    print(f"bindings: {len(changed)} class layout(s) differ" + ("" if changed else " (expected when the bindings were carried over)"))
+    for c in changed[:40]:
+        print(f"  {c}")
 
-    if old_hashes_path.exists() and new_hashes_path.exists():
-        with open(old_hashes_path) as f:
-            old_hashes = json.load(f).get("hashes", {})
-        with open(new_hashes_path) as f:
-            new_hashes = json.load(f).get("hashes", {})
+    old_s = load_json(generated / f"class_sizes_{old_ver}.json").get("sizes", {})
+    new_s = load_json(generated / f"class_sizes_{new_ver}.json").get("sizes", {})
+    resized = [(c, old_s[c], new_s[c]) for c in sorted(set(old_s) & set(new_s)) if old_s[c] != new_s[c]]
+    print(f"binary:   {len(resized)} class(es) changed sizeof between {old_ver} and {new_ver}")
+    for c, a, b in resized:
+        print(f"  {c}: {a:#x} -> {b:#x}   (update its members in the bindings, or the layout is wrong)")
+    if resized and not have_bindings:
+        print("  These classes' headers were generated from the OLD layout and are now wrong.")
 
-        changed = []
-        for cls in sorted(set(old_hashes) | set(new_hashes)):
-            oh = old_hashes.get(cls)
-            nh = new_hashes.get(cls)
-            if oh != nh:
-                if oh and nh:
-                    changed.append(f"  CHANGED: {cls} ({oh} → {nh})")
-                elif not oh:
-                    changed.append(f"  NEW:     {cls}")
-                else:
-                    changed.append(f"  REMOVED: {cls}")
+    print("\n=== Functions needing a human ===")
+    unmatched = load_json(new_addr).get("unmatched", [])
+    print(f"{len(unmatched)} function(s) gdport could not place")
+    for sig in unmatched[:15]:
+        print(f"  {sig}")
+    if len(unmatched) > 15:
+        print(f"  ... and {len(unmatched) - 15} more (see the 'unmatched' list in {new_addr.name})")
+    if unmatched:
+        print("Find each in IDA and add it to generated/addresses.local.json:")
+        print('  { "Class::function(args)": "0xRVA" }')
 
-        if changed:
-            print(f"\nLayout changes ({len(changed)} classes):")
-            for line in changed:
-                print(line)
-        else:
-            print("\nNo layout changes detected")
-
-    # 5. Show unmatched summary
-    if new_addresses.exists():
-        with open(new_addresses) as f:
-            data = json.load(f)
-        unmatched = data.get("unmatched", [])
-        if unmatched:
-            print(f"\n{len(unmatched)} functions need manual address finding in IDA:")
-            for sig in unmatched[:10]:
-                print(f"  {sig}")
-            if len(unmatched) > 10:
-                print(f"  ... and {len(unmatched) - 10} more")
-            print(f"\nAdd them to generated/addresses.local.json to unblock mod devs")
-
-    print("\nDone!")
+    print("\nNext: python tools/layout_check.py check <bindings> --version " + new_ver + "; rebuild; run the mods.")
 
 
 if __name__ == "__main__":

@@ -1,21 +1,12 @@
-// Hide attempts — removes the attempt counter label in the top-left of levels.
+// Hide attempts: the in-level "Attempt N" label is always hidden.
 #include <sdk.h>
-#include <windows.h>
+#include <gd/PlayLayer.hpp>
 
-static void(__fastcall* orig_toggleHideAttempts)(void* self, bool hide);
-
-static void __fastcall hook_toggleHideAttempts(void* self, bool hide) {
-    orig_toggleHideAttempts(self, true);
-}
-
-extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"({"name":"Hide Attempts","desc":"Hides the attempt counter label","ver":"1.0"})";
+static void __fastcall hook_toggleHideAttempts(PlayLayer* self, bool /*hide*/) {
+    cadence::original<&PlayLayer::toggleHideAttempts>(self, true);
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-
-    cadence::hook_typed(
-        "PlayLayer::toggleHideAttempts(bool hide)",
-        hook_toggleHideAttempts, &orig_toggleHideAttempts);
+    cadence::hook<&PlayLayer::toggleHideAttempts>(hook_toggleHideAttempts);
 }

@@ -1,6 +1,7 @@
-// Speed hack — in a level: + faster, - slower, 0 resets (0.25x - 5x).
+// Speed hack: in a level, + is faster, - is slower, 0 resets (0.25x to 5x).
 // Scales the dt that CCScheduler::update hands to every scheduled game update.
-#include <sdk.h>
+#include <sdk_extras.h>
+#include <gd/PlayLayer.hpp>
 
 static float g_speed = 1.0f;
 static HWND g_hwnd = nullptr;
@@ -42,15 +43,9 @@ extern "C" __declspec(dllexport) void mod_unload() {
     update_title();
 }
 
-extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"j({"name":"Speed Hack","desc":"Change game speed 0.25x-5x","key":"+/- 0","ver":"1.1"})j";
-}
-
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-
     g_hwnd = FindWindowA(nullptr, "Geometry Dash");
-
     cadence::hook(cadence::cocos("?update@CCScheduler@cocos2d@@UEAAXM@Z"),
                   (void*)hook_scheduler_update, (void**)&orig_scheduler_update);
     cadence::hook(cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ"),

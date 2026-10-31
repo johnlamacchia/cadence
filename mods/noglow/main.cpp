@@ -1,21 +1,12 @@
-// No glow — hides the glow/glitter effects in levels for cleaner visuals.
+// No glow: the glitter effect is always off.
 #include <sdk.h>
-#include <windows.h>
+#include <gd/PlayLayer.hpp>
 
-static void(__fastcall* orig_toggleGlitter)(void* self, bool visible);
-
-static void __fastcall hook_toggleGlitter(void* self, bool visible) {
-    orig_toggleGlitter(self, false);
-}
-
-extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"({"name":"No Glow","desc":"Removes glitter/glow effects","ver":"1.0"})";
+static void __fastcall hook_toggleGlitter(PlayLayer* self, bool /*visible*/) {
+    cadence::original<&PlayLayer::toggleGlitter>(self, false);
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-
-    cadence::hook_typed(
-        "PlayLayer::toggleGlitter(bool visible)",
-        hook_toggleGlitter, &orig_toggleGlitter);
+    cadence::hook<&PlayLayer::toggleGlitter>(hook_toggleGlitter);
 }

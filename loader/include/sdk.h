@@ -1,20 +1,18 @@
-// Cadence public API
-// This is the entire mod-facing interface. Read time: ~3 minutes.
+// Cadence: the whole mod-facing API. Read time: ~5 minutes.
 //
-// A mod is a DLL that exports:
-//   extern "C" void mod_main(const LoaderAPI* api);
+// A mod is a DLL in <GD>/mods/ that exports one function:
 //
-// The LoaderAPI lets you:
-//   1. Resolve GD function addresses by signature string
-//   2. Resolve cocos2d exports by mangled name
-//   3. Hook any resolved function (x64, chains correctly)
-//   4. Unhook
-//   5. Log to the shared loader.log
-//   6. Query the current GD version
+//     extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api);
 //
-// Plus two tiny header-only helpers: cadence::play_layer() (the live
-// PlayLayer, never dangling) and cadence::key_pressed() (focus-aware edge
-// detection, no polling thread needed).
+// The loader does exactly three things for you:
+//   1. addr    resolve a GD function's address from its signature
+//   2. hook    install / remove an x64 hook (hooks from many mods chain)
+//   3. load    call mod_main once per mod, in alphabetical order
+// plus gd_version() and log() (a line in loader.log).
+//
+// Nothing is wrapped: you call the real GD functions with their real signatures.
+// The typed layer at the bottom just checks your hook's signature at compile
+// time against the generated headers in generated/include/gd/.
 
 #pragma once
 #include <cstddef>
@@ -32,8 +30,10 @@
 #include <windows.h>
 #endif
 
-// ── Mod metadata ─────────────────────────────────────────────────────
+// ── C API ─────────────────────────────────────────────────────────────
 
+// One loaded mod, as reported by api->get_mods. Strings come from the metadata
+// that cadence_add_mod() bakes into the DLL (see cmake/CadenceMod.cmake).
 struct ModEntry {
     const char* filename;
     const char* name;
@@ -44,48 +44,42 @@ struct ModEntry {
     bool enabled;
 };
 
-// ── C API ─────────────────────────────────────────────────────────────
-
 struct LoaderAPI {
-    // Resolve a GD function by its signature string.
-    // Returns nullptr if the function has no known address.
-    // Example: api->addr(api, "MenuLayer::init()")
+    // Address of a GD function, by the exact signature string used as a key in
+    // generated/addresses_<ver>.json (e.g. "PlayLayer::resetLevel()").
+    // nullptr, plus a warning in loader.log, if there is no known address.
     void* (*addr)(const LoaderAPI* self, const char* signature);
 
-    // Install an x64 hook. *original receives a trampoline to the real function.
-    // Multiple mods hooking the same function chain correctly.
+    // Install an x64 hook on `target`. On success *original receives the next
+    // function in the chain: the previously installed detour, or a trampoline to
+    // the real code. Hooks from any number of mods on one function chain.
     bool (*hook_fn)(const LoaderAPI* self, void* target, void* detour, void** original);
 
-    // Remove a previously installed hook.
+    // Remove the calling mod's hooks on `target`. Safe in any order: hooks
+    // installed after it are re-linked. You normally never need this; the loader
+    // removes a mod's hooks when it is unloaded.
     bool (*unhook_fn)(const LoaderAPI* self, void* target);
 
-    // Current GD version string (e.g. "2.2091").
+    // "2.2091": the GD version the loaded address file was generated for.
     const char* (*gd_version_fn)(const LoaderAPI* self);
 
-    // Resolve a cocos2d export by its MSVC-mangled name.
-    // Equivalent to GetProcAddress(libcocos2d, name) but you don't
-    // need to call GetModuleHandle yourself.
-    // Example: api->cocos_addr(api, "?setVisible@CCNode@cocos2d@@UEAAX_N@Z")
-    void* (*cocos_addr)(const LoaderAPI* self, const char* mangled_name);
-
-    // Write a line to loader.log (printf-style formatting).
+    // Append a printf-style line to loader.log.
     void (*log_fn)(const LoaderAPI* self, const char* fmt, ...);
 
-    // Get the list of loaded mods. Returns pointer to internal array.
-    // Count is written to *out_count. Valid until next hot reload.
+    // The mods the loader has loaded. Valid until the next reload.
     const ModEntry* (*get_mods)(const LoaderAPI* self, int* out_count);
 };
 
-// Convenience macros for the C API
-#define GD_ADDR(api, sig)                 ((api)->addr((api), (sig)))
+#define GD_ADDR(api, sig)                  ((api)->addr((api), (sig)))
 #define GD_HOOK(api, target, detour, orig) ((api)->hook_fn((api), (target), (detour), (orig)))
-#define GD_UNHOOK(api, target)            ((api)->unhook_fn((api), (target)))
-#define GD_VERSION(api)                   ((api)->gd_version_fn((api)))
-#define GD_COCOS(api, name)              ((api)->cocos_addr((api), (name)))
+#define GD_UNHOOK(api, target)             ((api)->unhook_fn((api), (target)))
+#define GD_VERSION(api)                    ((api)->gd_version_fn((api)))
 
-// ── C++ type-safe layer (header-only) ─────────────────────────────────
+// ── C++ layer (header-only) ───────────────────────────────────────────
 
 #ifdef __cplusplus
+#include <string>
+#include <type_traits>
 
 namespace cadence {
 
@@ -98,7 +92,7 @@ inline void* addr(const char* sig) {
 }
 
 inline bool hook(void* target, void* detour, void** original) {
-    return g_api ? g_api->hook_fn(g_api, target, detour, original) : false;
+    return g_api && target ? g_api->hook_fn(g_api, target, detour, original) : false;
 }
 
 inline bool unhook(void* target) {
@@ -107,10 +101,6 @@ inline bool unhook(void* target) {
 
 inline const char* gd_version() {
     return g_api ? g_api->gd_version_fn(g_api) : "unknown";
-}
-
-inline void* cocos(const char* mangled_name) {
-    return g_api ? g_api->cocos_addr(g_api, mangled_name) : nullptr;
 }
 
 inline void log(const char* fmt, ...) {
@@ -128,56 +118,99 @@ inline const ModEntry* get_mods(int* count) {
     return g_api->get_mods(g_api, count);
 }
 
-// ── Verified GD 2.2091 field offsets ──────────────────────────────────
-// Every value here was read out of the shipped binary (the generated headers'
-// field order is NOT reliable for offsets). `python tools/offset_probe.py`
-// re-derives them, so run it after a GD update.
-namespace off {
-    inline constexpr size_t game_manager_play_layer     = 0x230;  // GameManager::m_playLayer
-    inline constexpr size_t play_layer_is_practice_mode = 0x32E0; // PlayLayer::m_isPracticeMode
-    inline constexpr size_t ui_layer_pause_btn          = 0x238;  // UILayer::m_pauseBtn
-    inline constexpr size_t ui_layer_game_layer         = 0x258;  // UILayer::m_gameLayer
-}
-
-// The live PlayLayer, or nullptr when no level is loaded. Main thread only.
-// Prefer this over caching a pointer in PlayLayer::init/onQuit: the game
-// clears this field in ~PlayLayer, so it can never dangle.
-inline void* play_layer() {
-    using shared_t = void* (*)();
-    static shared_t shared = nullptr;
-    if (!shared) shared = (shared_t)addr("GameManager::sharedState()");
-    if (!shared) return nullptr;
-    char* gm = (char*)shared();
-    return gm ? *(void**)(gm + off::game_manager_play_layer) : nullptr;
-}
-
 #ifdef _WIN32
-// Edge-triggered key press (true once per physical press). Call it at most
-// once per frame per key from a main-thread hook such as CCDirector::drawScene.
-// Returns false while GD is not the foreground window, so typing in other
-// apps never triggers your mod. State is kept per mod DLL.
-inline bool key_pressed(int vk) {
-    static bool was_down[256] = {};
-    if (vk < 0 || vk > 255) return false;
-    DWORD pid = 0;
-    GetWindowThreadProcessId(GetForegroundWindow(), &pid);
-    bool down = pid == GetCurrentProcessId() && (GetAsyncKeyState(vk) & 0x8000) != 0;
-    bool pressed = down && !was_down[vk];
-    was_down[vk] = down;
-    return pressed;
+// An export of libcocos2d.dll, by mangled name. This is just GetProcAddress.
+inline void* cocos(const char* mangled_name) {
+    static HMODULE m = GetModuleHandleA("libcocos2d.dll");
+    return m ? (void*)GetProcAddress(m, mangled_name) : nullptr;
 }
 #endif
 
-// Type-safe hook helper.
-// Usage:
-//   static bool(__thiscall* orig_init)(MenuLayer*);
-//   bool __fastcall hook_init(MenuLayer* self) {
-//       if (!orig_init(self)) return false;
-//       // add your stuff
-//       return true;
-//   }
-//   cadence::hook_typed("MenuLayer::init()", hook_init, &orig_init);
-template<typename Detour, typename Original>
+// ── Typed hooks ───────────────────────────────────────────────────────
+//
+//     #include <gd/PlayLayer.hpp>
+//
+//     static void __fastcall my_reset(PlayLayer* self) {
+//         cadence::original<&PlayLayer::resetLevel>(self);   // call through
+//     }
+//     cadence::hook<&PlayLayer::resetLevel>(my_reset);
+//
+// The detour's type is derived from the member function, so a wrong signature
+// is a compile error. Overloads need the usual cast:
+//     cadence::hook<static_cast<bool (Foo::*)(int)>(&Foo::bar)>(detour);
+// One hook per function per mod.
+
+// Specialised by gd/<Class>.hpp for every member function with a Windows address.
+template <auto F> inline constexpr const char* fn_sig = nullptr;
+
+namespace detail {
+
+// Whether MSVC returns R in a register (so the member-function and free-function
+// calling conventions agree). Large or non-trivial structs use a hidden return
+// pointer whose position differs between the two.
+template <class R, bool Simple = std::is_void_v<R> || std::is_scalar_v<R>>
+struct returns_in_register_impl : std::true_type {};
+template <class R>
+struct returns_in_register_impl<R, false> : std::bool_constant<
+    std::is_trivially_copyable_v<R> && std::is_standard_layout_v<R> &&
+    (sizeof(R) == 1 || sizeof(R) == 2 || sizeof(R) == 4 || sizeof(R) == 8)> {};
+template <class R> inline constexpr bool returns_in_register = returns_in_register_impl<R>::value;
+
+template <class T> struct fn_traits;
+template <class R, class C, class... A> struct fn_traits<R (C::*)(A...)> {
+    using ret = R; using type = R(__fastcall*)(C*, A...);
+};
+template <class R, class C, class... A> struct fn_traits<R (C::*)(A...) const> {
+    using ret = R; using type = R(__fastcall*)(const C*, A...);
+};
+template <class R, class... A> struct fn_traits<R (*)(A...)> {
+    using ret = R; using type = R(__fastcall*)(A...);
+};
+
+// Each class header registers the hash of the layout it was generated with.
+// mod_layout_hashes() (below) reports them so the loader can refuse a mod whose
+// classes changed, naming the class, instead of letting GD crash.
+struct LayoutRegistration {
+    const char* cls;
+    const char* hash;
+    LayoutRegistration* next;
+    LayoutRegistration(const char* c, const char* h) : cls(c), hash(h), next(head()) { head() = this; }
+    static LayoutRegistration*& head() { static LayoutRegistration* h = nullptr; return h; }
+};
+
+} // namespace detail
+
+// The detour type for F: ret(__fastcall*)(Class* self, args...).
+template <auto F> using fn_t = typename detail::fn_traits<decltype(F)>::type;
+
+// The next function in F's hook chain, for calling through from your detour.
+template <auto F> inline fn_t<F> original = nullptr;
+
+template <auto F> bool hook(fn_t<F> detour) {
+    static_assert(fn_sig<F> != nullptr,
+        "no Windows address is known for this function: include its gd/<Class>.hpp, "
+        "or it is marked `win inline` in the bindings (not hookable)");
+    static_assert(detail::returns_in_register<typename detail::fn_traits<decltype(F)>::ret>,
+        "this function returns a struct through a hidden pointer; hook it by hand with "
+        "cadence::hook(addr, detour, &orig) and declare the detour with the hidden pointer first");
+    void* target = addr(fn_sig<F>);
+    if (!target) return false;
+    return hook(target, (void*)detour, (void**)&original<F>);
+}
+
+// A typed pointer to the game's own implementation of F, to call it:
+//     auto reset = cadence::fn<&PlayLayer::resetLevel>();   // void(__fastcall*)(PlayLayer*)
+//     if (reset) reset(layer);
+// nullptr if the address is unknown. For a virtual function this calls that
+// class's implementation directly, without virtual dispatch.
+template <auto F> fn_t<F> fn() {
+    static_assert(fn_sig<F> != nullptr, "no Windows address is known for this function");
+    return reinterpret_cast<fn_t<F>>(addr(fn_sig<F>));
+}
+
+// Untyped, string-keyed variant for functions you declare yourself:
+//   cadence::hook_typed("MenuLayer::init()", my_init, &orig_init);
+template <typename Detour, typename Original>
 bool hook_typed(const char* sig, Detour detour, Original* original) {
     void* target = addr(sig);
     if (!target) return false;
@@ -186,27 +219,30 @@ bool hook_typed(const char* sig, Detour detour, Original* original) {
 
 } // namespace cadence
 
+// Exported from every mod that includes this header: the layout hashes of the
+// GD classes whose headers the mod included. Empty if it included none.
+extern "C" __declspec(dllexport) inline const char* mod_layout_hashes() {
+    static const std::string json = [] {
+        std::string s = "{";
+        for (auto* r = cadence::detail::LayoutRegistration::head(); r; r = r->next) {
+            if (s.size() > 1) s += ",";
+            s += "\"" + std::string(r->cls) + "\":\"" + r->hash + "\"";
+        }
+        return s + "}";
+    }();
+    return json.c_str();
+}
+
 #endif // __cplusplus
 
 // ── Mod lifecycle ─────────────────────────────────────────────────────
 
-// Required: entry point called after the loader resolves addresses.
-//   extern "C" void mod_main(const LoaderAPI* api);
+// Required: called once after the mod is loaded.
+//   extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api);
 
-// Optional: called before your DLL is unloaded during hot reload (F6).
-// Clean up any state that would dangle (UI elements, timers, etc.).
-// You do NOT need to unhook — the loader removes your hooks automatically.
-//   extern "C" void mod_unload();
+// Optional: called before a hot reload (F6). Undo anything the loader cannot:
+// nodes you added, flags you flipped, timers. Hooks are removed for you.
+//   extern "C" __declspec(dllexport) void mod_unload();
 
-// Optional: metadata for the mod menu. JSON with any subset of:
-// name, author, description (desc), keybind (key), version (ver).
-// Mods without this export show their filename in the mod menu.
-//   extern "C" const char* mod_info() {
-//       return R"({"name":"My Mod","author":"me","desc":"Does stuff","key":"N","ver":"1.0"})";
-//   }
-
-// Optional: export layout hashes so the loader can refuse your mod
-// if class layouts changed between GD versions.
-//   extern "C" const char* mod_layout_hashes() {
-//       return R"({"MenuLayer":"abcd1234","FLAlertLayer":"ef567890"})";
-//   }
+// Generated by the build, not written by hand: mod_info() returns the name,
+// author, description, key and version given to cadence_add_mod(), as JSON.

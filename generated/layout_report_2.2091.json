@@ -1,0 +1,5610 @@
+{
+ "classes": {
+  "AccountBanPopup": {
+   "error": null,
+   "size": 1032,
+   "status": "unverified"
+  },
+  "AccountHelpLayer": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "AccountLayer": {
+   "error": null,
+   "size": 720,
+   "status": "verified"
+  },
+  "AccountLoginLayer": {
+   "error": null,
+   "size": 784,
+   "status": "verified"
+  },
+  "AccountRegisterLayer": {
+   "error": null,
+   "size": 784,
+   "status": "unverified"
+  },
+  "AccountReviewCard": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "AccountReviewPopup": {
+   "error": null,
+   "size": 1576,
+   "status": "tail-padded"
+  },
+  "AchievementBar": {
+   "error": null,
+   "size": 416,
+   "status": "unverified"
+  },
+  "AchievementCell": {
+   "error": null,
+   "size": 560,
+   "status": "unverified"
+  },
+  "AchievementManager": {
+   "error": null,
+   "size": 392,
+   "status": "unverified"
+  },
+  "AchievementNotifier": {
+   "error": null,
+   "size": 344,
+   "status": "unverified"
+  },
+  "AchievementsLayer": {
+   "error": null,
+   "size": 648,
+   "status": "unverified"
+  },
+  "AdToolbox": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "AdminAbuseEntry": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "AdminAbuseMeta": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "AdminActionConfirmDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "AdminActionConfirmPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "AdminLogEntry": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "AdminReportQueueEntry": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "AdminReportedEntry": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "AdminReportedMeta": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "AdvFollowSetup": {
+   "error": null,
+   "size": 200,
+   "status": "unverified"
+  },
+  "AdvancedFollowEditObject": {
+   "error": null,
+   "size": 2128,
+   "status": "unverified"
+  },
+  "AdvancedFollowInstance": {
+   "error": null,
+   "size": 32,
+   "status": "unverified"
+  },
+  "AdvancedFollowTriggerObject": {
+   "error": null,
+   "size": 2104,
+   "status": "unverified"
+  },
+  "AnimatedGameObject": {
+   "error": null,
+   "size": 1552,
+   "status": "unverified"
+  },
+  "AnimatedShopKeeper": {
+   "error": null,
+   "size": 768,
+   "status": "unverified"
+  },
+  "AnimatedSpriteDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "AppDelegate": {
+   "error": null,
+   "size": 248,
+   "status": "unverified"
+  },
+  "ArtTriggerGameObject": {
+   "error": null,
+   "size": 1864,
+   "status": "unverified"
+  },
+  "ArtistCell": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "AudioAssetsBrowser": {
+   "error": null,
+   "size": 760,
+   "status": "unverified"
+  },
+  "AudioAssetsPopup": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "AudioEffectsLayer": {
+   "error": null,
+   "size": 592,
+   "status": "unverified"
+  },
+  "AudioLineGuideGameObject": {
+   "error": null,
+   "size": 1872,
+   "status": "unverified"
+  },
+  "AutoBackupOptionsDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "AutoBackupOptionsPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "AutoBackupPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "tail-padded"
+  },
+  "AutoSaveSettingsLayer": {
+   "error": null,
+   "size": 1056,
+   "status": "tail-padded"
+  },
+  "BitmapFontCache": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "BonusDropdown": {
+   "error": null,
+   "size": 344,
+   "status": "unverified"
+  },
+  "BoomListLayer": {
+   "error": null,
+   "size": 544,
+   "status": "unverified"
+  },
+  "BoomListView": {
+   "error": null,
+   "size": 464,
+   "status": "unverified"
+  },
+  "BoomScrollLayer": {
+   "error": "unknown type base cocos2d::CCTouchClipper",
+   "size": null,
+   "status": "incomplete"
+  },
+  "BoomScrollLayerDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "BrowseSmartKeyLayer": {
+   "error": null,
+   "size": 752,
+   "status": "unverified"
+  },
+  "BrowseSmartTemplateLayer": {
+   "error": null,
+   "size": 712,
+   "status": "unverified"
+  },
+  "BulkCommentKey": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "ButtonPage": {
+   "error": null,
+   "size": 408,
+   "status": "unverified"
+  },
+  "ButtonSprite": {
+   "error": null,
+   "size": 712,
+   "status": "verified"
+  },
+  "CAState": {
+   "error": null,
+   "size": 68,
+   "status": "unverified"
+  },
+  "CCAlertCircle": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "CCAnimateFrameCache": {
+   "error": null,
+   "size": 80,
+   "status": "unverified"
+  },
+  "CCAnimatedSprite": {
+   "error": null,
+   "size": 744,
+   "status": "unverified"
+  },
+  "CCBlockLayer": {
+   "error": null,
+   "size": 552,
+   "status": "unverified"
+  },
+  "CCCircleAlert": {
+   "error": null,
+   "size": 376,
+   "status": "unverified"
+  },
+  "CCCircleWave": {
+   "error": null,
+   "size": 376,
+   "status": "verified"
+  },
+  "CCCircleWaveDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CCContentLayer": {
+   "error": null,
+   "size": 544,
+   "status": "unverified"
+  },
+  "CCContentManager": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "CCCountdown": {
+   "error": null,
+   "size": 640,
+   "status": "unverified"
+  },
+  "CCCounterLabel": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "CCExtenderNode": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "CCIndexPath": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "CCLightFlash": {
+   "error": null,
+   "size": 360,
+   "status": "unverified"
+  },
+  "CCLightStrip": {
+   "error": null,
+   "size": 352,
+   "status": "unverified"
+  },
+  "CCMenuExtra": {
+   "error": null,
+   "size": 448,
+   "status": "unverified"
+  },
+  "CCMenuItemSpriteExtra": {
+   "error": null,
+   "size": 520,
+   "status": "verified"
+  },
+  "CCMenuItemToggler": {
+   "error": null,
+   "size": 400,
+   "status": "verified"
+  },
+  "CCMoveCNode": {
+   "error": null,
+   "size": 240,
+   "status": "unverified"
+  },
+  "CCNodeContainer": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "CCPartAnimSprite": {
+   "error": null,
+   "size": 640,
+   "status": "unverified"
+  },
+  "CCScrollLayerExt": {
+   "error": "unknown type base cocos2d::CCTouchClipper",
+   "size": null,
+   "status": "incomplete"
+  },
+  "CCScrollLayerExtDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CCSpriteCOpacity": {
+   "error": null,
+   "size": 600,
+   "status": "unverified"
+  },
+  "CCSpriteGrayscale": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "CCSpritePart": {
+   "error": null,
+   "size": 672,
+   "status": "unverified"
+  },
+  "CCSpritePlus": {
+   "error": null,
+   "size": 624,
+   "status": "unverified"
+  },
+  "CCSpriteWithHue": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "CCTextInputMenu": {
+   "error": null,
+   "size": 408,
+   "status": "unverified"
+  },
+  "CCTextInputNode": {
+   "error": null,
+   "size": 728,
+   "status": "verified"
+  },
+  "CCURLObject": {
+   "error": null,
+   "size": 120,
+   "status": "unverified"
+  },
+  "CameraTriggerGameObject": {
+   "error": null,
+   "size": 1888,
+   "status": "unverified"
+  },
+  "ChainNode": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "ChallengeNode": {
+   "error": null,
+   "size": 360,
+   "status": "unverified"
+  },
+  "ChallengesPage": {
+   "error": null,
+   "size": 736,
+   "status": "unverified"
+  },
+  "ChanceObject": {
+   "error": null,
+   "size": 16,
+   "status": "unverified"
+  },
+  "ChanceTriggerGameObject": {
+   "error": null,
+   "size": 1880,
+   "status": "unverified"
+  },
+  "CharacterColorDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CharacterColorPage": {
+   "error": null,
+   "size": 736,
+   "status": "unverified"
+  },
+  "CheckpointGameObject": {
+   "error": null,
+   "size": 1872,
+   "status": "unverified"
+  },
+  "CheckpointObject": {
+   "error": null,
+   "size": 4944,
+   "status": "unverified"
+  },
+  "ClearPlatformerSavesOptionsPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "ClearPlatformerSavesPopup": {
+   "error": null,
+   "size": 672,
+   "status": "unverified"
+  },
+  "CollisionBlockPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "CollisionTriggerAction": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "ColorAction": {
+   "error": null,
+   "size": 168,
+   "status": "verified"
+  },
+  "ColorAction2": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "ColorActionSprite": {
+   "error": null,
+   "size": 352,
+   "status": "unverified"
+  },
+  "ColorChannelSprite": {
+   "error": null,
+   "size": 624,
+   "status": "verified"
+  },
+  "ColorSelectDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "ColorSelectLiveOverlay": {
+   "error": null,
+   "size": 864,
+   "status": "verified"
+  },
+  "ColorSelectPopup": {
+   "error": null,
+   "size": 1280,
+   "status": "verified"
+  },
+  "ColorSetupDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CommentAdminDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CommentCell": {
+   "error": null,
+   "size": 616,
+   "status": "unverified"
+  },
+  "CommentOptionsPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "CommentUploadDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CommunityCreditNode": {
+   "error": null,
+   "size": 368,
+   "status": "unverified"
+  },
+  "CommunityCreditsPage": {
+   "error": null,
+   "size": 696,
+   "status": "unverified"
+  },
+  "ConfigureHSVWidget": {
+   "error": null,
+   "size": 456,
+   "status": "verified"
+  },
+  "ConfigureValuePopup": {
+   "error": null,
+   "size": 712,
+   "status": "unverified"
+  },
+  "ConfigureValuePopupDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "ControlMenuTouch": {
+   "error": null,
+   "size": 32,
+   "status": "unverified"
+  },
+  "ControlSlotsPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "ControllerInputNode": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "CountTriggerAction": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "CountTriggerGameObject": {
+   "error": null,
+   "size": 1872,
+   "status": "unverified"
+  },
+  "CreateGuidelinesLayer": {
+   "error": null,
+   "size": 768,
+   "status": "unverified"
+  },
+  "CreateMenuItem": {
+   "error": null,
+   "size": 568,
+   "status": "verified"
+  },
+  "CreateParticlePopup": {
+   "error": null,
+   "size": 1008,
+   "status": "verified"
+  },
+  "CreateStartPosPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "CreateStartPosPopupDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CreatorLayer": {
+   "error": null,
+   "size": 488,
+   "status": "unverified"
+  },
+  "CreatorSettingsDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CreatorSettingsPopup": {
+   "error": null,
+   "size": 1048,
+   "status": "tail-padded"
+  },
+  "CurrencyRewardDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CurrencyRewardLayer": {
+   "error": null,
+   "size": 640,
+   "status": "verified"
+  },
+  "CurrencySprite": {
+   "error": null,
+   "size": 680,
+   "status": "unverified"
+  },
+  "CustomListView": {
+   "error": null,
+   "size": 472,
+   "status": "verified"
+  },
+  "CustomMusicCell": {
+   "error": null,
+   "size": 584,
+   "status": "unverified"
+  },
+  "CustomSFXCell": {
+   "error": null,
+   "size": 584,
+   "status": "unverified"
+  },
+  "CustomSFXDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CustomSFXImportEntry": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "CustomSFXRowMenu": {
+   "error": null,
+   "size": 448,
+   "status": "unverified"
+  },
+  "CustomSFXWidget": {
+   "error": null,
+   "size": 504,
+   "status": "verified"
+  },
+  "CustomSongCell": {
+   "error": null,
+   "size": 584,
+   "status": "unverified"
+  },
+  "CustomSongDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CustomSongLayer": {
+   "error": null,
+   "size": 712,
+   "status": "unverified"
+  },
+  "CustomSongLayerDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "CustomSongWidget": {
+   "error": null,
+   "size": 632,
+   "status": "verified"
+  },
+  "CustomizeObjectLayer": {
+   "error": null,
+   "size": 928,
+   "status": "verified"
+  },
+  "CustomizeObjectSettingsPopup": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "DS_Dictionary": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "DTStatSeg": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "DailyLevelNode": {
+   "error": null,
+   "size": 376,
+   "status": "unverified"
+  },
+  "DailyLevelPage": {
+   "error": null,
+   "size": 744,
+   "status": "verified"
+  },
+  "DailyRecallUnlockPopup": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "DashRingObject": {
+   "error": null,
+   "size": 1880,
+   "status": "unverified"
+  },
+  "DeathHistogram": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "DeathMarkerLayer": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "DeathMarkerSettingsPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "DeathStatsPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "DeathTrackerOptionsPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "DeathTrackerPopup": {
+   "error": null,
+   "size": 680,
+   "status": "unverified"
+  },
+  "DelayedSpawnNode": {
+   "error": null,
+   "size": 16,
+   "status": "unverified"
+  },
+  "DemonFilterDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "DemonFilterSelectLayer": {
+   "error": null,
+   "size": 696,
+   "status": "unverified"
+  },
+  "DemonInfoPopup": {
+   "error": null,
+   "size": 664,
+   "status": "verified"
+  },
+  "DialogDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "DialogLayer": {
+   "error": null,
+   "size": 648,
+   "status": "unverified"
+  },
+  "DialogObject": {
+   "error": null,
+   "size": 136,
+   "status": "unverified"
+  },
+  "DownloadMessageDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "DpadMenu": {
+   "error": null,
+   "size": 448,
+   "status": "unverified"
+  },
+  "DrawGridLayer": {
+   "error": null,
+   "size": 640,
+   "status": "verified"
+  },
+  "Dropdown": {
+   "error": null,
+   "size": 560,
+   "status": "tail-padded"
+  },
+  "DropdownDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "DropdownListPopup": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "DropdownListPopupOwner": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "DropdownListRow": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "DropdownListStyle": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "DungeonBarsSprite": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "DynamicBitset": {
+   "error": null,
+   "size": 24,
+   "status": "unverified"
+  },
+  "DynamicMoveCalculation": {
+   "error": null,
+   "size": 24,
+   "status": "unverified"
+  },
+  "DynamicObjectAction": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "DynamicScrollDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "EasingSelectPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "EditButtonBar": {
+   "error": null,
+   "size": 368,
+   "status": "verified"
+  },
+  "EditGameObjectPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "EditLevelLayer": {
+   "error": null,
+   "size": 600,
+   "status": "unverified"
+  },
+  "EditTriggersPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "EditorBuildStats": {
+   "error": null,
+   "size": 104,
+   "status": "unverified"
+  },
+  "EditorCommandsPopup": {
+   "error": null,
+   "size": 1152,
+   "status": "unverified"
+  },
+  "EditorOptionsLayer": {
+   "error": null,
+   "size": 1160,
+   "status": "unverified"
+  },
+  "EditorPauseLayer": {
+   "error": null,
+   "size": 640,
+   "status": "unverified"
+  },
+  "EditorSFXActionConfigLayer": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "EditorSFXBinding": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "EditorSFXImportOptions": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "EditorSFXManager": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "EditorSFXSettingsPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "EditorSoundBrowserLayer": {
+   "error": null,
+   "size": 1208,
+   "status": "tail-padded"
+  },
+  "EditorSoundConfigCell": {
+   "error": null,
+   "size": 560,
+   "status": "unverified"
+  },
+  "EditorSoundConfigCellDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "EditorSoundConfigInfoLayer": {
+   "error": null,
+   "size": 1232,
+   "status": "tail-padded"
+  },
+  "EditorSoundConfigUploadPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "EditorSoundDeleteDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "EditorSoundDownloadDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "EditorSoundListDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "EditorSoundUploadDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "EditorSoundsLayer": {
+   "error": null,
+   "size": 1168,
+   "status": "tail-padded"
+  },
+  "EditorSoundsSettingsPopup": {
+   "error": null,
+   "size": 672,
+   "status": "unverified"
+  },
+  "EditorUI": {
+   "error": null,
+   "size": 1720,
+   "status": "unverified"
+  },
+  "EditorWindowPopup": {
+   "error": null,
+   "size": 1152,
+   "status": "unverified"
+  },
+  "EffectGameObject": {
+   "error": null,
+   "size": 1856,
+   "status": "unverified"
+  },
+  "EffectManagerState": {
+   "error": null,
+   "size": 832,
+   "status": "unverified"
+  },
+  "EmoteDef": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "EmotePickerDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "EmotePickerPopup": {
+   "error": null,
+   "size": 1224,
+   "status": "unverified"
+  },
+  "EmoteSprite": {
+   "error": null,
+   "size": 608,
+   "status": "unverified"
+  },
+  "EmoteToken": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "EndLevelLayer": {
+   "error": null,
+   "size": 688,
+   "status": "unverified"
+  },
+  "EndPortalObject": {
+   "error": null,
+   "size": 1376,
+   "status": "unverified"
+  },
+  "EndTriggerGameObject": {
+   "error": null,
+   "size": 1864,
+   "status": "unverified"
+  },
+  "EnhancedGameObject": {
+   "error": null,
+   "size": 1464,
+   "status": "unverified"
+  },
+  "EnhancedTriggerObject": {
+   "error": null,
+   "size": 1872,
+   "status": "unverified"
+  },
+  "EnterEffectAnimValue": {
+   "error": null,
+   "size": 32,
+   "status": "unverified"
+  },
+  "EnterEffectInstance": {
+   "error": null,
+   "size": 232,
+   "status": "unverified"
+  },
+  "EnterEffectObject": {
+   "error": null,
+   "size": 2088,
+   "status": "unverified"
+  },
+  "EventLinkTrigger": {
+   "error": null,
+   "size": 1888,
+   "status": "unverified"
+  },
+  "EventTriggerInstance": {
+   "error": null,
+   "size": 40,
+   "status": "unverified"
+  },
+  "ExplodeItemNode": {
+   "error": null,
+   "size": 352,
+   "status": "verified"
+  },
+  "ExplodeItemSprite": {
+   "error": null,
+   "size": 632,
+   "status": "unverified"
+  },
+  "ExtendedLayer": {
+   "error": null,
+   "size": 416,
+   "status": "unverified"
+  },
+  "FLAlertLayer": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "FLAlertLayerProtocol": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "FMOD::Channel": {
+   "error": null,
+   "size": null,
+   "status": "not generated"
+  },
+  "FMOD::ChannelControl": {
+   "error": null,
+   "size": null,
+   "status": "not generated"
+  },
+  "FMOD::ChannelGroup": {
+   "error": null,
+   "size": null,
+   "status": "not generated"
+  },
+  "FMOD::DSP": {
+   "error": null,
+   "size": null,
+   "status": "not generated"
+  },
+  "FMOD::DSPConnection": {
+   "error": null,
+   "size": null,
+   "status": "not generated"
+  },
+  "FMOD::Geometry": {
+   "error": null,
+   "size": null,
+   "status": "not generated"
+  },
+  "FMOD::Reverb3D": {
+   "error": null,
+   "size": null,
+   "status": "not generated"
+  },
+  "FMOD::Sound": {
+   "error": null,
+   "size": null,
+   "status": "not generated"
+  },
+  "FMOD::SoundGroup": {
+   "error": null,
+   "size": null,
+   "status": "not generated"
+  },
+  "FMOD::System": {
+   "error": null,
+   "size": null,
+   "status": "not generated"
+  },
+  "FMODAudioEngine": {
+   "error": null,
+   "size": 2216,
+   "status": "unverified"
+  },
+  "FMODAudioState": {
+   "error": null,
+   "size": 896,
+   "status": "unverified"
+  },
+  "FMODLevelVisualizer": {
+   "error": null,
+   "size": 328,
+   "status": "verified"
+  },
+  "FMODMusic": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "FMODQueuedEffect": {
+   "error": null,
+   "size": 112,
+   "status": "unverified"
+  },
+  "FMODQueuedMusic": {
+   "error": null,
+   "size": 104,
+   "status": "unverified"
+  },
+  "FMODSound": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "FMODSoundState": {
+   "error": null,
+   "size": 192,
+   "status": "unverified"
+  },
+  "FMODSoundTween": {
+   "error": null,
+   "size": 24,
+   "status": "unverified"
+  },
+  "FRequestProfilePage": {
+   "error": null,
+   "size": 936,
+   "status": "unverified"
+  },
+  "FileOperation": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "FileSaveManager": {
+   "error": null,
+   "size": 368,
+   "status": "unverified"
+  },
+  "FindBPMLayer": {
+   "error": null,
+   "size": 800,
+   "status": "verified"
+  },
+  "FindObjectOptionsLayer": {
+   "error": null,
+   "size": 1136,
+   "status": "unverified"
+  },
+  "FindObjectPopup": {
+   "error": null,
+   "size": 1160,
+   "status": "unverified"
+  },
+  "FollowRewardPage": {
+   "error": null,
+   "size": 704,
+   "status": "unverified"
+  },
+  "FollowUserDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "FontObject": {
+   "error": null,
+   "size": 184,
+   "status": "unverified"
+  },
+  "FontPreviewCell": {
+   "error": null,
+   "size": 560,
+   "status": "unverified"
+  },
+  "ForceBlockGameObject": {
+   "error": null,
+   "size": 1880,
+   "status": "unverified"
+  },
+  "FriendPickerDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "FriendPickerPopup": {
+   "error": null,
+   "size": 896,
+   "status": "tail-padded"
+  },
+  "FriendRequestDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "FriendRequestPopup": {
+   "error": null,
+   "size": 728,
+   "status": "verified"
+  },
+  "FriendRowEdges": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "FriendsProfilePage": {
+   "error": null,
+   "size": 984,
+   "status": "tail-padded"
+  },
+  "GDFileWriter": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "GJAccountBackupDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJAccountDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJAccountLoginDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJAccountManager": {
+   "error": null,
+   "size": 528,
+   "status": "unverified"
+  },
+  "GJAccountRegisterDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJAccountSettingsDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJAccountSettingsLayer": {
+   "error": null,
+   "size": 744,
+   "status": "unverified"
+  },
+  "GJAccountSyncDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJActionManager": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "GJAssetDownloadAction": {
+   "error": null,
+   "size": 16,
+   "status": "unverified"
+  },
+  "GJBaseGameLayer": {
+   "error": null,
+   "size": 14648,
+   "status": "unverified"
+  },
+  "GJBigSprite": {
+   "error": null,
+   "size": 376,
+   "status": "unverified"
+  },
+  "GJBigSpriteNode": {
+   "error": null,
+   "size": 384,
+   "status": "unverified"
+  },
+  "GJChallengeDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJChallengeItem": {
+   "error": null,
+   "size": 144,
+   "status": "unverified"
+  },
+  "GJChestSprite": {
+   "error": null,
+   "size": 616,
+   "status": "verified"
+  },
+  "GJColorSetupLayer": {
+   "error": null,
+   "size": 776,
+   "status": "verified"
+  },
+  "GJComment": {
+   "error": null,
+   "size": 480,
+   "status": "unverified"
+  },
+  "GJCommentListLayer": {
+   "error": null,
+   "size": 552,
+   "status": "verified"
+  },
+  "GJCompactUserCell": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "GJContentStatusDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJDailyLevelDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJDifficultySprite": {
+   "error": null,
+   "size": 608,
+   "status": "verified"
+  },
+  "GJDropDownLayer": {
+   "error": null,
+   "size": 608,
+   "status": "unverified"
+  },
+  "GJDropDownLayerDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJEditorSoundConfig": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "GJEffectManager": {
+   "error": null,
+   "size": 2088,
+   "status": "verified"
+  },
+  "GJFlyGroundLayer": {
+   "error": null,
+   "size": 472,
+   "status": "unverified"
+  },
+  "GJFollowCommandLayer": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "GJFriendRequest": {
+   "error": null,
+   "size": 408,
+   "status": "unverified"
+  },
+  "GJGameLevel": {
+   "error": null,
+   "size": 2112,
+   "status": "unverified"
+  },
+  "GJGameLoadingLayer": {
+   "error": null,
+   "size": 424,
+   "status": "unverified"
+  },
+  "GJGameState": {
+   "error": null,
+   "size": 1744,
+   "status": "unverified"
+  },
+  "GJGarageLayer": {
+   "error": null,
+   "size": 608,
+   "status": "unverified"
+  },
+  "GJGradientLayer": {
+   "error": null,
+   "size": 608,
+   "status": "unverified"
+  },
+  "GJGroundLayer": {
+   "error": null,
+   "size": 472,
+   "status": "verified"
+  },
+  "GJHttpResult": {
+   "error": null,
+   "size": 400,
+   "status": "unverified"
+  },
+  "GJItemIcon": {
+   "error": null,
+   "size": 632,
+   "status": "unverified"
+  },
+  "GJKeybindManager": {
+   "error": "unknown type base cocos2d::CCKeyboardActionManager",
+   "size": null,
+   "status": "incomplete"
+  },
+  "GJLevelList": {
+   "error": null,
+   "size": 592,
+   "status": "verified"
+  },
+  "GJLevelScoreCell": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "GJLinkObject": {
+   "error": null,
+   "size": 72,
+   "status": "unverified"
+  },
+  "GJListLayer": {
+   "error": null,
+   "size": 552,
+   "status": "verified"
+  },
+  "GJLocalLevelScoreCell": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "GJLocalScore": {
+   "error": null,
+   "size": 72,
+   "status": "unverified"
+  },
+  "GJMGLayer": {
+   "error": null,
+   "size": 488,
+   "status": "unverified"
+  },
+  "GJMPDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJMapObject": {
+   "error": null,
+   "size": 368,
+   "status": "unverified"
+  },
+  "GJMapPack": {
+   "error": null,
+   "size": 424,
+   "status": "unverified"
+  },
+  "GJMessageCell": {
+   "error": null,
+   "size": 608,
+   "status": "unverified"
+  },
+  "GJMessagePopup": {
+   "error": null,
+   "size": 744,
+   "status": "unverified"
+  },
+  "GJMessageThread": {
+   "error": null,
+   "size": 392,
+   "status": "unverified"
+  },
+  "GJMoreGamesLayer": {
+   "error": null,
+   "size": 616,
+   "status": "unverified"
+  },
+  "GJMultiplayerManager": {
+   "error": null,
+   "size": 368,
+   "status": "unverified"
+  },
+  "GJNotification": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "GJNotificationCell": {
+   "error": null,
+   "size": 584,
+   "status": "unverified"
+  },
+  "GJObjectDecoder": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "GJOnlineRewardDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJOptionsLayer": {
+   "error": null,
+   "size": 1136,
+   "status": "unverified"
+  },
+  "GJPFollowCommandLayer": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "GJPathPage": {
+   "error": null,
+   "size": 704,
+   "status": "verified"
+  },
+  "GJPathRewardPopup": {
+   "error": null,
+   "size": 672,
+   "status": "unverified"
+  },
+  "GJPathSprite": {
+   "error": null,
+   "size": 608,
+   "status": "verified"
+  },
+  "GJPathsLayer": {
+   "error": null,
+   "size": 688,
+   "status": "unverified"
+  },
+  "GJPlayerState": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "GJPointDouble": {
+   "error": null,
+   "size": 16,
+   "status": "unverified"
+  },
+  "GJPromoPopup": {
+   "error": null,
+   "size": 696,
+   "status": "unverified"
+  },
+  "GJPurchaseDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJRateEditorSoundLayer": {
+   "error": null,
+   "size": 1024,
+   "status": "unverified"
+  },
+  "GJRateLevelLayer": {
+   "error": null,
+   "size": 1120,
+   "status": "unverified"
+  },
+  "GJRateLevelListLayer": {
+   "error": null,
+   "size": 1024,
+   "status": "unverified"
+  },
+  "GJRequestCell": {
+   "error": null,
+   "size": 584,
+   "status": "unverified"
+  },
+  "GJRewardDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJRewardItem": {
+   "error": null,
+   "size": 88,
+   "status": "verified"
+  },
+  "GJRewardObject": {
+   "error": null,
+   "size": 72,
+   "status": "verified"
+  },
+  "GJRobotSprite": {
+   "error": null,
+   "size": 808,
+   "status": "verified"
+  },
+  "GJRotationControl": {
+   "error": null,
+   "size": 520,
+   "status": "unverified"
+  },
+  "GJRotationControlDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJScaleControl": {
+   "error": null,
+   "size": 616,
+   "status": "unverified"
+  },
+  "GJScaleControlDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJScoreCell": {
+   "error": null,
+   "size": 576,
+   "status": "unverified"
+  },
+  "GJSearchObject": {
+   "error": null,
+   "size": 472,
+   "status": "unverified"
+  },
+  "GJSelectionStrip": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "GJShaderState": {
+   "error": null,
+   "size": 720,
+   "status": "unverified"
+  },
+  "GJShopLayer": {
+   "error": null,
+   "size": 536,
+   "status": "unverified"
+  },
+  "GJSmartBlockPreview": {
+   "error": null,
+   "size": 376,
+   "status": "verified"
+  },
+  "GJSmartBlockPreviewSprite": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "GJSmartPrefab": {
+   "error": null,
+   "size": 128,
+   "status": "verified"
+  },
+  "GJSmartTemplate": {
+   "error": null,
+   "size": 208,
+   "status": "verified"
+  },
+  "GJSongBrowser": {
+   "error": null,
+   "size": 688,
+   "status": "verified"
+  },
+  "GJSpecialColorSelect": {
+   "error": null,
+   "size": 688,
+   "status": "verified"
+  },
+  "GJSpecialColorSelectDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJSpiderSprite": {
+   "error": null,
+   "size": 808,
+   "status": "verified"
+  },
+  "GJSpriteColor": {
+   "error": null,
+   "size": 40,
+   "status": "unverified"
+  },
+  "GJStoreItem": {
+   "error": null,
+   "size": 376,
+   "status": "unverified"
+  },
+  "GJThreadCell": {
+   "error": null,
+   "size": 576,
+   "status": "unverified"
+  },
+  "GJThreadMessage": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "GJTransformControl": {
+   "error": null,
+   "size": 648,
+   "status": "unverified"
+  },
+  "GJTransformControlDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GJTransformState": {
+   "error": null,
+   "size": 72,
+   "status": "unverified"
+  },
+  "GJUINode": {
+   "error": null,
+   "size": 392,
+   "status": "verified"
+  },
+  "GJUnlockableItem": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "GJUserMessage": {
+   "error": null,
+   "size": 472,
+   "status": "verified"
+  },
+  "GJUserScore": {
+   "error": null,
+   "size": 952,
+   "status": "unverified"
+  },
+  "GJValueTween": {
+   "error": null,
+   "size": 40,
+   "status": "unverified"
+  },
+  "GJWorldNode": {
+   "error": null,
+   "size": 384,
+   "status": "unverified"
+  },
+  "GJWriteMessagePopup": {
+   "error": null,
+   "size": 816,
+   "status": "unverified"
+  },
+  "GManager": {
+   "error": null,
+   "size": 360,
+   "status": "unverified"
+  },
+  "GameCell": {
+   "error": null,
+   "size": 600,
+   "status": "unverified"
+  },
+  "GameEffectsManager": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "GameLevelManager": {
+   "error": null,
+   "size": 1680,
+   "status": "unverified"
+  },
+  "GameLevelOptionsLayer": {
+   "error": null,
+   "size": 1152,
+   "status": "verified"
+  },
+  "GameManager": {
+   "error": null,
+   "size": 1768,
+   "status": "unverified"
+  },
+  "GameObject": {
+   "error": null,
+   "size": 1360,
+   "status": "unverified"
+  },
+  "GameObjectCopy": {
+   "error": null,
+   "size": 96,
+   "status": "verified"
+  },
+  "GameObjectEditorState": {
+   "error": null,
+   "size": 24,
+   "status": "unverified"
+  },
+  "GameObjectPhysics": {
+   "error": null,
+   "size": 48,
+   "status": "unverified"
+  },
+  "GameOptionsLayer": {
+   "error": null,
+   "size": 1152,
+   "status": "unverified"
+  },
+  "GameOptionsTrigger": {
+   "error": null,
+   "size": 1912,
+   "status": "unverified"
+  },
+  "GameRateDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GameSettingsLayer": {
+   "error": null,
+   "size": 1192,
+   "status": "tail-padded"
+  },
+  "GameStatsManager": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "GameToolbox": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "GauntletLayer": {
+   "error": null,
+   "size": 480,
+   "status": "unverified"
+  },
+  "GauntletNode": {
+   "error": null,
+   "size": 360,
+   "status": "unverified"
+  },
+  "GauntletSelectLayer": {
+   "error": null,
+   "size": 520,
+   "status": "unverified"
+  },
+  "GauntletSprite": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "GhostTrailEffect": {
+   "error": null,
+   "size": 408,
+   "status": "verified"
+  },
+  "GlobalKeybindSource": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GooglePlayDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "GooglePlayManager": {
+   "error": null,
+   "size": 336,
+   "status": "unverified"
+  },
+  "GradientTriggerObject": {
+   "error": null,
+   "size": 1896,
+   "status": "unverified"
+  },
+  "GraphicsReloadLayer": {
+   "error": null,
+   "size": 424,
+   "status": "unverified"
+  },
+  "GravityEffectSprite": {
+   "error": null,
+   "size": 600,
+   "status": "unverified"
+  },
+  "GridSettingsLayer": {
+   "error": null,
+   "size": 1152,
+   "status": "unverified"
+  },
+  "GroupCommandObject2": {
+   "error": null,
+   "size": 520,
+   "status": "unverified"
+  },
+  "HSVLiveOverlay": {
+   "error": null,
+   "size": 744,
+   "status": "unverified"
+  },
+  "HSVWidgetDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "HSVWidgetPopup": {
+   "error": null,
+   "size": 680,
+   "status": "unverified"
+  },
+  "HardStreak": {
+   "error": null,
+   "size": 448,
+   "status": "verified"
+  },
+  "IDNameBrowserDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "IDNameBrowserPopup": {
+   "error": null,
+   "size": 672,
+   "status": "unverified"
+  },
+  "IDNameInput": {
+   "error": null,
+   "size": 344,
+   "status": "unverified"
+  },
+  "InfoAlertButton": {
+   "error": null,
+   "size": 592,
+   "status": "unverified"
+  },
+  "InfoLayer": {
+   "error": null,
+   "size": 960,
+   "status": "verified"
+  },
+  "InheritanceNode": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "InputCaptureDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "InvitesPopup": {
+   "error": null,
+   "size": 792,
+   "status": "unverified"
+  },
+  "ItemInfoPopup": {
+   "error": null,
+   "size": 680,
+   "status": "verified"
+  },
+  "ItemTriggerGameObject": {
+   "error": null,
+   "size": 1912,
+   "status": "unverified"
+  },
+  "KeybindCapturePopup": {
+   "error": null,
+   "size": 1128,
+   "status": "verified"
+  },
+  "KeybindSet": {
+   "error": null,
+   "size": 32,
+   "status": "unverified"
+  },
+  "KeybindSettingsEntry": {
+   "error": null,
+   "size": 40,
+   "status": "unverified"
+  },
+  "KeybindSource": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "KeybindingsLayer": {
+   "error": null,
+   "size": 1184,
+   "status": "verified"
+  },
+  "KeybindingsSettingsPopup": {
+   "error": null,
+   "size": 752,
+   "status": "unverified"
+  },
+  "KeyframeAnimTriggerObject": {
+   "error": null,
+   "size": 1880,
+   "status": "unverified"
+  },
+  "KeyframeGameObject": {
+   "error": null,
+   "size": 1912,
+   "status": "unverified"
+  },
+  "KeyframeObject": {
+   "error": null,
+   "size": 448,
+   "status": "unverified"
+  },
+  "LabelGameObject": {
+   "error": null,
+   "size": 1936,
+   "status": "unverified"
+  },
+  "LeaderboardManagerDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LeaderboardsLayer": {
+   "error": null,
+   "size": 512,
+   "status": "unverified"
+  },
+  "LevelAreaInnerLayer": {
+   "error": null,
+   "size": 440,
+   "status": "unverified"
+  },
+  "LevelAreaLayer": {
+   "error": null,
+   "size": 440,
+   "status": "unverified"
+  },
+  "LevelBadgePopup": {
+   "error": null,
+   "size": 736,
+   "status": "tail-padded"
+  },
+  "LevelBindingsLayer": {
+   "error": null,
+   "size": 1200,
+   "status": "verified"
+  },
+  "LevelBrowserLayer": {
+   "error": null,
+   "size": 840,
+   "status": "verified"
+  },
+  "LevelCell": {
+   "error": null,
+   "size": 616,
+   "status": "unverified"
+  },
+  "LevelCommentDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LevelControlConfig": {
+   "error": null,
+   "size": 160,
+   "status": "verified"
+  },
+  "LevelControlsDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LevelDeleteDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LevelDownloadDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LevelEditorLayer": {
+   "error": null,
+   "size": 15880,
+   "status": "verified"
+  },
+  "LevelFeatureLayer": {
+   "error": null,
+   "size": 696,
+   "status": "unverified"
+  },
+  "LevelInfoLayer": {
+   "error": null,
+   "size": 752,
+   "status": "unverified"
+  },
+  "LevelLeaderboard": {
+   "error": null,
+   "size": 752,
+   "status": "verified"
+  },
+  "LevelListCell": {
+   "error": null,
+   "size": 576,
+   "status": "unverified"
+  },
+  "LevelListDeleteDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LevelListLayer": {
+   "error": null,
+   "size": 1032,
+   "status": "unverified"
+  },
+  "LevelManagerDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LevelOptionsLayer": {
+   "error": null,
+   "size": 1144,
+   "status": "unverified"
+  },
+  "LevelOptionsLayer2": {
+   "error": null,
+   "size": 1144,
+   "status": "unverified"
+  },
+  "LevelPage": {
+   "error": null,
+   "size": 576,
+   "status": "unverified"
+  },
+  "LevelPickerDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LevelPickerPopup": {
+   "error": null,
+   "size": 792,
+   "status": "unverified"
+  },
+  "LevelRateInfoDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LevelSearchLayer": {
+   "error": null,
+   "size": 504,
+   "status": "unverified"
+  },
+  "LevelSelectLayer": {
+   "error": null,
+   "size": 480,
+   "status": "unverified"
+  },
+  "LevelSettingsDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LevelSettingsLayer": {
+   "error": null,
+   "size": 904,
+   "status": "unverified"
+  },
+  "LevelSettingsObject": {
+   "error": null,
+   "size": 472,
+   "status": "unverified"
+  },
+  "LevelStatsInfoPopup": {
+   "error": null,
+   "size": 736,
+   "status": "tail-padded"
+  },
+  "LevelTools": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "LevelTouchSlot": {
+   "error": null,
+   "size": 60,
+   "status": "unverified"
+  },
+  "LevelUpdateDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LevelUploadDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LikeItemDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LikeItemLayer": {
+   "error": null,
+   "size": 688,
+   "status": "verified"
+  },
+  "ListButtonBar": {
+   "error": null,
+   "size": 352,
+   "status": "verified"
+  },
+  "ListButtonBarDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "ListButtonPage": {
+   "error": null,
+   "size": 408,
+   "status": "unverified"
+  },
+  "ListCell": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "ListUploadDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "LoadingCircle": {
+   "error": null,
+   "size": 568,
+   "status": "verified"
+  },
+  "LoadingCircleSprite": {
+   "error": null,
+   "size": 600,
+   "status": "verified"
+  },
+  "LoadingLayer": {
+   "error": null,
+   "size": 456,
+   "status": "unverified"
+  },
+  "LocalLevelManager": {
+   "error": null,
+   "size": 696,
+   "status": "unverified"
+  },
+  "MPLobbyLayer": {
+   "error": null,
+   "size": 496,
+   "status": "unverified"
+  },
+  "MapPackCell": {
+   "error": null,
+   "size": 600,
+   "status": "unverified"
+  },
+  "MapSelectLayer": {
+   "error": null,
+   "size": 488,
+   "status": "unverified"
+  },
+  "MemberListPopup": {
+   "error": null,
+   "size": 888,
+   "status": "tail-padded"
+  },
+  "MenuGameLayer": {
+   "error": null,
+   "size": 464,
+   "status": "unverified"
+  },
+  "MenuLayer": {
+   "error": null,
+   "size": 512,
+   "status": "unverified"
+  },
+  "MessageListDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "MessageThreadsPage": {
+   "error": null,
+   "size": 960,
+   "status": "tail-padded"
+  },
+  "MessagesProfilePage": {
+   "error": null,
+   "size": 840,
+   "status": "verified"
+  },
+  "MoreOptionsLayer": {
+   "error": null,
+   "size": 760,
+   "status": "unverified"
+  },
+  "MoreSearchLayer": {
+   "error": null,
+   "size": 736,
+   "status": "unverified"
+  },
+  "MoreVideoOptionsLayer": {
+   "error": null,
+   "size": 728,
+   "status": "unverified"
+  },
+  "MoveStepPopup": {
+   "error": null,
+   "size": 1152,
+   "status": "unverified"
+  },
+  "MultiTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "MultilineBitmapFont": {
+   "error": null,
+   "size": 696,
+   "status": "unverified"
+  },
+  "MultiplayerLayer": {
+   "error": null,
+   "size": 408,
+   "status": "unverified"
+  },
+  "MusicArtistObject": {
+   "error": null,
+   "size": 120,
+   "status": "unverified"
+  },
+  "MusicBrowser": {
+   "error": null,
+   "size": 920,
+   "status": "verified"
+  },
+  "MusicBrowserDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "MusicChangelogEntry": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "MusicChangelogLine": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "MusicChangelogPopup": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "MusicDelegateHandler": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "MusicDownloadDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "MusicDownloadManager": {
+   "error": null,
+   "size": 984,
+   "status": "unverified"
+  },
+  "MusicSearchResult": {
+   "error": null,
+   "size": 176,
+   "status": "unverified"
+  },
+  "MyStuffPopup": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "NCSInfoLayer": {
+   "error": null,
+   "size": 680,
+   "status": "unverified"
+  },
+  "NewThreadPopup": {
+   "error": null,
+   "size": 960,
+   "status": "tail-padded"
+  },
+  "NewgroundsInfoLayer": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "NewsBlock": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "NewsItem": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "NewsPopup": {
+   "error": null,
+   "size": 680,
+   "status": "unverified"
+  },
+  "NodePoint": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "NotificationFilterPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "NotificationListDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "NotificationsPage": {
+   "error": null,
+   "size": 672,
+   "status": "unverified"
+  },
+  "NumberInputDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "NumberInputLayer": {
+   "error": null,
+   "size": 768,
+   "status": "unverified"
+  },
+  "OBB2D": {
+   "error": null,
+   "size": 440,
+   "status": "verified"
+  },
+  "ObjectControlGameObject": {
+   "error": null,
+   "size": 1856,
+   "status": "unverified"
+  },
+  "ObjectDecoder": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "ObjectDecoderDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "ObjectManager": {
+   "error": null,
+   "size": 336,
+   "status": "unverified"
+  },
+  "ObjectToolbox": {
+   "error": null,
+   "size": 336,
+   "status": "unverified"
+  },
+  "OnlineListDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "OpacityEffectAction": {
+   "error": null,
+   "size": 44,
+   "status": "unverified"
+  },
+  "OptionsCell": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "OptionsLayer": {
+   "error": null,
+   "size": 672,
+   "status": "unverified"
+  },
+  "OptionsObject": {
+   "error": null,
+   "size": 120,
+   "status": "unverified"
+  },
+  "OptionsObjectDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "OptionsScrollLayer": {
+   "error": null,
+   "size": 768,
+   "status": "unverified"
+  },
+  "PagedListPopup": {
+   "error": null,
+   "size": 776,
+   "status": "unverified"
+  },
+  "ParentalGateLayer": {
+   "error": null,
+   "size": 776,
+   "status": "verified"
+  },
+  "ParentalOptionsLayer": {
+   "error": null,
+   "size": 752,
+   "status": "verified"
+  },
+  "ParentalPrivacyPopup": {
+   "error": null,
+   "size": 728,
+   "status": "tail-padded"
+  },
+  "ParticleGameObject": {
+   "error": null,
+   "size": 1824,
+   "status": "tail-padded"
+  },
+  "ParticlePreviewLayer": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "PauseLayer": {
+   "error": null,
+   "size": 672,
+   "status": "unverified"
+  },
+  "PlatformDownloadDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "PlatformFileDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "PlatformToolbox": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "PlatformerControlsPopup": {
+   "error": null,
+   "size": 1296,
+   "status": "tail-padded"
+  },
+  "PlayLayer": {
+   "error": null,
+   "size": 15584,
+   "status": "unverified"
+  },
+  "PlayerButtonCommand": {
+   "error": null,
+   "size": 24,
+   "status": "unverified"
+  },
+  "PlayerCheckpoint": {
+   "error": null,
+   "size": 1384,
+   "status": "unverified"
+  },
+  "PlayerControlGameObject": {
+   "error": null,
+   "size": 1864,
+   "status": "unverified"
+  },
+  "PlayerFireBoostSprite": {
+   "error": null,
+   "size": 608,
+   "status": "verified"
+  },
+  "PlayerObject": {
+   "error": null,
+   "size": 3152,
+   "status": "verified"
+  },
+  "PlayerTrailState": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "PointNode": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "PriceLabel": {
+   "error": null,
+   "size": 336,
+   "status": "unverified"
+  },
+  "ProfilePage": {
+   "error": null,
+   "size": 904,
+   "status": "verified"
+  },
+  "ProgressGameObject": {
+   "error": null,
+   "size": 1856,
+   "status": "unverified"
+  },
+  "PromoInterstitial": {
+   "error": null,
+   "size": 728,
+   "status": "unverified"
+  },
+  "PulseEffectAction": {
+   "error": null,
+   "size": 72,
+   "status": "unverified"
+  },
+  "PurchaseItemPopup": {
+   "error": null,
+   "size": 680,
+   "status": "verified"
+  },
+  "RandTriggerGameObject": {
+   "error": null,
+   "size": 1880,
+   "status": "unverified"
+  },
+  "RateDemonLayer": {
+   "error": null,
+   "size": 744,
+   "status": "unverified"
+  },
+  "RateLevelDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "RateLevelLayer": {
+   "error": null,
+   "size": 696,
+   "status": "unverified"
+  },
+  "RateStarsLayer": {
+   "error": null,
+   "size": 760,
+   "status": "unverified"
+  },
+  "RateStarsModLayer": {
+   "error": null,
+   "size": 680,
+   "status": "unverified"
+  },
+  "ReadArchive": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "RecordButtonCommand": {
+   "error": null,
+   "size": 16,
+   "status": "unverified"
+  },
+  "RecordCheckpoint": {
+   "error": null,
+   "size": 72,
+   "status": "unverified"
+  },
+  "RenameThreadPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "ReportPopup": {
+   "error": null,
+   "size": 1176,
+   "status": "tail-padded"
+  },
+  "ReportPopupConfig": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "ReportQueuePopup": {
+   "error": null,
+   "size": 792,
+   "status": "unverified"
+  },
+  "RetryLevelLayer": {
+   "error": null,
+   "size": 632,
+   "status": "unverified"
+  },
+  "ReviewChoiceDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "ReviewChoiceSheet": {
+   "error": null,
+   "size": 1024,
+   "status": "tail-padded"
+  },
+  "RewardUnlockLayer": {
+   "error": null,
+   "size": 744,
+   "status": "verified"
+  },
+  "RewardedVideoDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "RewardsPage": {
+   "error": null,
+   "size": 728,
+   "status": "unverified"
+  },
+  "RingObject": {
+   "error": null,
+   "size": 1864,
+   "status": "verified"
+  },
+  "RotateGameplayGameObject": {
+   "error": null,
+   "size": 1888,
+   "status": "unverified"
+  },
+  "RowPressItem": {
+   "error": null,
+   "size": 528,
+   "status": "tail-padded"
+  },
+  "SFXBrowser": {
+   "error": null,
+   "size": 864,
+   "status": "unverified"
+  },
+  "SFXBrowserDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SFXChangelogEntry": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "SFXChangelogPopup": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "SFXFolderObject": {
+   "error": null,
+   "size": 184,
+   "status": "unverified"
+  },
+  "SFXFolderPickerDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SFXFolderPickerPopup": {
+   "error": null,
+   "size": 768,
+   "status": "tail-padded"
+  },
+  "SFXInfoObject": {
+   "error": null,
+   "size": 176,
+   "status": "unverified"
+  },
+  "SFXSearchResult": {
+   "error": null,
+   "size": 192,
+   "status": "verified"
+  },
+  "SFXSettingsPopup": {
+   "error": null,
+   "size": 1136,
+   "status": "unverified"
+  },
+  "SFXStateContainer": {
+   "error": null,
+   "size": 32,
+   "status": "unverified"
+  },
+  "SFXTriggerGameObject": {
+   "error": null,
+   "size": 2056,
+   "status": "unverified"
+  },
+  "SFXTriggerInstance": {
+   "error": null,
+   "size": 24,
+   "status": "unverified"
+  },
+  "SFXTriggerState": {
+   "error": null,
+   "size": 168,
+   "status": "unverified"
+  },
+  "SavedActiveObjectState": {
+   "error": null,
+   "size": 16,
+   "status": "unverified"
+  },
+  "SavedObjectStateRef": {
+   "error": null,
+   "size": 48,
+   "status": "unverified"
+  },
+  "SavedSpecialObjectState": {
+   "error": null,
+   "size": 16,
+   "status": "unverified"
+  },
+  "ScrollViewPopup": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "ScrollableContentLayer": {
+   "error": "unknown type base cocos2d::CCTouchClipper",
+   "size": null,
+   "status": "incomplete"
+  },
+  "ScrollingLayer": {
+   "error": null,
+   "size": 608,
+   "status": "unverified"
+  },
+  "SearchButton": {
+   "error": null,
+   "size": 616,
+   "status": "verified"
+  },
+  "SecretGame01Layer": {
+   "error": null,
+   "size": 464,
+   "status": "unverified"
+  },
+  "SecretLayer": {
+   "error": null,
+   "size": 488,
+   "status": "unverified"
+  },
+  "SecretLayer2": {
+   "error": null,
+   "size": 520,
+   "status": "unverified"
+  },
+  "SecretLayer3": {
+   "error": null,
+   "size": 464,
+   "status": "unverified"
+  },
+  "SecretLayer4": {
+   "error": null,
+   "size": 496,
+   "status": "unverified"
+  },
+  "SecretLayer5": {
+   "error": null,
+   "size": 656,
+   "status": "unverified"
+  },
+  "SecretLayer6": {
+   "error": null,
+   "size": 416,
+   "status": "unverified"
+  },
+  "SecretNumberLayer": {
+   "error": null,
+   "size": 408,
+   "status": "verified"
+  },
+  "SecretRewardsLayer": {
+   "error": null,
+   "size": 600,
+   "status": "unverified"
+  },
+  "SectionedContentNode": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "SelectArtDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SelectArtLayer": {
+   "error": null,
+   "size": 704,
+   "status": "verified"
+  },
+  "SelectEventLayer": {
+   "error": null,
+   "size": 1056,
+   "status": "unverified"
+  },
+  "SelectFontLayer": {
+   "error": null,
+   "size": 688,
+   "status": "unverified"
+  },
+  "SelectFontLayer2": {
+   "error": null,
+   "size": 672,
+   "status": "unverified"
+  },
+  "SelectListIconDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SelectListIconLayer": {
+   "error": null,
+   "size": 688,
+   "status": "unverified"
+  },
+  "SelectPremadeDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SelectPremadeLayer": {
+   "error": null,
+   "size": 672,
+   "status": "unverified"
+  },
+  "SelectSFXSortDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SelectSFXSortLayer": {
+   "error": null,
+   "size": 680,
+   "status": "unverified"
+  },
+  "SelectSettingDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SelectSettingLayer": {
+   "error": null,
+   "size": 688,
+   "status": "verified"
+  },
+  "SelectSmartTemplateLayer": {
+   "error": null,
+   "size": 608,
+   "status": "unverified"
+  },
+  "SequenceTriggerGameObject": {
+   "error": null,
+   "size": 2032,
+   "status": "unverified"
+  },
+  "SequenceTriggerState": {
+   "error": null,
+   "size": 128,
+   "status": "unverified"
+  },
+  "SetColorIDPopup": {
+   "error": null,
+   "size": 712,
+   "status": "unverified"
+  },
+  "SetFolderPopup": {
+   "error": null,
+   "size": 728,
+   "status": "verified"
+  },
+  "SetGroupIDLayer": {
+   "error": null,
+   "size": 864,
+   "status": "unverified"
+  },
+  "SetIDPopup": {
+   "error": null,
+   "size": 704,
+   "status": "unverified"
+  },
+  "SetIDPopupDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SetItemIDLayer": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetLevelOrderPopup": {
+   "error": null,
+   "size": 712,
+   "status": "unverified"
+  },
+  "SetTargetIDLayer": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "SetTextPopup": {
+   "error": null,
+   "size": 760,
+   "status": "unverified"
+  },
+  "SetTextPopupDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SetupAdvFollowEditPhysicsPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetupAdvFollowPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "verified"
+  },
+  "SetupAdvFollowRetargetPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupAnimSettingsPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupAnimationPopup": {
+   "error": null,
+   "size": 1024,
+   "status": "verified"
+  },
+  "SetupAreaAnimTriggerPopup": {
+   "error": null,
+   "size": 1056,
+   "status": "unverified"
+  },
+  "SetupAreaFadeTriggerPopup": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "SetupAreaMoveTriggerPopup": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "SetupAreaRotateTriggerPopup": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "SetupAreaTintTriggerPopup": {
+   "error": null,
+   "size": 1056,
+   "status": "unverified"
+  },
+  "SetupAreaTransformTriggerPopup": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "SetupAreaTriggerPopup": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "SetupArtSwitchPopup": {
+   "error": null,
+   "size": 1024,
+   "status": "verified"
+  },
+  "SetupAudioLineGuidePopup": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "SetupAudioTriggerPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "SetupBGSpeedTrigger": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupCameraEdgePopup": {
+   "error": null,
+   "size": 1024,
+   "status": "unverified"
+  },
+  "SetupCameraGuidePopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupCameraModePopup": {
+   "error": null,
+   "size": 1064,
+   "status": "verified"
+  },
+  "SetupCameraOffsetTrigger": {
+   "error": null,
+   "size": 1120,
+   "status": "verified"
+  },
+  "SetupCameraRotatePopup": {
+   "error": null,
+   "size": 1080,
+   "status": "unverified"
+  },
+  "SetupCameraRotatePopup2": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupCheckpointPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetupCoinLayer": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetupCollisionStateTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupCollisionTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetupCountTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupDashRingPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetupEndPopup": {
+   "error": null,
+   "size": 1024,
+   "status": "verified"
+  },
+  "SetupEnterEffectPopup": {
+   "error": null,
+   "size": 1072,
+   "status": "unverified"
+  },
+  "SetupEnterTriggerPopup": {
+   "error": null,
+   "size": 1024,
+   "status": "unverified"
+  },
+  "SetupEventLinkPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupForceBlockPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupGameplayOffsetPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetupGradientPopup": {
+   "error": null,
+   "size": 1040,
+   "status": "unverified"
+  },
+  "SetupGravityModPopup": {
+   "error": null,
+   "size": 728,
+   "status": "unverified"
+  },
+  "SetupGravityTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupInstantCollisionTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupInstantCountPopup": {
+   "error": null,
+   "size": 1072,
+   "status": "verified"
+  },
+  "SetupInteractObjectPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupItemCompareTriggerPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "verified"
+  },
+  "SetupItemEditTriggerPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "verified"
+  },
+  "SetupKeyframeAnimPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupKeyframePopup": {
+   "error": null,
+   "size": 1024,
+   "status": "unverified"
+  },
+  "SetupMGTrigger": {
+   "error": null,
+   "size": 1080,
+   "status": "unverified"
+  },
+  "SetupMoveCommandPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "SetupObjectControlPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupObjectOptions2Popup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetupObjectOptionsPopup": {
+   "error": null,
+   "size": 712,
+   "status": "verified"
+  },
+  "SetupObjectTogglePopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupOpacityPopup": {
+   "error": null,
+   "size": 1056,
+   "status": "verified"
+  },
+  "SetupOptionsTriggerPopup": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "SetupPersistentItemTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupPickupTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupPlatformerEndPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupPlayerControlPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupPortalPopup": {
+   "error": null,
+   "size": 744,
+   "status": "unverified"
+  },
+  "SetupProgressPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetupPulsePopup": {
+   "error": null,
+   "size": 1336,
+   "status": "verified"
+  },
+  "SetupRandAdvTriggerPopup": {
+   "error": null,
+   "size": 1064,
+   "status": "verified"
+  },
+  "SetupRandTriggerPopup": {
+   "error": null,
+   "size": 1048,
+   "status": "verified"
+  },
+  "SetupResetTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupReverbPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "SetupRotateCommandPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupRotateGameplayPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetupRotatePopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupSFXEditPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "verified"
+  },
+  "SetupSFXPopup": {
+   "error": null,
+   "size": 1048,
+   "status": "verified"
+  },
+  "SetupSequenceTriggerPopup": {
+   "error": null,
+   "size": 1032,
+   "status": "verified"
+  },
+  "SetupShaderEffectPopup": {
+   "error": null,
+   "size": 1024,
+   "status": "unverified"
+  },
+  "SetupShakePopup": {
+   "error": null,
+   "size": 1072,
+   "status": "verified"
+  },
+  "SetupSmartBlockLayer": {
+   "error": null,
+   "size": 704,
+   "status": "verified"
+  },
+  "SetupSmartTemplateLayer": {
+   "error": null,
+   "size": 696,
+   "status": "verified"
+  },
+  "SetupSongTriggerPopup": {
+   "error": null,
+   "size": 1032,
+   "status": "verified"
+  },
+  "SetupSpawnParticlePopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupSpawnPopup": {
+   "error": null,
+   "size": 1048,
+   "status": "verified"
+  },
+  "SetupStaticCameraPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupStopTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupTeleportPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "verified"
+  },
+  "SetupTimeWarpPopup": {
+   "error": null,
+   "size": 1024,
+   "status": "verified"
+  },
+  "SetupTimerControlTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupTimerEventTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupTimerTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupTouchTogglePopup": {
+   "error": null,
+   "size": 1064,
+   "status": "verified"
+  },
+  "SetupTransformPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "SetupTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "SetupZoomTriggerPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "ShaderGameObject": {
+   "error": null,
+   "size": 1936,
+   "status": "unverified"
+  },
+  "ShaderLayer": {
+   "error": null,
+   "size": 1648,
+   "status": "unverified"
+  },
+  "ShardsPage": {
+   "error": null,
+   "size": 704,
+   "status": "unverified"
+  },
+  "ShareCommentDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "ShareCommentLayer": {
+   "error": null,
+   "size": 832,
+   "status": "unverified"
+  },
+  "ShareLevelLayer": {
+   "error": null,
+   "size": 760,
+   "status": "unverified"
+  },
+  "ShareLevelSettingsLayer": {
+   "error": null,
+   "size": 712,
+   "status": "unverified"
+  },
+  "ShareListLayer": {
+   "error": null,
+   "size": 752,
+   "status": "unverified"
+  },
+  "SimpleObject": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "SimplePlayer": {
+   "error": null,
+   "size": 680,
+   "status": "verified"
+  },
+  "SlideInLayer": {
+   "error": null,
+   "size": 608,
+   "status": "unverified"
+  },
+  "Slider": {
+   "error": null,
+   "size": 456,
+   "status": "unverified"
+  },
+  "SliderDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SliderThumb": {
+   "error": null,
+   "size": 424,
+   "status": "unverified"
+  },
+  "SliderTouchLogic": {
+   "error": null,
+   "size": 488,
+   "status": "unverified"
+  },
+  "SmartGameObject": {
+   "error": null,
+   "size": 1432,
+   "status": "unverified"
+  },
+  "SmartPrefabResult": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "SmartTemplateCell": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "SocialLinksPopup": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "SongCell": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "SongChannelState": {
+   "error": null,
+   "size": 32,
+   "status": "unverified"
+  },
+  "SongInfoLayer": {
+   "error": null,
+   "size": 760,
+   "status": "unverified"
+  },
+  "SongInfoObject": {
+   "error": null,
+   "size": 976,
+   "status": "tail-padded"
+  },
+  "SongObject": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "SongOptionsLayer": {
+   "error": null,
+   "size": 688,
+   "status": "unverified"
+  },
+  "SongPlaybackDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SongSelectNode": {
+   "error": null,
+   "size": 432,
+   "status": "verified"
+  },
+  "SongTriggerGameObject": {
+   "error": null,
+   "size": 2064,
+   "status": "unverified"
+  },
+  "SongTriggerState": {
+   "error": null,
+   "size": 16,
+   "status": "unverified"
+  },
+  "SongUsageDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SongUsageEntry": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "SongUsagePopup": {
+   "error": null,
+   "size": 744,
+   "status": "tail-padded"
+  },
+  "SongsLayer": {
+   "error": null,
+   "size": 608,
+   "status": "verified"
+  },
+  "SoundPackDescDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "SoundPackDescPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "SoundStateContainer": {
+   "error": null,
+   "size": 104,
+   "status": "unverified"
+  },
+  "SpawnParticleGameObject": {
+   "error": null,
+   "size": 1896,
+   "status": "unverified"
+  },
+  "SpawnTriggerAction": {
+   "error": null,
+   "size": 72,
+   "status": "unverified"
+  },
+  "SpawnTriggerGameObject": {
+   "error": null,
+   "size": 1936,
+   "status": "unverified"
+  },
+  "SpecialAnimGameObject": {
+   "error": null,
+   "size": 1472,
+   "status": "unverified"
+  },
+  "SpriteAnimationManager": {
+   "error": null,
+   "size": 472,
+   "status": "unverified"
+  },
+  "SpriteDescription": {
+   "error": null,
+   "size": 104,
+   "status": "unverified"
+  },
+  "SpritePartDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "StarInfoPopup": {
+   "error": null,
+   "size": 664,
+   "status": "verified"
+  },
+  "StartPosBrowser": {
+   "error": null,
+   "size": 680,
+   "status": "unverified"
+  },
+  "StartPosBrowserDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "StartPosLayer": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "StartPosObject": {
+   "error": null,
+   "size": 1864,
+   "status": "unverified"
+  },
+  "StatsCell": {
+   "error": null,
+   "size": 560,
+   "status": "unverified"
+  },
+  "StatsLayer": {
+   "error": null,
+   "size": 608,
+   "status": "unverified"
+  },
+  "StatsObject": {
+   "error": null,
+   "size": 72,
+   "status": "verified"
+  },
+  "SupportLayer": {
+   "error": null,
+   "size": 640,
+   "status": "unverified"
+  },
+  "TOSPopup": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "TabbedPopupLayer": {
+   "error": null,
+   "size": 1072,
+   "status": "unverified"
+  },
+  "TabbedPopupTab": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "TableView": {
+   "error": "unknown type base CCScrollLayerExt (unknown type base cocos2d::CCTouchClipper)",
+   "size": null,
+   "status": "incomplete"
+  },
+  "TableViewCell": {
+   "error": null,
+   "size": 560,
+   "status": "unverified"
+  },
+  "TableViewCellDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "TableViewDataSource": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "TableViewDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "TeleportPortalObject": {
+   "error": null,
+   "size": 1928,
+   "status": "verified"
+  },
+  "TextAlertPopup": {
+   "error": null,
+   "size": 344,
+   "status": "unverified"
+  },
+  "TextArea": {
+   "error": null,
+   "size": 736,
+   "status": "unverified"
+  },
+  "TextAreaDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "TextGameObject": {
+   "error": null,
+   "size": 1400,
+   "status": "verified"
+  },
+  "TextInputDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "TextStyleSection": {
+   "error": null,
+   "size": 96,
+   "status": "verified"
+  },
+  "ThreadDescPopup": {
+   "error": null,
+   "size": 1016,
+   "status": "unverified"
+  },
+  "ThreadMessageDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "ThreadMessageOptionsPopup": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "ThreadOpenHelper": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "ThreadOptionsPopup": {
+   "error": null,
+   "size": 1048,
+   "status": "tail-padded"
+  },
+  "ThreadRequestPopup": {
+   "error": null,
+   "size": 664,
+   "status": "unverified"
+  },
+  "ThreadSearchPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "unverified"
+  },
+  "ThreadViewPopup": {
+   "error": null,
+   "size": 1240,
+   "status": "tail-padded"
+  },
+  "TimeSpeedControl": {
+   "error": null,
+   "size": 352,
+   "status": "tail-padded"
+  },
+  "TimerItem": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "TimerTriggerAction": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "TimerTriggerGameObject": {
+   "error": null,
+   "size": 1888,
+   "status": "unverified"
+  },
+  "ToggleTriggerAction": {
+   "error": null,
+   "size": 48,
+   "status": "unverified"
+  },
+  "TopArtistsLayer": {
+   "error": null,
+   "size": 752,
+   "status": "unverified"
+  },
+  "TouchControlEditLayer": {
+   "error": null,
+   "size": 1344,
+   "status": "tail-padded"
+  },
+  "TouchToggleAction": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "TraceDrawObject": {
+   "error": null,
+   "size": 48,
+   "status": "unverified"
+  },
+  "TraceGroupOutline": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "TransformTriggerGameObject": {
+   "error": null,
+   "size": 1880,
+   "status": "unverified"
+  },
+  "TriggerControlGameObject": {
+   "error": null,
+   "size": 1896,
+   "status": "unverified"
+  },
+  "TriggerEffectDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "TutorialLayer": {
+   "error": null,
+   "size": 696,
+   "status": "verified"
+  },
+  "TutorialPopup": {
+   "error": null,
+   "size": 720,
+   "status": "unverified"
+  },
+  "UIButtonConfig": {
+   "error": null,
+   "size": 40,
+   "status": "unverified"
+  },
+  "UILayer": {
+   "error": null,
+   "size": 656,
+   "status": "unverified"
+  },
+  "UIObjectSettingsPopup": {
+   "error": null,
+   "size": 1000,
+   "status": "verified"
+  },
+  "UIOptionsLayer": {
+   "error": null,
+   "size": 1056,
+   "status": "unverified"
+  },
+  "UIPOptionsLayer": {
+   "error": null,
+   "size": 1032,
+   "status": "unverified"
+  },
+  "UISaveLoadLayer": {
+   "error": null,
+   "size": 1008,
+   "status": "unverified"
+  },
+  "UISettingsGameObject": {
+   "error": null,
+   "size": 1872,
+   "status": "unverified"
+  },
+  "URLCell": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "URLViewLayer": {
+   "error": null,
+   "size": 616,
+   "status": "verified"
+  },
+  "UndoObject": {
+   "error": null,
+   "size": 168,
+   "status": "unverified"
+  },
+  "UpdateAccountSettingsPopup": {
+   "error": null,
+   "size": 712,
+   "status": "unverified"
+  },
+  "UploadActionDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "UploadActionPopup": {
+   "error": null,
+   "size": 704,
+   "status": "verified"
+  },
+  "UploadListPopup": {
+   "error": null,
+   "size": 704,
+   "status": "unverified"
+  },
+  "UploadMessageDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "UploadPopup": {
+   "error": null,
+   "size": 704,
+   "status": "unverified"
+  },
+  "UploadPopupDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "UserInfoDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "UserListDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "ValueControlSettings": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "VideoOptionsLayer": {
+   "error": null,
+   "size": 760,
+   "status": "verified"
+  },
+  "VirtualKeyboardNode": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "VirtualRowSource": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "VolumeChangeDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "WorldLevelPage": {
+   "error": null,
+   "size": 680,
+   "status": "unverified"
+  },
+  "WorldSelectLayer": {
+   "error": null,
+   "size": 472,
+   "status": "unverified"
+  },
+  "WriteArchive": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::CCAccelAmplitude": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCAccelDeccelAmplitude": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCAction": {
+   "error": null,
+   "size": 80,
+   "status": "unverified"
+  },
+  "cocos2d::CCActionCamera": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCActionEase": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCActionInstant": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCActionInterval": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCActionManager": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCActionTween": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "cocos2d::CCAnimate": {
+   "error": null,
+   "size": 128,
+   "status": "unverified"
+  },
+  "cocos2d::CCAnimation": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCAnimationCache": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCAnimationFrame": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCApplication": {
+   "error": null,
+   "size": 208,
+   "status": "unverified"
+  },
+  "cocos2d::CCArray": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "cocos2d::CCAtlasNode": {
+   "error": null,
+   "size": 352,
+   "status": "unverified"
+  },
+  "cocos2d::CCAutoreleasePool": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCBMFontConfiguration": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCBezierBy": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCBezierTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCBlink": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCCallFunc": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCCallFuncN": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCCallFuncND": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCCallFuncO": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCCamera": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCCardinalSplineBy": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCCardinalSplineTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCCatmullRomBy": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCCatmullRomTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCClippingNode": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCComponent": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCComponentContainer": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "cocos2d::CCConfiguration": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCDataVisitor": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "cocos2d::CCDeccelAmplitude": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCDelayTime": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCDevice": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::CCDictElement": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::CCDictionary": {
+   "error": null,
+   "size": 72,
+   "status": "unverified"
+  },
+  "cocos2d::CCDirector": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "cocos2d::CCDisplayLinkDirector": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "cocos2d::CCDrawNode": {
+   "error": null,
+   "size": 416,
+   "status": "unverified"
+  },
+  "cocos2d::CCEGLView": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "cocos2d::CCEGLViewProtocol": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseBackIn": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseBackInOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseBackOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseBounce": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseBounceIn": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseBounceInOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseBounceOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseElastic": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseElasticIn": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseElasticInOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseElasticOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseExponentialIn": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseExponentialInOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseExponentialOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseIn": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseInOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseRateAction": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseSineIn": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseSineInOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCEaseSineOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCFadeIn": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCFadeOut": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCFadeOutBLTiles": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCFadeOutDownTiles": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCFadeOutTRTiles": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCFadeOutUpTiles": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCFadeTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCFileUtils": {
+   "error": null,
+   "size": 152,
+   "status": "unverified"
+  },
+  "cocos2d::CCFileUtilsAndroid": {
+   "error": null,
+   "size": 152,
+   "status": "unverified"
+  },
+  "cocos2d::CCFileUtilsIOS": {
+   "error": null,
+   "size": 152,
+   "status": "unverified"
+  },
+  "cocos2d::CCFileUtilsMac": {
+   "error": null,
+   "size": 152,
+   "status": "unverified"
+  },
+  "cocos2d::CCFileUtilsWin32": {
+   "error": null,
+   "size": 152,
+   "status": "unverified"
+  },
+  "cocos2d::CCFiniteTimeAction": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCFlipX": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCFlipX3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCFlipY": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCFlipY3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCFollow": {
+   "error": null,
+   "size": 80,
+   "status": "unverified"
+  },
+  "cocos2d::CCGLProgram": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCGrabber": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCGrid3D": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCGrid3DAction": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCGridAction": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCGridBase": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCHide": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCIMEDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "cocos2d::CCIMEDispatcher": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::CCImage": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCJumpBy": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCJumpTiles3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCJumpTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCKeyboardDispatcher": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCKeyboardHandler": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCKeypadDispatcher": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCKeypadHandler": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCLabelAtlas": {
+   "error": null,
+   "size": 360,
+   "status": "unverified"
+  },
+  "cocos2d::CCLabelBMFont": {
+   "error": null,
+   "size": 536,
+   "status": "unverified"
+  },
+  "cocos2d::CCLabelTTF": {
+   "error": null,
+   "size": 704,
+   "status": "unverified"
+  },
+  "cocos2d::CCLayer": {
+   "error": null,
+   "size": 408,
+   "status": "unverified"
+  },
+  "cocos2d::CCLayerColor": {
+   "error": null,
+   "size": 544,
+   "status": "unverified"
+  },
+  "cocos2d::CCLayerGradient": {
+   "error": null,
+   "size": 568,
+   "status": "unverified"
+  },
+  "cocos2d::CCLayerMultiplex": {
+   "error": null,
+   "size": 408,
+   "status": "unverified"
+  },
+  "cocos2d::CCLayerRGBA": {
+   "error": null,
+   "size": 432,
+   "status": "unverified"
+  },
+  "cocos2d::CCLens3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCLightning": {
+   "error": null,
+   "size": 408,
+   "status": "unverified"
+  },
+  "cocos2d::CCLiquid": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCMenu": {
+   "error": null,
+   "size": 448,
+   "status": "unverified"
+  },
+  "cocos2d::CCMenuItem": {
+   "error": null,
+   "size": 376,
+   "status": "unverified"
+  },
+  "cocos2d::CCMenuItemAtlasFont": {
+   "error": null,
+   "size": 376,
+   "status": "unverified"
+  },
+  "cocos2d::CCMenuItemFont": {
+   "error": null,
+   "size": 376,
+   "status": "unverified"
+  },
+  "cocos2d::CCMenuItemImage": {
+   "error": null,
+   "size": 400,
+   "status": "unverified"
+  },
+  "cocos2d::CCMenuItemLabel": {
+   "error": null,
+   "size": 376,
+   "status": "unverified"
+  },
+  "cocos2d::CCMenuItemSprite": {
+   "error": null,
+   "size": 400,
+   "status": "unverified"
+  },
+  "cocos2d::CCMenuItemToggle": {
+   "error": null,
+   "size": 376,
+   "status": "unverified"
+  },
+  "cocos2d::CCMotionStreak": {
+   "error": null,
+   "size": 472,
+   "status": "unverified"
+  },
+  "cocos2d::CCMouseDispatcher": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCMouseHandler": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "cocos2d::CCMoveBy": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCMoveTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCNode": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCNodeRGBA": {
+   "error": null,
+   "size": 344,
+   "status": "unverified"
+  },
+  "cocos2d::CCNotificationCenter": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCNotificationObserver": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCObject": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCOrbitCamera": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCPageTurn3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCParallaxNode": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleBatchNode": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleExplosion": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleFire": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleFireworks": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleFlower": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleGalaxy": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleMeteor": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleRain": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleSmoke": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleSnow": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleSpiral": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleSun": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleSystem": {
+   "error": null,
+   "size": 792,
+   "status": "unverified"
+  },
+  "cocos2d::CCParticleSystemQuad": {
+   "error": null,
+   "size": 848,
+   "status": "unverified"
+  },
+  "cocos2d::CCPlace": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCPointArray": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCPoolManager": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::CCPrettyPrinter": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "cocos2d::CCProfiler": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCProfilingTimer": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCProgressFromTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCProgressTimer": {
+   "error": null,
+   "size": 344,
+   "status": "unverified"
+  },
+  "cocos2d::CCProgressTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCRemoveSelf": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCRenderTexture": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCRepeat": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCRepeatForever": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCReuseGrid": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCReverseTime": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCRipple3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCRotateBy": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCRotateTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCSAXParser": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::CCScaleBy": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCScaleTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCScene": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCScheduler": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCSchedulerScriptHandlerEntry": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCScriptEngineManager": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::CCScriptHandlerEntry": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCSequence": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCSet": {
+   "error": null,
+   "size": 72,
+   "status": "unverified"
+  },
+  "cocos2d::CCShaderCache": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCShaky3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCShakyTiles3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCShatteredTiles3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCShow": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCShuffleTiles": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCSkewBy": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCSkewTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCSpawn": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCSpeed": {
+   "error": null,
+   "size": 80,
+   "status": "unverified"
+  },
+  "cocos2d::CCSplitCols": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCSplitRows": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCSprite": {
+   "error": null,
+   "size": 600,
+   "status": "unverified"
+  },
+  "cocos2d::CCSpriteBatchNode": {
+   "error": null,
+   "size": 360,
+   "status": "unverified"
+  },
+  "cocos2d::CCSpriteFrame": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCSpriteFrameCache": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCStandardTouchHandler": {
+   "error": null,
+   "size": 72,
+   "status": "unverified"
+  },
+  "cocos2d::CCStopGrid": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCString": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCTMXLayer": {
+   "error": null,
+   "size": 360,
+   "status": "unverified"
+  },
+  "cocos2d::CCTMXLayerInfo": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCTMXMapInfo": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "cocos2d::CCTMXObjectGroup": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCTMXTiledMap": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTMXTilesetInfo": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCTargetedAction": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCTargetedTouchHandler": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCTextFieldTTF": {
+   "error": null,
+   "size": 768,
+   "status": "unverified"
+  },
+  "cocos2d::CCTexture2D": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCTextureAtlas": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCTextureCache": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCTextureETC": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCTexturePVR": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCThread": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::CCTileMapAtlas": {
+   "error": null,
+   "size": 352,
+   "status": "unverified"
+  },
+  "cocos2d::CCTiledGrid3D": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCTiledGrid3DAction": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCTime": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::CCTimer": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCTintBy": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCTintTo": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCToggleVisibility": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCTouch": {
+   "error": null,
+   "size": 88,
+   "status": "unverified"
+  },
+  "cocos2d::CCTouchDelegate": {
+   "error": null,
+   "size": 8,
+   "status": "unverified"
+  },
+  "cocos2d::CCTouchDispatcher": {
+   "error": null,
+   "size": 128,
+   "status": "unverified"
+  },
+  "cocos2d::CCTouchHandler": {
+   "error": null,
+   "size": 72,
+   "status": "unverified"
+  },
+  "cocos2d::CCTouchScriptHandlerEntry": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionCrossFade": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionFade": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionFadeBL": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionFadeDown": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionFadeTR": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionFadeUp": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionFlipAngular": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionFlipX": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionFlipY": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionJumpZoom": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionMoveInB": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionMoveInL": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionMoveInR": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionMoveInT": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionPageTurn": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionProgress": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionProgressHorizontal": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionProgressInOut": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionProgressOutIn": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionProgressRadialCCW": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionProgressRadialCW": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionProgressVertical": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionRotoZoom": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionScene": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionSceneOriented": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionShrinkGrow": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionSlideInB": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionSlideInL": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionSlideInR": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionSlideInT": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionSplitCols": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionSplitRows": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionTurnOffTiles": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionZoomFlipAngular": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionZoomFlipX": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTransitionZoomFlipY": {
+   "error": null,
+   "size": 320,
+   "status": "unverified"
+  },
+  "cocos2d::CCTurnOffTiles": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCTwirl": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCUserDefault": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::CCWaves": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCWaves3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCWavesTiles3D": {
+   "error": null,
+   "size": 96,
+   "status": "unverified"
+  },
+  "cocos2d::CCZone": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::ParticleStruct": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::ZipUtils": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCArrayForObjectSorting": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCControl": {
+   "error": null,
+   "size": 432,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCControlButton": {
+   "error": null,
+   "size": 432,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCControlColourPicker": {
+   "error": null,
+   "size": 432,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCControlHuePicker": {
+   "error": null,
+   "size": 432,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCControlPotentiometer": {
+   "error": null,
+   "size": 432,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCControlSaturationBrightnessPicker": {
+   "error": null,
+   "size": 432,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCControlSlider": {
+   "error": null,
+   "size": 432,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCControlStepper": {
+   "error": null,
+   "size": 432,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCControlSwitch": {
+   "error": null,
+   "size": 432,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCControlUtils": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCEditBox": {
+   "error": null,
+   "size": 440,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCHttpClient": {
+   "error": null,
+   "size": 64,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCHttpRequest": {
+   "error": null,
+   "size": 224,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCHttpResponse": {
+   "error": null,
+   "size": 160,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCInvocation": {
+   "error": null,
+   "size": 56,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCScale9Sprite": {
+   "error": null,
+   "size": 344,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCScrollView": {
+   "error": null,
+   "size": 408,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCTableView": {
+   "error": null,
+   "size": 416,
+   "status": "unverified"
+  },
+  "cocos2d::extension::CCTableViewCell": {
+   "error": null,
+   "size": 328,
+   "status": "unverified"
+  },
+  "pugi::xml_document": {
+   "error": "unknown type empty base pugi::xml_node",
+   "size": null,
+   "status": "incomplete"
+  },
+  "pugi::xml_node": {
+   "error": null,
+   "size": 1,
+   "status": "unverified"
+  },
+  "tk_spline": {
+   "error": null,
+   "size": 168,
+   "status": "unverified"
+  }
+ },
+ "functions": {
+  "declared": 15034,
+  "omitted": 32,
+  "omitted_hookable": 0
+ },
+ "version": "2.2091"
+}

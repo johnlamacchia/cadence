@@ -3,6 +3,13 @@ Geode Bindings
 https://github.com/geode-sdk/bindings
 ==============================================================================
 
+Derived from these bindings (names, signatures, member lists, addresses, enum
+definitions) and covered by the licence below:
+  generated/addresses_<version>.json
+  generated/layout_hashes_<version>.json, layout_report_<version>.json
+  generated/include/gd/**   (including gd/enums.hpp, copied from the bindings' Enums.hpp)
+No code from geode-sdk/geode is used anywhere in this project.
+
 Boost Software License - Version 1.0 - August 17th, 2003
 
 Permission is hereby granted, free of charge, to any person or organization

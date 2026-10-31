@@ -135,7 +135,6 @@ struct LoaderAPI {
     bool  (*hook_fn)(const LoaderAPI* self, void* target, void* detour, void** original);
     bool  (*unhook_fn)(const LoaderAPI* self, void* target);
     const char* (*gd_version_fn)(const LoaderAPI* self);
-    void* (*cocos_addr)(const LoaderAPI* self, const char* mangled_name);
     void  (*log_fn)(const LoaderAPI* self, const char* fmt, ...);
     const ModEntry* (*get_mods)(const LoaderAPI* self, int* out_count);
 };
@@ -169,12 +168,6 @@ static const char* api_gd_version(const LoaderAPI*) {
     return g_gd_version.c_str();
 }
 
-static void* api_cocos_addr(const LoaderAPI*, const char* mangled_name) {
-    static HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
-    if (!cocos) return nullptr;
-    return (void*)GetProcAddress(cocos, mangled_name);
-}
-
 static void api_log(const LoaderAPI*, const char* fmt, ...) {
     if (!g_log) return;
     va_list ap;
@@ -193,47 +186,62 @@ static const ModEntry* api_get_mods(const LoaderAPI*, int* out_count) {
     return g_mod_entries.empty() ? nullptr : g_mod_entries.data();
 }
 
-static LoaderAPI g_api = {api_addr, api_hook, api_unhook, api_gd_version, api_cocos_addr, api_log, api_get_mods};
+static LoaderAPI g_api = {api_addr, api_hook, api_unhook, api_gd_version, api_log, api_get_mods};
 
 // --- Address loading ---
 
+// True if `rva` is inside one of GeometryDash.exe's executable sections. Anything
+// else (a placeholder, a typo in a local override, an address from another GD
+// version) would be hooked as garbage, so it is refused here instead.
+static bool rva_is_code(uintptr_t rva) {
+    auto base = (const uint8_t*)GetModuleHandleW(nullptr);
+    auto nt = (const IMAGE_NT_HEADERS64*)(base + ((const IMAGE_DOS_HEADER*)base)->e_lfanew);
+    auto sec = IMAGE_FIRST_SECTION(nt);
+    for (unsigned i = 0; i < nt->FileHeader.NumberOfSections; i++) {
+        if ((sec[i].Characteristics & IMAGE_SCN_MEM_EXECUTE) &&
+            rva >= sec[i].VirtualAddress && rva < sec[i].VirtualAddress + sec[i].Misc.VirtualSize)
+            return true;
+    }
+    return false;
+}
+
+// Adds every "signature": "0xRVA" pair of `data`; returns how many were accepted.
+static int add_addresses(const std::unordered_map<std::string, std::string>& data, const char* what) {
+    uintptr_t image_base = (uintptr_t)GetModuleHandleW(nullptr);
+    int accepted = 0, rejected = 0;
+    std::string example;
+    for (auto& [sig, addr_str] : data) {
+        if (!(addr_str.starts_with("0x") || addr_str.starts_with("0X"))) continue;   // version, count, lists...
+        uintptr_t rva = strtoull(addr_str.c_str(), nullptr, 16);
+        if (!rva_is_code(rva)) {
+            if (rejected++ == 0) example = sig + " = " + addr_str;
+            continue;
+        }
+        g_addresses[sig] = (void*)(image_base + rva);
+        accepted++;
+    }
+    if (rejected)
+        log("[WARN] %s: ignored %d address(es) that are not inside GeometryDash.exe's code, e.g. %s",
+            what, rejected, example.c_str());
+    return accepted;
+}
+
 static bool load_addresses(const std::filesystem::path& base_dir) {
-    // Find addresses JSON
     for (auto& entry : std::filesystem::directory_iterator(base_dir)) {
         auto name = entry.path().filename().string();
         if (name.starts_with("addresses_") && name.ends_with(".json")) {
             g_gd_version = name.substr(10, name.size() - 15); // strip "addresses_" and ".json"
-
-            auto data = json_reader::parse_file(entry.path().string());
-            uintptr_t image_base = (uintptr_t)GetModuleHandleW(nullptr);
-            int count = 0;
-            for (auto& [sig, addr_str] : data) {
-                if (sig == "version" || sig == "count") continue;
-                if (addr_str.starts_with("0x") || addr_str.starts_with("0X")) {
-                    uintptr_t rva = strtoull(addr_str.c_str(), nullptr, 16);
-                    g_addresses[sig] = (void*)(image_base + rva);
-                    count++;
-                }
-            }
-            log("[INFO] loaded %d addresses for GD %s", count, g_gd_version.c_str());
+            int n = add_addresses(json_reader::parse_file(entry.path().string()), name.c_str());
+            log("[INFO] loaded %d addresses for GD %s", n, g_gd_version.c_str());
             break;
         }
     }
 
-    // Load local overrides
+    // Local overrides win over the official file.
     auto local_path = base_dir / "addresses.local.json";
     if (std::filesystem::exists(local_path)) {
-        auto data = json_reader::parse_file(local_path.string());
-        uintptr_t image_base = (uintptr_t)GetModuleHandleW(nullptr);
-        int count = 0;
-        for (auto& [sig, addr_str] : data) {
-            if (addr_str.starts_with("0x") || addr_str.starts_with("0X")) {
-                uintptr_t rva = strtoull(addr_str.c_str(), nullptr, 16);
-                g_addresses[sig] = (void*)(image_base + rva);
-                count++;
-            }
-        }
-        if (count > 0) log("[INFO] loaded %d local address overrides", count);
+        int n = add_addresses(json_reader::parse_file(local_path.string()), "addresses.local.json");
+        if (n > 0) log("[INFO] loaded %d local address overrides", n);
     }
 
     return !g_addresses.empty();
@@ -319,7 +327,7 @@ static bool check_mod_hashes(HMODULE mod, const std::string& mod_name) {
     for (auto& [cls, hash] : mod_hashes) {
         auto it = g_layout_hashes.find(cls);
         if (it != g_layout_hashes.end() && it->second != hash) {
-            log("[ERROR] mod '%s' uses class '%s' with layout hash %s, but current is %s — refusing to load",
+            log("[ERROR] mod '%s' was built against class '%s' (layout hash %s) but this GD has %s - refusing to load it",
                 mod_name.c_str(), cls.c_str(), hash.c_str(), it->second.c_str());
             return false;
         }

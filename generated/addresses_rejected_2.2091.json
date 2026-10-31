@@ -1,0 +1,17 @@
+{
+  "version": "2.2091",
+  "rejected": {
+    "cocos2d::CCTexturePVR::CCTexturePVR()": {
+      "address": "0x143f80",
+      "reason": "inside the function that starts at 0x143f00"
+    },
+    "cocos2d::CCTexturePVR::createGLTexture()": {
+      "address": "0x144020",
+      "reason": "inside the function that starts at 0x143fa4"
+    },
+    "cocos2d::CCTexturePVR::unpackPVRv3Data(unsigned char*, unsigned int)": {
+      "address": "0x144880",
+      "reason": "inside the function that starts at 0x144870"
+    }
+  }
+}

@@ -1,7 +1,8 @@
-// Pause countdown — after you press Resume, show 3-2-1 on screen before play continues.
+// Pause countdown: after you press Resume, show 3-2-1 on screen before play continues.
 // PauseLayer::onResume is the only caller of PlayLayer::resume, so we hold the
 // resume back, count down on the render thread, then call the real resume.
-#include <sdk.h>
+#include <sdk_extras.h>
+#include <gd/PlayLayer.hpp>
 
 using sharedDirector_t = void*(*)();
 using getRunningScene_t = void*(__fastcall*)(void*);
@@ -19,10 +20,9 @@ static removeChild_t fn_removeChild;
 static setPosition_t fn_setPosition;
 static setScale_t fn_setScale;
 
-static void(__fastcall* orig_resume)(void* self);
 static void(__fastcall* orig_drawScene)(void* director);
 
-static void* g_pending = nullptr;  // the PlayLayer whose resume() we are delaying
+static PlayLayer* g_pending = nullptr;  // the PlayLayer whose resume() we are delaying
 static void* g_label = nullptr;
 static void* g_label_scene = nullptr;
 static int g_shown = 0;
@@ -57,7 +57,7 @@ static void show_number(int n) {
     g_label_scene = scene;
 }
 
-static void __fastcall hook_resume(void* self) {
+static void __fastcall hook_resume(PlayLayer* self) {
     if (g_pending) return;
     g_pending = self;
     g_shown = 0;
@@ -66,7 +66,7 @@ static void __fastcall hook_resume(void* self) {
 
 static void __fastcall hook_drawScene(void* director) {
     if (g_pending) {
-        void* pl = cadence::play_layer();
+        PlayLayer* pl = cadence::play_layer();
         if (pl != g_pending) {
             // The level was left mid-countdown; its scene is gone.
             g_pending = nullptr;
@@ -80,7 +80,7 @@ static void __fastcall hook_drawScene(void* director) {
             if (n <= 0) {
                 drop_label();
                 g_pending = nullptr;
-                orig_resume(pl);
+                cadence::original<&PlayLayer::resume>(pl);
             } else if (n != g_shown) {
                 g_shown = n;
                 show_number(n);
@@ -94,15 +94,11 @@ extern "C" __declspec(dllexport) void mod_unload() {
     // Never leave the game stuck paused if we are unloaded mid-countdown.
     if (g_pending && g_pending == cadence::play_layer()) {
         drop_label();
-        orig_resume(g_pending);
+        cadence::original<&PlayLayer::resume>(g_pending);
     }
     g_pending = nullptr;
     g_label = nullptr;
     g_label_scene = nullptr;
-}
-
-extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"({"name":"Pause Countdown","desc":"3-2-1 countdown after unpausing","ver":"1.1"})";
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
@@ -123,7 +119,7 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
         return;
     }
 
-    cadence::hook_typed("PlayLayer::resume()", hook_resume, &orig_resume);
+    cadence::hook<&PlayLayer::resume>(hook_resume);
     cadence::hook(cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ"),
                   (void*)hook_drawScene, (void**)&orig_drawScene);
 }

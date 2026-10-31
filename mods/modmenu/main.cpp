@@ -1,9 +1,8 @@
-// Mod Menu — press Insert to toggle an in-game overlay showing all loaded mods.
-#include <sdk.h>
-#include <windows.h>
+// Mod Menu: press Insert to toggle an in-game overlay listing all loaded mods.
+#include <sdk_extras.h>
 
-struct CCPoint { float x, y; };
-struct _ccColor4B { unsigned char r, g, b, a; };
+using CCPoint = cocos2d::CCPoint;
+using _ccColor4B = cocos2d::ccColor4B;
 
 using sharedDirector_t      = void*(*)();
 using getRunningScene_t     = void*(__fastcall*)(void*);
@@ -151,10 +150,6 @@ static void __fastcall hook_drawScene(void* director) {
     }
 
     orig_drawScene(director);
-}
-
-extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"({"name":"Mod Menu","desc":"In-game mod list overlay","key":"Insert","ver":"1.1"})";
 }
 
 extern "C" __declspec(dllexport) void mod_unload() {

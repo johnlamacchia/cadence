@@ -1,74 +1,37 @@
-// Attempt counter — tracks and displays total attempts in window title while in a level.
+// Attempt counter: counts level resets while a level is open and shows the total
+// in the window title when you leave it.
 #include <sdk.h>
-#include <windows.h>
-#include <cstdio>
+#include <gd/PlayLayer.hpp>
 
 static int g_attempts = 0;
-static bool g_in_level = false;
-static HWND g_hwnd = nullptr;
 
-static HWND find_gd_window() {
-    return FindWindowA(nullptr, "Geometry Dash");
+static bool __fastcall hook_init(PlayLayer* self, GJGameLevel* level, bool dontCreateObjects) {
+    bool ok = cadence::original<&PlayLayer::init>(self, level, dontCreateObjects);
+    if (ok) g_attempts = 0;
+    return ok;
 }
 
-static void update_title() {
-    if (!g_hwnd) g_hwnd = find_gd_window();
-    // Don't set title while in level — fpsdisplay handles title updates.
-    // Instead just track attempts; the counter shows on level complete/quit.
-}
-
-static bool(__fastcall* orig_PlayLayer_init)(void* self, void* level, bool dontCreate);
-
-static bool __fastcall hook_PlayLayer_init(void* self, void* level, bool dontCreate) {
-    bool ret = orig_PlayLayer_init(self, level, dontCreate);
-    if (ret) {
-        g_in_level = true;
-        g_attempts = 0;
-    }
-    return ret;
-}
-
-static void(__fastcall* orig_resetLevel)(void* self);
-
-static void __fastcall hook_resetLevel(void* self) {
+static void __fastcall hook_resetLevel(PlayLayer* self) {
     g_attempts++;
-    orig_resetLevel(self);
+    cadence::original<&PlayLayer::resetLevel>(self);
 }
 
-static void(__fastcall* orig_PlayLayer_onQuit)(void* self);
-
-static void __fastcall hook_PlayLayer_onQuit(void* self) {
-    g_in_level = false;
-    if (!g_hwnd) g_hwnd = find_gd_window();
-    if (g_hwnd) {
-        char title[128];
+static void __fastcall hook_onQuit(PlayLayer* self) {
+    if (HWND hwnd = FindWindowA(nullptr, "Geometry Dash")) {
+        char title[96];
         snprintf(title, sizeof(title), "Geometry Dash  |  Session: %d attempts", g_attempts);
-        SetWindowTextA(g_hwnd, title);
+        SetWindowTextA(hwnd, title);
     }
-    orig_PlayLayer_onQuit(self);
+    cadence::original<&PlayLayer::onQuit>(self);
 }
 
 extern "C" __declspec(dllexport) void mod_unload() {
-    g_in_level = false;
     g_attempts = 0;
-}
-
-extern "C" __declspec(dllexport) const char* mod_info() {
-    return R"({"name":"Attempt Counter","desc":"Tracks session attempts, shows on quit","ver":"1.0"})";
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-
-    cadence::hook_typed(
-        "PlayLayer::init(GJGameLevel* level, bool dontCreateObjects)",
-        hook_PlayLayer_init, &orig_PlayLayer_init);
-
-    cadence::hook_typed(
-        "PlayLayer::resetLevel()",
-        hook_resetLevel, &orig_resetLevel);
-
-    cadence::hook_typed(
-        "PlayLayer::onQuit()",
-        hook_PlayLayer_onQuit, &orig_PlayLayer_onQuit);
+    cadence::hook<&PlayLayer::init>(hook_init);
+    cadence::hook<&PlayLayer::resetLevel>(hook_resetLevel);
+    cadence::hook<&PlayLayer::onQuit>(hook_onQuit);
 }

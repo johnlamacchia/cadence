@@ -1,14 +1,15 @@
 # Cadence mod guide
 
 Everything you need to write a mod that does not crash the game. The API itself is
-small (`loader/include/sdk.h`, about 200 lines); most of this page is about how
-Geometry Dash behaves, because that is where mods go wrong.
+small (`loader/include/sdk.h`, about 250 lines with comments); most of this page is
+about how Geometry Dash behaves, because that is where mods go wrong.
 
 - [Your first mod](#your-first-mod)
+- [The typed API](#the-typed-api)
 - [The rules](#the-rules)
 - [Recipes](#recipes)
 - [Calling-convention and ABI pitfalls](#calling-convention-and-abi-pitfalls)
-- [Reading and writing game fields](#reading-and-writing-game-fields)
+- [Class layouts and how far to trust them](#class-layouts-and-how-far-to-trust-them)
 - [Hot reload](#hot-reload)
 - [Debugging](#debugging)
 - [After a GD update](#after-a-gd-update)
@@ -30,26 +31,65 @@ Press **F6** in game to load it. After that, edit, rebuild, copy the DLL over th
 Prefer to keep your mod outside this repo? Copy `template/` anywhere, rename `MY_MOD`,
 and configure with `-DCADENCE_SDK_DIR=<path to cadence>` (or the `sdk/` folder of a release zip).
 
-A complete mod is this:
+A complete mod:
 
 ```cpp
 #include <sdk.h>
+#include <gd/PlayLayer.hpp>
 
-static void(__fastcall* orig_resetLevel)(void* self);
-
-static void __fastcall hook_resetLevel(void* self) {
-    cadence::log("level reset");
-    orig_resetLevel(self);
+static void __fastcall my_reset(PlayLayer* self) {
+    cadence::log("level reset, practice mode: %d", self->m_isPracticeMode);
+    cadence::original<&PlayLayer::resetLevel>(self);
 }
 
 extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     cadence::set_api(api);
-    cadence::hook_typed("PlayLayer::resetLevel()", hook_resetLevel, &orig_resetLevel);
+    cadence::hook<&PlayLayer::resetLevel>(my_reset);
 }
 ```
 
-Finding a function's signature: search `generated/addresses_2.2091.json`. The key is the
-exact string you pass to `cadence::addr` / `hook_typed`.
+The mod's name, author, description, key and version are not in the code. They are arguments
+to `cadence_add_mod()` in its `CMakeLists.txt` and are baked into the DLL:
+
+```cmake
+cadence_add_mod(my_mod main.cpp NAME "My Mod" AUTHOR "me" DESCRIPTION "Does a thing" KEY "M" VERSION "1.0")
+```
+
+---
+
+## The typed API
+
+`generated/include/gd/<Class>.hpp` declares each GD class: its bases, its member functions and
+its data members, with `static_assert`s on `sizeof` and every member's offset. Include the
+headers for the classes you use and the compiler checks your hooks against the real signatures.
+
+```cpp
+cadence::hook<&PlayLayer::resetLevel>(detour);     // detour must be void(__fastcall*)(PlayLayer*)
+cadence::original<&PlayLayer::resetLevel>(self);   // the next function in the chain (typed)
+auto f = cadence::fn<&PlayLayer::resetLevel>();    // the game's own function, to call it (nullptr if unknown)
+```
+
+- **Wrong signature = compile error.** The detour type is derived from the declaration.
+- **A function with no Windows address cannot be hooked,** and says so at compile time: the
+  bindings mark it `win inline` or give it no `win` address (`MenuLayer::onMoreGames` is one
+  in 2.2091). `cadence::hook_typed("Class::fn(args)", detour, &orig)` takes the signature as a
+  string instead and just returns `false` (with a warning in `loader.log`) if it has no address.
+- **Overloads** need the usual cast:
+  `cadence::hook<static_cast<bool (Foo::*)(int)>(&Foo::bar)>(detour)`. Static functions the same:
+  `constexpr auto create = static_cast<Foo* (*)(int)>(&Foo::create);` then `cadence::fn<create>()`.
+- One hook per function per mod (`original<F>` is one variable per F).
+- A function that returns a struct through a hidden pointer cannot be hooked with `hook<F>`
+  (its compile-time check explains why); use `cadence::hook(addr, detour, &orig)` and declare the
+  detour with the return slot first.
+- `cadence::fn<F>()` on a **virtual** function calls that class's implementation directly,
+  not through the vtable.
+
+Things the headers do not do: they define no function bodies, so you cannot call a GD member
+function directly (it would not link). Use `cadence::fn<>()`, or a virtual call on an object, where
+the vtable layout is the bindings' (see [below](#class-layouts-and-how-far-to-trust-them)).
+
+Optional helpers live in `sdk_extras.h`: `cadence::play_layer()` and `cadence::key_pressed()`.
+The loader and `sdk.h` do not depend on them.
 
 ---
 
@@ -71,7 +111,7 @@ static void __fastcall hook_drawScene(void* director) {
     // safe to call game functions here
     orig_drawScene(director);
 }
-// mod_main:
+// mod_main (a cocos2d export has no bindings address, so look it up by name):
 cadence::hook(cadence::cocos("?drawScene@CCDirector@cocos2d@@QEAAXXZ"),
               (void*)hook_drawScene, (void**)&orig_drawScene);
 ```
@@ -87,7 +127,8 @@ level: two of our own mods did exactly that and crashed inside the game with a f
 the level is unreliable, so ask the game instead:
 
 ```cpp
-void* pl = cadence::play_layer();   // nullptr outside a level, never stale
+#include <sdk_extras.h>
+PlayLayer* pl = cadence::play_layer();   // nullptr outside a level, never stale
 if (!pl) return;
 ```
 
@@ -102,22 +143,7 @@ scene is still the running scene.
 
 Calling `PlayLayer::resetLevel` from inside a `destroyPlayer` hook restarts the level while
 the death is still being processed, which kills the player again, forever. Set a flag and act
-on the next frame:
-
-```cpp
-static bool g_reset_pending = false;
-static void __fastcall hook_destroyPlayer(void* self, void* player, void* object) {
-    orig_destroyPlayer(self, player, object);
-    g_reset_pending = true;
-}
-static void __fastcall hook_drawScene(void* director) {
-    if (g_reset_pending) {
-        g_reset_pending = false;
-        if (void* pl = cadence::play_layer()) resetLevel(pl);
-    }
-    orig_drawScene(director);
-}
-```
+on the next frame (see `mods/autoretry`).
 
 ### 4. Never block a hook
 
@@ -131,18 +157,16 @@ if (cadence::play_layer() && cadence::key_pressed('N')) { ... }
 ```
 
 `key_pressed` fires once per physical press, ignores input while GD is not the foreground
-window, and needs no thread. Call it once per key per frame from a game-thread hook.
+window, and needs no thread. Call it at most once per key per frame from a game-thread hook.
 Do not use `GetAsyncKeyState(key) & 1`: the low bit is not reliable and it fires when GD is
-in the background.
-
-Gate toggles on `cadence::play_layer()` if the key could also be typed into a text field
-(level search, comments).
+in the background. Gate toggles on `play_layer()` if the key could also be typed into a text
+field (level search, comments).
 
 ### 6. Always call the original (unless you mean not to)
 
-Skipping `orig_*` replaces the function. That is the point of a noclip mod's
+Skipping `original<F>` replaces the function. That is the point of a noclip mod's
 `destroyPlayer` hook, but it is a bug in almost every other hook. Hooks from several mods
-chain automatically, and a mod that does not call through breaks every mod hooked after it.
+chain automatically, and a mod that does not call through breaks every mod hooked before it.
 
 ### 7. Own your state in `mod_unload`
 
@@ -158,78 +182,70 @@ Each of these exists as a working mod in `mods/`.
 
 | I want to... | Do this | Example |
 |---|---|---|
-| Change what a function returns | Hook it, return your value, optionally call `orig` | `hitboxes` (`shouldDrawDebugHitboxes`) |
-| Stop something happening | Hook it and `return` without calling `orig` | `noclip`, `anticheat` |
-| Change an argument | Call `orig` with a different value | `hideground`, `noglow` |
-| React to something happening | Call `orig`, then run your code | `attemptcounter` |
+| Change what a function returns | Hook it, return your value, optionally call `original` | `hitboxes`, `anticheat` |
+| Stop something happening | Hook it and `return` without calling `original` | `noclip` |
+| Change an argument | Call `original` with a different value | `hideground`, `noglow` |
+| React to something happening | Call `original`, then run your code | `attemptcounter` |
+| Read or write a game field | `self->m_isPracticeMode` on the typed `self` | `practicemusic`, `hidepause` |
+| Call a game function | `cadence::fn<&Class::function>()` | `example`, `instantrestart` |
 | Run every frame | Hook `CCDirector::drawScene` or `CCScheduler::update` | `autoretry`, `speedhack` |
 | Respond to a key | `cadence::key_pressed` in a `drawScene` hook, or hook `UILayer::keyDown` | `noclip`, `instantrestart` |
 | Show UI | `CCLabelBMFont::create`, `addChild` on the running scene, from the game thread | `fpsdisplay`, `pausecountdown`, `modmenu` |
-| Add a button to a layer | Hook the layer's `init`, build with `CCMenuItemSpriteExtra::create` | `example` |
 | Read what other mods are loaded | `cadence::get_mods` | `modmenu` |
-| Hide an existing node | Reach it through a field offset, `setVisible(false)` | `hidepause` |
-
-Hook a cocos2d function with `cadence::cocos("<mangled name>")` (an export of
-`libcocos2d.dll`) and `cadence::hook`. Hook a GD function with `cadence::hook_typed`.
 
 ---
 
 ## Calling-convention and ABI pitfalls
 
 GD is MSVC x64, so every function is `__fastcall`-compatible: `this` in `rcx`, then `rdx`,
-`r8`, `r9`, then the stack. Your hook is `ReturnType __fastcall hook(void* self, ...)`.
+`r8`, `r9`, then the stack. A detour is `Ret __fastcall hook(Class* self, ...)`.
 
-- **`std::string` by value is a hidden pointer.** If GD declares `f(std::string s)`, your
-  hook or call takes `std::string* s`.
+- **Match the return type exactly.** Our own `anticheat` hook was written `void` for a function
+  that returns `bool`: it returned whatever was left in `rax`. The typed API turns that into a
+  compile error.
+- **`std::string` by value is a hidden pointer.** The detour's `std::string` parameter handles it.
 - **Small structs returned by value use a hidden return pointer** when they have a
-  constructor (for example `CCDirector::getWinSize` returns a `CCSize` through `rdx`). When in
-  doubt, disassemble the caller.
-- **Do not pass a 3-byte struct (`ccColor3B`) by value.** MSVC passes it in a way that is not
-  safe to reproduce from a function-pointer typedef. Pass the three channels as separate
-  `unsigned char` arguments to your own wrapper, or avoid the call.
-- **Do not call a virtual export directly on an object of a derived class** and assume it does
-  what the virtual call would. Resolving `CCNodeRGBA::setColor` by name and calling it on a
-  `CCLabelBMFont` ran the base-class code against the wrong layout and crashed. Prefer
-  behaviour you can get without it (different bitmap fonts instead of colours) or call through
-  the object's vtable.
+  constructor (for example `CCDirector::getWinSize` returns a `CCSize` through `rdx`).
+- **Do not pass a 3-byte struct (`ccColor3B`) by value** to a function you declare yourself.
+  MSVC passes it in a way that is not safe to reproduce from a function-pointer typedef.
+- **Do not call a virtual cocos2d export directly on an object of a derived class** and assume
+  it does what the virtual call would. Resolving `CCNodeRGBA::setColor` by name and calling it on
+  a `CCLabelBMFont` ran the base-class code against the wrong layout and crashed.
 - Fields of `bool` / `int` / pointer type are plain loads and stores. Anything with a
   constructor or destructor (`std::vector`, `std::string`, `CCArray`) must be touched through
   the game's own functions.
+- Build in **Release**. The headers refuse to compile with the debug STL
+  (`_ITERATOR_DEBUG_LEVEL != 0`), whose containers have different sizes from the game's.
 
 ---
 
-## Reading and writing game fields
+## Class layouts and how far to trust them
 
-The generated headers in `generated/include/gd/` list each class's fields **in the right
-order but not at reliable byte offsets**. Two offsets we first took from them were wrong, and
-one of those wrote into a `std::vector`. Do not compute an offset by adding up field sizes.
+The generator computes each class's layout from the member lists in the Broma bindings using
+the MSVC x64 object model, then emits `static_assert`s for it. The compiler checks them: if our
+model of MSVC and the compiler's disagree for any class or member, the generated headers do not
+build. Whether the *bindings* describe the real class correctly is a separate question, and we
+check that against the game binary:
 
-Offsets we use are read out of the game's machine code and live in `cadence::off`
-(`sdk.h`). To get a new one:
+| Status in `generated/layout_report_<ver>.json` | Meaning |
+|---|---|
+| `verified` | The class's `sizeof` read out of `GeometryDash.exe` (from `X::create`'s `operator new(size)`) equals the size computed from the bindings. |
+| `tail-padded` | The binary's class is **larger** than the bindings describe: members Geode never mapped. Every mapped member's offset is still computed from the front, and an explicit `_unmapped_tail` pad makes `sizeof` right. Anything in the tail is invisible to you. |
+| `unverified` | Computed from the bindings; there is no independent size to compare against. Treat offsets deep in a large class with care. |
+| `incomplete` / `not generated` | A type the bindings use is not defined (or it is FMOD, the audio library). No header; the class is only forward-declared. |
 
-```powershell
-pip install capstone pefile
-# which [reg+disp] operands does this function use?
-python tools/offset_probe.py --scan 0x3000 0x3700 "PlayLayer::togglePracticeMode"
-```
+Independently, `tools/layout_check.py check` confirms offsets that were read from machine code
+(for example `GJBaseGameLayer::m_isPracticeMode` at `0x32E0` and `m_debugDrawNode` at `0x3870`).
 
-Find a function that obviously uses your field (a setter, a toggle, `init`), look at the
-displacement it loads or stores, and confirm it in a second function. Then add it to
-`cadence::off` and to `EXPECTED` in `tools/offset_probe.py`, so that
-`python tools/offset_probe.py --verify` guards it after every GD update.
+**Virtual calls through the headers** (`node->setVisible(false)`) dispatch through the vtable,
+so they rely on the bindings listing virtual functions in the game's vtable order, as Geode
+does. We have not verified vtable order class by class, so the example mods call cocos2d through
+`GetProcAddress`'d exports as before, and hooks use addresses, which do not depend on it.
 
-If your mod depends on a class layout, export `mod_layout_hashes()` (values from
-`generated/layout_hashes_<ver>.json`); the loader then refuses to load the mod when the layout
-changed.
-
-Verified offsets for GD 2.2091:
-
-| Constant | Value | Meaning |
-|---|---|---|
-| `off::game_manager_play_layer` | `0x230` | `GameManager::m_playLayer` |
-| `off::play_layer_is_practice_mode` | `0x32E0` | `PlayLayer::m_isPracticeMode` |
-| `off::ui_layer_pause_btn` | `0x238` | `UILayer::m_pauseBtn` |
-| `off::ui_layer_game_layer` | `0x258` | `UILayer::m_gameLayer` |
+If your mod depends on a class layout, you are already covered: each class header registers its
+layout hash, the mod exports them, and the loader **refuses to load the mod, naming the class**,
+if the game's layout hash differs. After a GD update, a mod built against the old layouts will not
+run with the new ones until rebuilt.
 
 ---
 
@@ -256,7 +272,7 @@ would turn either into a crash.
 ## Debugging
 
 - **`loader.log`** (in the GD folder): every mod load, every `address not found` warning,
-  everything you pass to `cadence::log`.
+  every refused mod, everything you pass to `cadence::log`.
 - **`crash_<timestamp>.log` / `.dmp`**: written on a fatal exception. The log has the faulting
   module and offset and a stack trace; the `.dmp` opens in Visual Studio or WinDbg. Look at the
   first frame inside `GeometryDash.exe` and the mod DLL right above it: that is the call that
@@ -264,17 +280,20 @@ would turn either into a crash.
 - `address not found: X` means no entry for that signature in the address file. Either the
   string does not match the JSON key exactly, or the function has no known address for this GD
   version. Add it to `generated/addresses.local.json` (see `README.md`).
-- Run the engine tests with `ctest -C Release` from `build/`. They exercise the hook engine
-  (chaining, removal from any position, restore, re-hook) without launching GD.
+- Addresses must point into `GeometryDash.exe`'s code; the loader ignores any that do not (and
+  says so in `loader.log`), so a typo in a local override cannot corrupt the game.
+- `ctest -C Release` from `build/` runs the hook-engine tests and a loader smoke test that loads
+  every mod without launching GD.
 
 ---
 
 ## After a GD update
 
 ```powershell
-python tools/sdk_update.py --old 2.2091 --new 2.2092   # re-match addresses
-python tools/offset_probe.py --verify                  # re-check every cadence::off value
+python tools/sdk_update.py --old 2.2091 --new 2.2092   # re-match addresses, regenerate, report
+python tools/layout_check.py check <bindings> --version 2.2092
 ```
 
-If `--verify` reports `BAD`, use `--scan` to find the new displacement and update
-`cadence::off`.
+`sdk_update` lists the classes whose `sizeof` changed in the new exe and the functions it could
+not place. Rebuild your mods afterwards: a mod using a class whose layout changed is refused
+until it is rebuilt against the new headers.

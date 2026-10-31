@@ -19,7 +19,11 @@ def main():
         sys.exit(f"mods/{name} already exists")
     dest.mkdir(parents=True)
     (dest / "main.cpp").write_text((ROOT / "template" / "main.cpp").read_text().replace("MY_MOD", name))
-    (dest / "CMakeLists.txt").write_text(f"cadence_add_mod({name} main.cpp)\n")
+    (dest / "CMakeLists.txt").write_text(
+        f'cadence_add_mod({name} main.cpp\n'
+        f'    NAME "{name}" AUTHOR "you" VERSION "1.0"\n'
+        f'    DESCRIPTION "What it does"\n'
+        f'    KEY "K")\n')
     print(f"created mods/{name}/\nnext: cmake -B build -A x64 && cmake --build build --config Release --target {name}_mod")
 
 

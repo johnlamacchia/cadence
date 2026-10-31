@@ -18,8 +18,11 @@ class PlatformAddrs:
     m1: Optional[int] = None
     ios: Optional[int] = None
 
+    # The bindings use this as "address not known yet"; it is far outside the image.
+    WIN_PLACEHOLDER = 0x9999999
+
     def has_win(self) -> bool:
-        return self.win is not None and not self.win_inline
+        return self.win is not None and not self.win_inline and self.win != self.WIN_PLACEHOLDER
 
 
 @dataclass
@@ -32,6 +35,7 @@ class FuncDecl:
     is_static: bool = False
     is_ctor: bool = False
     is_dtor: bool = False
+    is_const: bool = False
     class_name: str = ""
 
     def signature(self) -> str:
@@ -130,7 +134,7 @@ class BromaParser:
                 continue
 
             # Class declaration
-            m = re.match(r'class\s+(\w+)', text[pos:])
+            m = re.match(r'class\s+([\w:]+)', text[pos:])
             if m:
                 cls_name = m.group(1)
                 pos += m.end()
@@ -373,7 +377,9 @@ class BromaParser:
 
         # Parse const qualifier
         pos = self._skip_ws_comments(text, pos)
+        is_const = False
         if pos < length and text[pos:pos+5] == 'const':
+            is_const = True
             pos += 5
 
         # Now look for = addrs ; or = addrs { body } or just ;
@@ -402,6 +408,7 @@ class BromaParser:
             is_static=is_static,
             is_ctor=is_ctor,
             is_dtor=is_dtor,
+            is_const=is_const,
             class_name=class_name,
         )
         return func, pos
