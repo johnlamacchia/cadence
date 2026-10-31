@@ -2,6 +2,8 @@
 #include <windows.h>
 #include <Zydis/Zydis.h>
 #include <cstring>
+#include <memory>
+#include <mutex>
 #include <vector>
 
 namespace hook {
@@ -29,19 +31,11 @@ struct Target {
     size_t patch_size;
     uint8_t* trampoline;
     std::vector<Link> chain;   // [0] oldest ... back() newest, the one the target jumps to
-    Target* next;
 };
 
-static Target* g_targets = nullptr;
-static CRITICAL_SECTION g_lock;
-static bool g_init = false;
-
-static void ensure_init() {
-    if (!g_init) {
-        InitializeCriticalSection(&g_lock);
-        g_init = true;
-    }
-}
+// Targets are never freed (see Target), so a pointer into this list stays valid.
+static std::vector<std::unique_ptr<Target>> g_targets;
+static std::mutex g_lock;
 
 static void write_abs_jmp(uint8_t* buf, void* target) {
     buf[0] = 0xFF;
@@ -145,8 +139,8 @@ static bool relocate_instruction(
 }
 
 static Target* find_target(void* target) {
-    for (Target* t = g_targets; t; t = t->next)
-        if (t->target == target) return t;
+    for (auto& t : g_targets)
+        if (t->target == target) return t.get();
     return nullptr;
 }
 
@@ -192,14 +186,13 @@ static Target* create_target(void* target) {
     write_abs_jmp(tramp + tramp_offset, func + copied);
     FlushInstructionCache(GetCurrentProcess(), tramp, TRAMPOLINE_MAX);
 
-    auto* t = new Target{};
+    auto t = std::make_unique<Target>();
     t->target = target;
     memcpy(t->saved, func, copied);
     t->patch_size = copied;
     t->trampoline = tramp;
-    t->next = g_targets;
-    g_targets = t;
-    return t;
+    g_targets.push_back(std::move(t));
+    return g_targets.back().get();
 }
 
 static void patch_jmp(Target* t, void* dest) {
@@ -223,22 +216,16 @@ static void restore_original(Target* t) {
 
 bool install(void* target, void* detour, void** original) {
     if (!target || !detour || !original) return false;
-    ensure_init();
-    EnterCriticalSection(&g_lock);
+    std::lock_guard lock(g_lock);
 
     Target* t = find_target(target);
     if (!t) t = create_target(target);
-    if (!t) {
-        LeaveCriticalSection(&g_lock);
-        return false;
-    }
+    if (!t) return false;
 
-    void* next = t->chain.empty() ? (void*)t->trampoline : t->chain.back().detour;
+    void* next = t->chain.empty() ? static_cast<void*>(t->trampoline) : t->chain.back().detour;
     t->chain.push_back(Link{detour, original, next});
     *original = next;
     patch_jmp(t, detour);
-
-    LeaveCriticalSection(&g_lock);
     return true;
 }
 
@@ -272,21 +259,16 @@ static int remove_in_range_locked(Target* t, uintptr_t lo, uintptr_t hi) {
 }
 
 int remove_in_range(void* target, uintptr_t lo, uintptr_t hi) {
-    ensure_init();
-    EnterCriticalSection(&g_lock);
+    std::lock_guard lock(g_lock);
     Target* t = find_target(target);
-    int removed = t ? remove_in_range_locked(t, lo, hi) : 0;
-    LeaveCriticalSection(&g_lock);
-    return removed;
+    return t ? remove_in_range_locked(t, lo, hi) : 0;
 }
 
 int remove_by_detour_range(uintptr_t lo, uintptr_t hi) {
-    ensure_init();
-    EnterCriticalSection(&g_lock);
+    std::lock_guard lock(g_lock);
     int removed = 0;
-    for (Target* t = g_targets; t; t = t->next)
-        removed += remove_in_range_locked(t, lo, hi);
-    LeaveCriticalSection(&g_lock);
+    for (auto& t : g_targets)
+        removed += remove_in_range_locked(t.get(), lo, hi);
     return removed;
 }
 

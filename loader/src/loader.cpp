@@ -1,12 +1,17 @@
 #include "loader.h"
 #include "hook.h"
 #include "crash.h"
+#include <cadence_abi.h>
+#include <algorithm>
+#include <atomic>
+#include <cstdarg>
 #include <cstdio>
+#include <cstdlib>
+#include <filesystem>
+#include <fstream>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <filesystem>
-#include <fstream>
 #include <intrin.h>
 #include <psapi.h>
 
@@ -26,8 +31,8 @@ namespace json_reader {
             p++;
             std::string s;
             while (p < end && *p != '"') {
-                if (*p == '\\') { p++; s += *p++; }
-                else s += *p++;
+                if (*p == '\\' && p + 1 < end) p++;
+                s += *p++;
             }
             if (p < end) p++; // skip closing "
             return s;
@@ -119,25 +124,6 @@ static void log(const char* fmt, ...) {
 }
 
 // --- LoaderAPI implementation ---
-
-struct ModEntry {
-    const char* filename;
-    const char* name;
-    const char* author;
-    const char* description;
-    const char* keybind;
-    const char* version;
-    bool enabled;
-};
-
-struct LoaderAPI {
-    void* (*addr)(const LoaderAPI* self, const char* signature);
-    bool  (*hook_fn)(const LoaderAPI* self, void* target, void* detour, void** original);
-    bool  (*unhook_fn)(const LoaderAPI* self, void* target);
-    const char* (*gd_version_fn)(const LoaderAPI* self);
-    void  (*log_fn)(const LoaderAPI* self, const char* fmt, ...);
-    const ModEntry* (*get_mods)(const LoaderAPI* self, int* out_count);
-};
 
 static void* api_addr(const LoaderAPI*, const char* sig) {
     auto it = g_addresses.find(sig);
@@ -261,20 +247,20 @@ static bool load_layout_hashes(const std::filesystem::path& base_dir) {
 
 // --- Mod loading ---
 
-typedef void (*ModMainFunc)(const LoaderAPI* api);
-typedef void (*ModUnloadFunc)();
-typedef const char* (*ModInfoFunc)();
+using ModMainFunc = void (*)(const LoaderAPI* api);
+using ModUnloadFunc = void (*)();
+using ModInfoFunc = const char* (*)();
+using ModHashesFunc = const char* (*)();
 
 struct ModInfoInternal {
-    std::filesystem::path path;
     std::string filename;
-    HMODULE handle;
+    HMODULE handle = nullptr;
     std::string display_name;
     std::string author;
     std::string description;
     std::string keybind;
     std::string version;
-    bool enabled;
+    bool enabled = true;
 };
 
 static std::vector<ModInfoInternal> g_loaded_mods;
@@ -302,7 +288,7 @@ static std::string json_get(const std::unordered_map<std::string, std::string>& 
 }
 
 static void parse_mod_info(ModInfoInternal& mod) {
-    auto get_info = (ModInfoFunc)GetProcAddress(mod.handle, "mod_info");
+    auto get_info = reinterpret_cast<ModInfoFunc>(GetProcAddress(mod.handle, "mod_info"));
     if (!get_info) return;
     const char* raw = get_info();
     if (!raw) return;
@@ -316,11 +302,11 @@ static void parse_mod_info(ModInfoInternal& mod) {
 }
 
 static bool check_mod_hashes(HMODULE mod, const std::string& mod_name) {
-    // Mod exports: const char* mod_layout_hashes() → JSON string of class→hash
-    auto get_hashes = (const char* (*)())GetProcAddress(mod, "mod_layout_hashes");
-    if (!get_hashes) return true; // no hash info = skip check
+    // Mods export mod_layout_hashes(): a JSON object of class name -> layout hash.
+    auto get_hashes = reinterpret_cast<ModHashesFunc>(GetProcAddress(mod, "mod_layout_hashes"));
+    if (!get_hashes) return true;   // no hash info, nothing to check
 
-    std::string raw = get_hashes();
+    const std::string raw = get_hashes();
     json_reader::Parser p{raw.c_str(), raw.c_str() + raw.size()};
     auto mod_hashes = p.read_string_map();
 
@@ -347,7 +333,7 @@ static int g_generation = 0;
 // removed, but its DLL stays mapped for the rest of the session (a few KB).
 static void unload_all_mods() {
     for (auto it = g_loaded_mods.rbegin(); it != g_loaded_mods.rend(); ++it) {
-        auto unload = (ModUnloadFunc)GetProcAddress(it->handle, "mod_unload");
+        auto unload = reinterpret_cast<ModUnloadFunc>(GetProcAddress(it->handle, "mod_unload"));
         if (unload) {
             log("[INFO] calling mod_unload for '%s'", it->filename.c_str());
             unload();
@@ -405,7 +391,7 @@ static void load_mods(const std::filesystem::path& mods_dir) {
             continue;
         }
 
-        auto mod_main = (ModMainFunc)GetProcAddress(mod, "mod_main");
+        auto mod_main = reinterpret_cast<ModMainFunc>(GetProcAddress(mod, "mod_main"));
         if (!mod_main) {
             log("[WARN] mod '%s' has no mod_main export, skipping", mod_name.c_str());
             FreeLibrary(mod);
@@ -416,10 +402,8 @@ static void load_mods(const std::filesystem::path& mods_dir) {
         mod_main(&g_api);
 
         ModInfoInternal info;
-        info.path = dll_path;
         info.filename = mod_name;
         info.handle = mod;
-        info.enabled = true;
         parse_mod_info(info);
         g_loaded_mods.push_back(std::move(info));
         log("[INFO] mod '%s' initialized", mod_name.c_str());
@@ -429,7 +413,7 @@ static void load_mods(const std::filesystem::path& mods_dir) {
 
 // --- Main-thread reload via drawScene hook ---
 
-static volatile bool g_reload_pending = false;
+static std::atomic<bool> g_reload_pending{false};
 static void(__fastcall* orig_drawScene)(void*) = nullptr;
 
 static void show_reload_toast(void* director, int mod_count) {
@@ -439,18 +423,18 @@ static void show_reload_toast(void* director, int mod_count) {
     HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
     if (!cocos) return;
 
-    auto getRunningScene = (getRunningScene_t)GetProcAddress(cocos,
-        "?getRunningScene@CCDirector@cocos2d@@QEAAPEAVCCScene@2@XZ");
-    auto addChild = (addChild_t)GetProcAddress(cocos,
-        "?addChild@CCNode@cocos2d@@UEAAXPEAV12@H@Z");
+    auto getRunningScene = reinterpret_cast<getRunningScene_t>(GetProcAddress(cocos,
+        "?getRunningScene@CCDirector@cocos2d@@QEAAPEAVCCScene@2@XZ"));
+    auto addChild = reinterpret_cast<addChild_t>(GetProcAddress(cocos,
+        "?addChild@CCNode@cocos2d@@UEAAXPEAV12@H@Z"));
     if (!getRunningScene || !addChild) return;
 
     void* scene = getRunningScene(director);
     if (!scene) return;
 
     using TextAlertPopup_create_t = void* (*)(std::string*, float, float, int, std::string*);
-    auto textAlertCreate = (TextAlertPopup_create_t)api_addr(nullptr,
-        "TextAlertPopup::create(std::string text, float delay, float scale, int opacity, std::string font)");
+    auto textAlertCreate = reinterpret_cast<TextAlertPopup_create_t>(api_addr(nullptr,
+        "TextAlertPopup::create(std::string text, float delay, float scale, int opacity, std::string font)"));
     if (!textAlertCreate) return;
 
     char msg[128];
@@ -465,8 +449,7 @@ static void show_reload_toast(void* director, int mod_count) {
 }
 
 static void __fastcall hook_drawScene(void* director) {
-    if (g_reload_pending) {
-        g_reload_pending = false;
+    if (g_reload_pending.exchange(false)) {
         log("[INFO] === hot reload triggered ===");
         unload_all_mods();
         load_mods(g_base_dir / "mods");
@@ -481,9 +464,11 @@ void reload_mods() {
     g_reload_pending = true;
 }
 
+// Polls F6 for the life of the process; it only sets a flag, the reload itself
+// happens on the render thread in hook_drawScene.
 static DWORD WINAPI hotkey_thread(LPVOID) {
     bool was_down = false;
-    while (true) {
+    for (;;) {
         bool is_down = (GetAsyncKeyState(VK_F6) & 0x8000) != 0;
         if (is_down && !was_down) {
             g_reload_pending = true;
@@ -492,16 +477,16 @@ static DWORD WINAPI hotkey_thread(LPVOID) {
         was_down = is_down;
         Sleep(30);
     }
-    return 0;
 }
 
 static bool install_drawscene_hook() {
     HMODULE cocos = GetModuleHandleW(L"libcocos2d.dll");
     if (!cocos) return false;
-    void* drawScene = (void*)GetProcAddress(cocos,
-        "?drawScene@CCDirector@cocos2d@@QEAAXXZ");
+    void* drawScene = reinterpret_cast<void*>(GetProcAddress(cocos,
+        "?drawScene@CCDirector@cocos2d@@QEAAXXZ"));
     if (!drawScene) return false;
-    return hook::install(drawScene, (void*)hook_drawScene, (void**)&orig_drawScene);
+    return hook::install(drawScene, reinterpret_cast<void*>(hook_drawScene),
+                         reinterpret_cast<void**>(&orig_drawScene));
 }
 
 bool init() {
@@ -537,7 +522,8 @@ bool init() {
     if (install_drawscene_hook()) {
         log("[INFO] drawScene hook installed for main-thread reload");
     }
-    CreateThread(nullptr, 0, hotkey_thread, nullptr, 0, nullptr);
+    if (HANDLE t = CreateThread(nullptr, 0, hotkey_thread, nullptr, 0, nullptr))
+        CloseHandle(t);
     log("[INFO] hot reload ready (press F6)");
 
     log("[INFO] loader init complete");

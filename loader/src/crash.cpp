@@ -83,12 +83,12 @@ static int enum_modules(ModuleInfo* out, int max_count) {
     return count;
 }
 
-static const wchar_t* find_module(ModuleInfo* mods, int count, uintptr_t addr) {
+static const ModuleInfo* find_module(const ModuleInfo* mods, int count, uintptr_t addr) {
     for (int i = 0; i < count; i++) {
         if (addr >= mods[i].base && addr < mods[i].end)
-            return mods[i].name;
+            return &mods[i];
     }
-    return L"<unknown>";
+    return nullptr;
 }
 
 static LONG WINAPI handler(EXCEPTION_POINTERS* ep) {
@@ -106,14 +106,15 @@ static LONG WINAPI handler(EXCEPTION_POINTERS* ep) {
 
     uintptr_t crash_addr = (uintptr_t)ep->ExceptionRecord->ExceptionAddress;
 
-    ModuleInfo mods[256];
+    // Static: ~135 KB is too much to put on a stack that may be nearly exhausted.
+    static ModuleInfo mods[256];
     int mod_count = enum_modules(mods, 256);
-    const wchar_t* crash_mod = find_module(mods, mod_count, crash_addr);
+    const ModuleInfo* crash_mod = find_module(mods, mod_count, crash_addr);
 
     fprintf(f, "=== Cadence Crash Report ===\n\n");
     fprintf(f, "Exception: 0x%08lX (%s)\n", code, exception_name(code));
     fprintf(f, "Address:   0x%llX\n", (unsigned long long)crash_addr);
-    fprintf(f, "Module:    %ls\n\n", crash_mod);
+    fprintf(f, "Module:    %ls\n\n", crash_mod ? crash_mod->name : L"<unknown>");
 
     if (code == EXCEPTION_ACCESS_VIOLATION && ep->ExceptionRecord->NumberParameters >= 2) {
         const char* op = ep->ExceptionRecord->ExceptionInformation[0] == 0 ? "read" : "write";
@@ -133,22 +134,26 @@ static LONG WINAPI handler(EXCEPTION_POINTERS* ep) {
     fprintf(f, "  R14 = 0x%016llX  R15 = 0x%016llX\n", ctx->R14, ctx->R15);
     fprintf(f, "  RIP = 0x%016llX  RFLAGS = 0x%08lX\n\n", ctx->Rip, ctx->EFlags);
 
+    // Unwind from the faulting context, not from this handler's own stack.
     fprintf(f, "Stack trace:\n");
-    void* frames[64];
-    USHORT frame_count = CaptureStackBackTrace(0, 64, frames, nullptr);
-    for (USHORT i = 0; i < frame_count; i++) {
-        uintptr_t addr = (uintptr_t)frames[i];
-        const wchar_t* mod = find_module(mods, mod_count, addr);
-        uintptr_t mod_base = 0;
-        for (int j = 0; j < mod_count; j++) {
-            if (addr >= mods[j].base && addr < mods[j].end) {
-                mod_base = mods[j].base;
-                break;
-            }
+    CONTEXT walk = *ctx;
+    for (int i = 0; i < 64 && walk.Rip; i++) {
+        uintptr_t addr = walk.Rip;
+        const ModuleInfo* mod = find_module(mods, mod_count, addr);
+        fprintf(f, "  [%2d] 0x%llX  %ls+0x%llX\n", i, (unsigned long long)addr,
+            mod ? mod->name : L"<unknown>", (unsigned long long)(mod ? addr - mod->base : 0));
+
+        DWORD64 image_base = 0;
+        RUNTIME_FUNCTION* fn = RtlLookupFunctionEntry(walk.Rip, &image_base, nullptr);
+        if (fn) {
+            void* handler_data = nullptr;
+            DWORD64 frame = 0;
+            RtlVirtualUnwind(UNW_FLAG_NHANDLER, image_base, walk.Rip, fn, &walk, &handler_data, &frame, nullptr);
+        } else {
+            // Leaf function without unwind data: the return address is at [rsp].
+            walk.Rip = *reinterpret_cast<const DWORD64*>(walk.Rsp);
+            walk.Rsp += 8;
         }
-        fprintf(f, "  [%2d] 0x%llX  %ls+0x%llX\n", i,
-            (unsigned long long)addr, mod,
-            (unsigned long long)(addr - mod_base));
     }
 
     fprintf(f, "\nLoaded modules:\n");

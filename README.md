@@ -285,6 +285,7 @@ until exit, because their detours can still be on the call stack and UI they bui
 loader/            winmm proxy, mod loader, hook engine, crash handler
   include/sdk.h        the entire mod-facing API
   include/sdk_extras.h optional helpers
+  include/cadence_abi.h LoaderAPI / ModEntry, shared by the loader and sdk.h
 mods/              17 example mods (one directory each)
 template/          standalone starter mod
 cmake/             cadence_add_mod() build helper

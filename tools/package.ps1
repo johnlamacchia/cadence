@@ -29,7 +29,7 @@ Copy-Item build\loader\Release\winmm.dll $stage
 Copy-Item generated\addresses_*.json, generated\layout_hashes_*.json "$stage\generated"
 Get-ChildItem build\mods -Recurse -Filter *.dll | Where-Object { $_.FullName -like "*\Release\*" } | Copy-Item -Destination "$stage\mods"
 
-Copy-Item loader\include\sdk.h, loader\include\sdk_extras.h "$stage\sdk\loader\include"
+Copy-Item loader\include\sdk.h, loader\include\sdk_extras.h, loader\include\cadence_abi.h "$stage\sdk\loader\include"
 Copy-Item generated\include "$stage\sdk\generated\include" -Recurse
 Copy-Item cmake\CadenceMod.cmake "$stage\sdk\cmake"
 Copy-Item template\* "$stage\sdk\template"
