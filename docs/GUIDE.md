@@ -110,8 +110,18 @@ Things the headers do not do: they define no function bodies, so you cannot call
 function directly (it would not link). Use `cadence::fn<>()`, or a virtual call on an object, where
 the vtable layout is the bindings' (see [below](#class-layouts-and-how-far-to-trust-them)).
 
-Optional helpers live in `sdk_extras.h`: `cadence::play_layer()` and `cadence::key_pressed()`.
+Optional helpers live in `sdk_extras.h`: `cadence::play_layer()`, `cadence::key_pressed()`, and a small set for switching
+mods on and off (`disabled_mods()`, `write_disabled_mods()`, `reload_mods()`, `loader_version()`, `game_folder()`).
 The loader and `sdk.h` do not depend on them.
+
+**Switching mods off.** The loader does not run a mod listed in `cadence_disabled.txt` next to `GeometryDash.exe` (one file
+name per line, e.g. `hitboxes.dll`; `#` starts a comment, case does not matter). A disabled mod still appears in
+`api->get_mods` with `enabled = false` and its name, author and description, so a menu can offer to switch it back on; its
+`mod_main` is never called. `cadence::reload_mods()` makes the loader re-read the file (same as F6). The `modmenu` example is
+the working version of this. Both features need loader version 2; on an older loader `loader_version()` returns 1 and
+`reload_mods()` returns false, so check before relying on them. (The version and reload are exported by name from the loader,
+`cadence_loader_version` and `cadence_reload_mods`, not added to the `LoaderAPI` table, so a mod built against the old header
+keeps working.) A mod must not disable itself.
 
 ### GD's own UI: `sdk_ui.h`
 

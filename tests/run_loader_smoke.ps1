@@ -69,5 +69,16 @@ Check (@($log | Select-String "ignored 1 address.*not inside GeometryDash.exe").
 Check (@($log | Select-String "address not found: GJBaseGameLayer::checkSpawnAbuse").Count -eq 1) "the mod that asked for it is told 'not found' and skips the hook"
 Check (@($log | Select-String "mod 'anticheat.dll' initialized").Count -eq 1) "the mod still loads and the game is not touched"
 
+Write-Host "Scenario 4: cadence_disabled.txt -> those mods are not run, but are still listed"
+Stage $good
+Set-Content "$work\cadence_disabled.txt" "# a comment`nhitboxes.dll`n   NoClip.DLL   `n`nnot_installed.dll`n" -Encoding ascii
+$log = RunSmoke
+Check (@($log | Select-String "mod 'hitboxes.dll' is disabled").Count -eq 1) "hitboxes.dll is reported disabled"
+Check (@($log | Select-String "mod 'noclip.dll' is disabled").Count -eq 1) "the match ignores case and surrounding spaces (NoClip.DLL)"
+Check (-not ($log | Select-String "mod 'hitboxes.dll' initialized") -and -not ($log | Select-String "mod 'noclip.dll' initialized")) "a disabled mod's mod_main never ran"
+$running = @($log | Select-String "mod '(.+?)' initialized").Count
+Check ($running -eq $expectedMods.Count - 2) "every other mod still loads ($running of $($expectedMods.Count - 2))"
+Check (@($log | Select-String "mods: $($expectedMods.Count - 2) running, 2 disabled").Count -eq 1) "the summary line says $($expectedMods.Count - 2) running, 2 disabled"
+Check (@($log | Select-String "\[ERROR\]" | Where-Object { $_.Line -notmatch "no usable addresses" }).Count -eq 0) "no errors (besides the empty address table this test uses on purpose)"
 if ($failures.Count) { Write-Host "`n$($failures.Count) check(s) failed" -ForegroundColor Red; exit 1 }
 Write-Host "`nloader smoke test passed" -ForegroundColor Green

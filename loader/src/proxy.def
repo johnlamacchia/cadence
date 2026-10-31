@@ -181,3 +181,5 @@ EXPORTS
     waveOutSetVolume = proxy_waveOutSetVolume
     waveOutUnprepareHeader = proxy_waveOutUnprepareHeader
     waveOutWrite = proxy_waveOutWrite
+    cadence_reload_mods
+    cadence_loader_version

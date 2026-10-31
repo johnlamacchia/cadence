@@ -4,11 +4,13 @@
 #include <cadence_abi.h>
 #include <algorithm>
 #include <atomic>
+#include <cctype>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -334,6 +336,7 @@ static int g_generation = 0;
 // removed, but its DLL stays mapped for the rest of the session (a few KB).
 static void unload_all_mods() {
     for (auto it = g_loaded_mods.rbegin(); it != g_loaded_mods.rend(); ++it) {
+        if (!it->handle) continue;                 // a disabled mod: it was never running
         auto unload = reinterpret_cast<ModUnloadFunc>(GetProcAddress(it->handle, "mod_unload"));
         if (unload) {
             log("[INFO] calling mod_unload for '%s'", it->filename.c_str());
@@ -353,6 +356,26 @@ static void unload_all_mods() {
     g_mod_entries.clear();
 }
 
+// cadence_disabled.txt, next to the exe: one mod file name per line (# starts a comment). Those mods are not run.
+// They still appear in get_mods() with enabled=false, with the name, author and description read by loading the
+// DLL without ever calling mod_main, so a menu can offer to switch them back on.
+static std::string lowercase(std::string s) {
+    for (char& c : s) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    return s;
+}
+
+static std::set<std::string> read_disabled_list() {
+    std::set<std::string> disabled;
+    std::ifstream file(g_base_dir / L"cadence_disabled.txt");
+    for (std::string line; std::getline(file, line);) {
+        size_t first = line.find_first_not_of(" \t");
+        size_t last = line.find_last_not_of(" \t\r");
+        if (first == std::string::npos || line[first] == '#') continue;
+        disabled.insert(lowercase(line.substr(first, last - first + 1)));
+    }
+    return disabled;
+}
+
 static void load_mods(const std::filesystem::path& mods_dir) {
     if (!std::filesystem::exists(mods_dir)) {
         log("[INFO] no mods/ directory, nothing to load");
@@ -370,6 +393,7 @@ static void load_mods(const std::filesystem::path& mods_dir) {
     std::error_code ec;
     std::filesystem::create_directories(g_cache_dir, ec);
     g_generation++;
+    const std::set<std::string> disabled = read_disabled_list();
 
     for (auto& dll_path : dlls) {
         auto mod_name = dll_path.filename().string();
@@ -384,6 +408,20 @@ static void load_mods(const std::filesystem::path& mods_dir) {
         HMODULE mod = LoadLibraryW(shadow.c_str());
         if (!mod) {
             log("[ERROR] failed to load mod '%s': error %lu", mod_name.c_str(), GetLastError());
+            continue;
+        }
+
+        if (disabled.count(lowercase(mod_name))) {
+            // Read its metadata, then let it go again: mod_main was never called, so it has no hooks to leave behind.
+            ModInfoInternal info;
+            info.filename = mod_name;
+            info.handle = mod;
+            parse_mod_info(info);
+            info.handle = nullptr;
+            info.enabled = false;
+            FreeLibrary(mod);
+            g_loaded_mods.push_back(std::move(info));
+            log("[INFO] mod '%s' is disabled (cadence_disabled.txt), not running it", mod_name.c_str());
             continue;
         }
 
@@ -410,6 +448,10 @@ static void load_mods(const std::filesystem::path& mods_dir) {
         log("[INFO] mod '%s' initialized", mod_name.c_str());
     }
     rebuild_mod_entries();
+
+    int running = 0, switched_off = 0;
+    for (const auto& m : g_loaded_mods) (m.enabled ? running : switched_off)++;
+    log("[INFO] mods: %d running, %d disabled", running, switched_off);
 }
 
 // --- Main-thread reload via drawScene hook ---
@@ -454,7 +496,9 @@ static void __fastcall hook_drawScene(void* director) {
         log("[INFO] === hot reload triggered ===");
         unload_all_mods();
         load_mods(g_base_dir / "mods");
-        int count = (int)g_loaded_mods.size();
+        int count = 0;
+        for (const auto& m : g_loaded_mods)
+            if (m.enabled) count++;
         log("[INFO] === hot reload complete ===");
         show_reload_toast(director, count);
     }
@@ -549,3 +593,10 @@ bool init() {
 }
 
 }
+
+// Exported by name (see proxy.def) so a mod can use them when the loader is new enough and simply find nothing
+// (GetProcAddress returns null) on an older one, with no change to the LoaderAPI table.
+//   cadence_loader_version(): 1 = 1.0 / 1.1; 2 = adds cadence_disabled.txt and cadence_reload_mods().
+//   cadence_reload_mods():    the same as pressing F6 (it only sets a flag; the reload happens next frame).
+extern "C" int cadence_loader_version() { return 2; }
+extern "C" void cadence_reload_mods() { loader::reload_mods(); }

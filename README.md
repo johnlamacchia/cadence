@@ -34,6 +34,7 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
 | A function has no known address (missing, or the bindings mark it `win inline`) | That hook is skipped and a line goes to `loader.log`. GD is not touched. |
 | An address is not inside `GeometryDash.exe`'s code (the bindings' `0x9999999` placeholder, a typo in a local override) | Ignored at load, with an example in `loader.log`. |
 | A mod was built against a class whose layout changed | **The mod is refused, and the log names the class.** Other mods load. |
+| A mod is listed in `cadence_disabled.txt` | It is not run (`mod_main` is never called) but still shows up, as disabled, so a menu can switch it back on. |
 | Two mods hook the same function | They chain. Removing either one, in any order, leaves the other working. |
 | A mod hook crashes GD | `crash_<time>.log` and a `.dmp` are written next to the exe. |
 
@@ -259,7 +260,7 @@ Press keys while **in a level** with GD focused unless noted.
 | Mod | What it does | Key |
 |---|---|---|
 | `example` | Clicking the RobTop logo on the main menu shows "Hello" in GD's own `FLAlertLayer` | click |
-| `modmenu` | In-game overlay listing every loaded mod with its keybind | **Insert** |
+| `modmenu` | The Cadence menu: every installed mod, with a tick box to switch each one on or off (saved in `cadence_disabled.txt`) | **Insert** |
 | `fpsdisplay` | FPS counter, top-left, on every scene | always on |
 | `hitboxes` | Show the game's debug hitboxes | **H** |
 | `noclip` | Survive all hazards | **N** |
