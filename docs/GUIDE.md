@@ -76,8 +76,15 @@ auto f = cadence::fn<&PlayLayer::resetLevel>();    // the game's own function, t
   string instead and just returns `false` (with a warning in `loader.log`) if it has no address.
 - **Overloads** need the usual cast:
   `cadence::hook<static_cast<bool (Foo::*)(int)>(&Foo::bar)>(detour)`. Static functions the same:
-  `constexpr auto create = static_cast<Foo* (*)(int)>(&Foo::create);` then `cadence::fn<create>()`.
-- One hook per function per mod (`original<F>` is one variable per F).
+  `cadence::fn<static_cast<Foo* (*)(int)>(&Foo::create)>()`.
+- **One hook per function per mod.** `original<F>` is one variable per F, so a second hook on the
+  same function in the same DLL points the first detour's "original" back at itself and recurses
+  until the stack is gone (this crashed a mod before the main menu). If two features need the
+  same function, hook it once and call both from the one detour.
+- **Pass a member-function pointer to `hook`/`original`/`fn` as an expression,** not through a
+  `constexpr` variable: MSVC did not treat `constexpr auto k = static_cast<...>(&C::f)` as the
+  same template argument, so `fn_sig<k>` was not found. Write the `static_cast` in the template
+  argument, or wrap it in a macro.
 - A function that returns a struct through a hidden pointer cannot be hooked with `hook<F>`
   (its compile-time check explains why); use `cadence::hook(addr, detour, &orig)` and declare the
   detour with the return slot first.
@@ -90,6 +97,38 @@ the vtable layout is the bindings' (see [below](#class-layouts-and-how-far-to-tr
 
 Optional helpers live in `sdk_extras.h`: `cadence::play_layer()` and `cadence::key_pressed()`.
 The loader and `sdk.h` do not depend on them.
+
+### GD's own UI: `sdk_ui.h`
+
+Also optional. Popups, buttons and checkboxes built from the game's own classes, with no cocos2d
+subclassing:
+
+```cpp
+#include <sdk_ui.h>
+
+cadence::ui::alert("Hello", "A GD popup.");
+cadence::ui::confirm("Sure?", "Pick one.", "No", "Yes", [](bool yes) { /* ... */ });
+
+cadence::ui::Popup("My mod", 300, 180)
+    .label("Options", 0, 55)
+    .checkbox("Show hitboxes", -100, 20, on, [](bool v) { on = v; })
+    .button("Reset", 0, -50, [] { reset(); })
+    .show();
+```
+
+- Coordinates are relative to the **centre of the popup** (GD's design height is 320). Where you put
+  things, and how much room you leave, is up to you; read `popup.width()` / `popup.height()` for the
+  window the game actually gave you.
+- By default the game sizes the window to its (empty) text and ignores the height you ask for.
+  `Popup(title, w, h, /*tall=*/true)` makes the height real. Lay out from `width()` / `height()`.
+- `button()` takes `scale`, `height`, a background sprite and an optional fixed `width`;
+  `icon_button()` takes any sprite frame name; `label()` and `checkbox()` take a maximum width and
+  shrink long text to fit.
+- To change what a popup shows, `clear()` it and add again, **from per-frame code**, not from inside
+  one of its own button callbacks (a button must not delete itself while it handles its click).
+  Set a flag in the callback and rebuild on the next frame.
+- `close()` dismisses it; `is_open()` tells you whether it still exists.
+- Callbacks run on the game thread. `mods/uidemo` (F7) exercises all of it.
 
 ---
 
@@ -206,6 +245,18 @@ GD is MSVC x64, so every function is `__fastcall`-compatible: `this` in `rcx`, t
 - **`std::string` by value is a hidden pointer.** The detour's `std::string` parameter handles it.
 - **Small structs returned by value use a hidden return pointer** when they have a
   constructor (for example `CCDirector::getWinSize` returns a `CCSize` through `rdx`).
+- **`CCPoint`, `CCSize` and `CCRect` are passed by hidden reference, not in registers,** even
+  though they are only 8 or 16 bytes: the game's versions have copy constructors, which makes
+  MSVC treat them as non-trivial. The generated headers declare them the same way, so the typed
+  API gets it right. If you declare your own function type that takes one by value, give your
+  struct a copy constructor too, or you will pass the two floats where the game reads a pointer
+  (this crashed inside libcocos2d the first time we called `playPlatformerEndAnimationToPos`).
+- **A method inherited from a second base class gets that base's `this`.** `FLAlertLayer`'s
+  `keyBackClicked` belongs to a base class embedded 0x150 bytes into the layer, and the function
+  starts by subtracting 0x150 to get back to the layer. Called with the layer pointer it computes
+  garbage and crashes. The headers list such methods under the derived class, so the typed
+  `self` of a hook on one is the adjusted pointer, not the object. When a call or hook on an
+  inherited virtual misbehaves, look at the function's first instructions for a `lea reg, [rcx - N]`.
 - **Do not pass a 3-byte struct (`ccColor3B`) by value** to a function you declare yourself.
   MSVC passes it in a way that is not safe to reproduce from a function-pointer typedef.
 - **Do not call a virtual cocos2d export directly on an object of a derived class** and assume

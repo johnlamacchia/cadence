@@ -29,7 +29,9 @@
 #include <gd/ButtonSprite.hpp>
 #include <gd/CCMenuItemSpriteExtra.hpp>
 #include <gd/CCMenuItemToggler.hpp>
+#include <gd/cocos2d/CCMenu.hpp>
 #include <gd/FLAlertLayer.hpp>
+#include <gd/ScrollingLayer.hpp>
 #include <functional>
 #include <memory>
 #include <string>
@@ -50,9 +52,11 @@ struct Cocos {
     void(__fastcall* set_position)(void* node, float x, float y) = nullptr;
     void(__fastcall* set_scale)(void* node, float scale) = nullptr;
     void(__fastcall* set_anchor)(void* node, const cocos2d::CCPoint* anchor) = nullptr;
+    void(__fastcall* remove_from_parent)(void* node) = nullptr;
 
     bool ok() const {
-        return label && frame_sprite && node && retain && add_child && set_position && set_scale && set_anchor;
+        return label && frame_sprite && node && retain && add_child && set_position && set_scale && set_anchor &&
+               remove_from_parent;
     }
 };
 
@@ -70,6 +74,7 @@ inline const Cocos& api() {
         x.set_position = lookup<decltype(x.set_position)>("?setPosition@CCNode@cocos2d@@UEAAXMM@Z");
         x.set_scale = lookup<decltype(x.set_scale)>("?setScale@CCNode@cocos2d@@UEAAXM@Z");
         x.set_anchor = lookup<decltype(x.set_anchor)>("?setAnchorPoint@CCNode@cocos2d@@UEAAXAEBVCCPoint@2@@Z");
+        x.remove_from_parent = lookup<decltype(x.remove_from_parent)>("?removeFromParent@CCNode@cocos2d@@UEAAXXZ");
         if (!x.ok()) cadence::log("sdk_ui: a cocos2d export is missing, ui:: calls will do nothing");
         return x;
     }();
@@ -156,13 +161,13 @@ inline Delegate* new_delegate(std::function<void(bool)> on_result) {
 }
 
 inline FLAlertLayer* create_alert(Delegate* delegate, const char* title, const std::string& text,
-                                  const char* first, const char* second, float width, float height) {
+                                  const char* first, const char* second, float width, float height, bool scroll = false) {
     auto create = cadence::fn<static_cast<FLAlertLayer*(*)(
         FLAlertLayerProtocol*, char const*, std::string, char const*, char const*, float, bool, float, float)>(
         &FLAlertLayer::create)>();
     if (!create) return nullptr;
     return create(reinterpret_cast<FLAlertLayerProtocol*>(delegate), title, text, first, second, width,
-                  false, height, 1.0f);
+                  scroll, height, 1.0f);
 }
 
 inline void show_layer(FLAlertLayer* layer) {
@@ -194,49 +199,107 @@ inline bool confirm(const char* title, const std::string& text, const char* no, 
 // ---- Custom popups ------------------------------------------------------------------------
 
 // A GD popup you add your own labels, buttons and checkboxes to. It always has a
-// Close button. Build it, then call show(). Items you add land on the popup's
-// button menu, so positions are relative to the centre of the screen.
+// Close button. Build it, then call show(). Items land on the popup's button menu,
+// so positions are relative to the centre of the screen.
+//
+// A popup can be rebuilt in place: clear() removes everything you added, then add
+// again. Do that from your per-frame code, not from inside one of the popup's own
+// button callbacks (a button must not delete itself while it is handling its click);
+// set a flag in the callback and rebuild on the next frame.
+//
+// Popup is a cheap handle: copies share one popup.
 class Popup {
 public:
-    Popup(const char* title, float width = 300.0f, float height = 180.0f)
-        : layer_(detail::create_alert(nullptr, title, " ", "Close", nullptr, width, height)) {}
+    // By default the game sizes the window to fit its (empty) text, so `height` is ignored and the
+    // window is small. Pass `tall = true` to make `height` the real window height instead (the game
+    // then lays the window out for a scrolling text area). Either way, read width()/height() back.
+    Popup(const char* title, float width = 300.0f, float height = 180.0f, bool tall = false)
+        : s_(std::make_shared<State>()) {
+        std::shared_ptr<State> state = s_;
+        detail::Delegate* d = detail::new_delegate([state](bool) { state->closed = true; });
+        s_->layer = detail::create_alert(d, title, " ", "Close", nullptr, width, height, tall);
+        if (!s_->layer) { d->done = true; s_->closed = true; return; }
+        s_->width = s_->layer->m_width;
+        s_->height = s_->layer->m_height;
 
-    bool valid() const { return layer_ && layer_->m_buttonMenu && detail::api().ok(); }
+        // Tall mode is only used for the window height; the empty scrolling text area it comes
+        // with draws a shaded rectangle over everything we add, so hide it.
+        if (tall && s_->layer->m_scrollingLayer) s_->layer->m_scrollingLayer->m_bVisible = false;
+
+        // Where the button menu's origin is varies with how the game laid the window out (in the
+        // tall mode it sits near the bottom, not at the centre). Measure it once and shift every
+        // item by the difference, so coordinates really are relative to the window centre.
+        if (s_->layer->m_buttonMenu) {
+            s_->shift_x = s_->layer->m_obContentSize.width / 2 - s_->layer->m_buttonMenu->m_obPosition.x;
+            s_->shift_y = s_->layer->m_obContentSize.height / 2 - s_->layer->m_buttonMenu->m_obPosition.y;
+        }
+        cadence::log("sdk_ui: popup \"%s\" is %g x %g (asked for %g x %g), button menu origin is off centre by (%g, %g)",
+                     title, s_->width, s_->height, width, height, s_->shift_x, s_->shift_y);
+    }
+
+    // The window size the game actually gave us. Lay out from these, not from what you asked for.
+    float width() const { return s_->width; }
+    float height() const { return s_->height; }
+
+    // True from show() until the player (or close()) dismisses it.
+    bool is_open() const { return s_->shown && !s_->closed; }
 
     // Centred on (x, y), or with its left edge at x if `left_align`.
+    // If `max_width` > 0 the scale is reduced until the text is at most that wide.
     Popup& label(const char* text, float x, float y, float scale = 0.5f, const char* font = "bigFont.fnt",
-                 bool left_align = false) {
-        if (!valid()) return *this;
+                 bool left_align = false, float max_width = 0.0f) {
+        if (!usable()) return *this;
         if (void* l = detail::api().label(text, font)) {
+            if (max_width > 0.0f) {
+                float natural = static_cast<cocos2d::CCNode*>(l)->m_obContentSize.width;
+                if (natural * scale > max_width) scale = max_width / natural;
+            }
             if (left_align) {
                 const cocos2d::CCPoint anchor{0.0f, 0.5f};
                 detail::api().set_anchor(l, &anchor);
             }
             detail::api().set_scale(l, scale);
-            detail::api().set_position(l, x, y);
-            detail::api().add_child(layer_->m_buttonMenu, l, 5);
+            place(l, x, y);
         }
         return *this;
     }
 
     // `scale` sizes the whole button; at the default 0.7 a short word is about 70 units wide,
     // so keep button centres at least ~90 units apart.
-    Popup& button(const char* text, float x, float y, std::function<void()> on_click, float scale = 0.7f) {
-        if (!valid()) return *this;
+    // `height` is the button's own height (the sprite does not scale it down with `scale`), and `bg`
+    // picks the colour: "GJ_button_01.png" green, "_02" blue, "_03" gray, "_04" pink/red. `width` > 0
+    // makes it a fixed width in units (so a column of buttons lines up); 0 sizes it to the text.
+    Popup& button(const char* text, float x, float y, std::function<void()> on_click, float scale = 0.7f,
+                  float height = 30.0f, const char* bg = "GJ_button_01.png", float width = 0.0f) {
+        if (!usable()) return *this;
         auto create = cadence::fn<static_cast<ButtonSprite*(*)(
             char const*, int, int, float, bool, char const*, char const*, float)>(&ButtonSprite::create)>();
         if (!create) return *this;
-        ButtonSprite* sprite = create(text, 0, 0, scale, false, "goldFont.fnt", "GJ_button_01.png", 30.0f);
+        ButtonSprite* sprite = width > 0.0f ? create(text, static_cast<int>(width), 0, scale, true, "goldFont.fnt", bg, height)
+                     : create(text, 0, 0, scale, false, "goldFont.fnt", bg, height);
         CCMenuItemSpriteExtra* item = detail::make_item(sprite, [fn = std::move(on_click)](void*) { if (fn) fn(); });
-        if (!item) return *this;
-        detail::api().set_position(item, x, y);
-        detail::api().add_child(layer_->m_buttonMenu, item, 5);
+        if (item) place(item, x, y);
         return *this;
     }
 
-    // GD's checkbox with its label to the right (the label starts ~22 units right of x).\n    // `on_change` gets the new state.
-    Popup& checkbox(const char* text, float x, float y, bool initial, std::function<void(bool)> on_change) {
-        if (!valid()) return *this;
+    // A button that is one of the game's sprite frames (e.g. "GJ_infoIcon_001.png",
+    // "GJ_plus3Btn_001.png"), shrinking when pressed like the others.
+    Popup& icon_button(const char* frame, float x, float y, std::function<void()> on_click, float scale = 1.0f) {
+        if (!usable()) return *this;
+        void* sprite = detail::api().frame_sprite(frame);
+        if (!sprite) return *this;
+        detail::api().set_scale(sprite, scale);
+        CCMenuItemSpriteExtra* item = detail::make_item(sprite, [fn = std::move(on_click)](void*) { if (fn) fn(); });
+        if (item) place(item, x, y);
+        return *this;
+    }
+
+    // GD's checkbox with its label to the right (about 24 units tall at box_scale 0.8; the label
+    // starts 28*box_scale units right of x). `max_label_width` > 0 shrinks long text to fit.
+    // `on_change` gets the new state.
+    Popup& checkbox(const char* text, float x, float y, bool initial, std::function<void(bool)> on_change,
+                    float text_scale = 0.4f, float box_scale = 0.8f, float max_label_width = 0.0f) {
+        if (!usable()) return *this;
         auto create = cadence::fn<&CCMenuItemToggler::create>();
         auto toggle = cadence::fn<&CCMenuItemToggler::toggle>();
         void* off = detail::api().frame_sprite("GJ_checkOff_001.png");
@@ -254,21 +317,60 @@ public:
             if (fn) fn(*state);
         };
         toggle(item, initial);
-        detail::api().set_scale(item, 0.8f);
-        detail::api().set_position(item, x, y);
-        detail::api().add_child(layer_->m_buttonMenu, item, 5);
-        label(text, x + 22.0f, y, 0.4f, "bigFont.fnt", true);   // starts just right of the box
+        detail::api().set_scale(item, box_scale);
+        place(item, x, y);
+        label(text, x + 28.0f * box_scale, y, text_scale, "bigFont.fnt", true, max_label_width);
         return *this;
     }
 
+    // Removes everything added with label/button/checkbox (not the title or Close).
+    void clear() {
+        if (!usable()) return;
+        for (void* item : s_->items) {
+            detail::handlers().erase(item);
+            detail::api().remove_from_parent(item);
+        }
+        s_->items.clear();
+    }
+
     bool show() {
-        if (!layer_) return false;
-        detail::show_layer(layer_);
+        if (!s_->layer || s_->closed) return false;
+        detail::show_layer(s_->layer);
+        s_->shown = true;
         return true;
     }
 
-private:
-    FLAlertLayer* layer_;
-};
+    // Dismisses the popup as if the player had pressed back.
+    void close() {
+        if (!is_open()) return;
+        // keyBackClicked is a method of a base class embedded in FLAlertLayer, so the game wants
+        // `this` to point at that sub-object: the function starts with `lea rdi, [rcx - 0x150]`
+        // to get back to the layer. Passing the layer itself crashes.
+        constexpr size_t kKeypadBase = 0x150;
+        using back_t = void(__fastcall*)(void*);
+        if (auto back = reinterpret_cast<back_t>(cadence::addr(cadence::fn_sig<&FLAlertLayer::keyBackClicked>)))
+            back(reinterpret_cast<char*>(s_->layer) + kKeypadBase);
+        s_->closed = true;
+    }
 
+private:
+    struct State {
+        FLAlertLayer* layer = nullptr;
+        float width = 0.0f, height = 0.0f;
+        float shift_x = 0.0f, shift_y = 0.0f;
+        bool shown = false;
+        bool closed = false;
+        std::vector<void*> items;
+    };
+
+    bool usable() const { return s_->layer && !s_->closed && s_->layer->m_buttonMenu && detail::api().ok(); }
+
+    void place(void* node, float x, float y) {
+        detail::api().set_position(node, x + s_->shift_x, y + s_->shift_y);
+        detail::api().add_child(s_->layer->m_buttonMenu, node, 5);
+        s_->items.push_back(node);
+    }
+
+    std::shared_ptr<State> s_;
+};
 } // namespace cadence::ui
