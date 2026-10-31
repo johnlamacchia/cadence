@@ -1,5 +1,6 @@
 // Cadence menu: press Insert to list every installed mod, switch mods on and off, and read what each
-// one does. Built with sdk_ui.h, so it looks like the game's own popups.
+// one does. Built with sdk_ui.h, so it looks like the game's own popups. The list scrolls with the mouse wheel,
+// has page arrows (only when there is another page), and filters as you type after clicking Search.
 //
 // Switching a mod off writes its file name to cadence_disabled.txt (the loader skips those). Changes
 // are collected in the list and applied with the Apply button, which saves the file, closes the menu
@@ -32,8 +33,10 @@ struct Menu {
     std::vector<Row> rows;
     std::set<std::string> disabled;         // lowercase file names the player wants switched off
     std::set<std::string> initial;          // what the file said when the menu opened
-    int first = 0, visible = 1;
-    size_t detail = 0;
+    int first = 0, visible = 1, shown = 0;  // first visible row of the (filtered) list, rows per page, rows in the list
+    size_t detail = 0;                      // index into rows, not into the filtered list
+    std::string query;                      // what the player typed into the search box (lowercase)
+    bool typing = false;                    // true while the keyboard is ours: see cadence::claim_input
     bool rebuild = false;
     std::string note;                       // a line under the list (shown after Apply on an old loader)
 } g;
@@ -83,8 +86,28 @@ void collect_rows() {
 
 void request_rebuild() { g.rebuild = true; }
 
+bool matches(const Row& r) {
+    if (g.query.empty()) return true;
+    return lowercase(r.name + " " + r.author + " " + r.description + " " + r.filename).find(g.query) != std::string::npos;
+}
+
+// While typing the keyboard belongs to the search box: other mods that poll keys through cadence::key_pressed
+// ignore it (so typing "h" does not toggle the hitboxes), and the keys never reach the game (see hook_key).
+void set_typing(bool on) {
+    if (on == g.typing) return;
+    g.typing = on;
+    cadence::claim_input(on);
+    request_rebuild();
+}
+
+void set_query(const std::string& q) {
+    g.query = q;
+    g.first = 0;
+    request_rebuild();
+}
+
 void scroll_by(int rows) {
-    int max_first = std::max(0, static_cast<int>(g.rows.size()) - g.visible);
+    int max_first = std::max(0, g.shown - g.visible);
     g.first = std::clamp(g.first + rows, 0, max_first);
     request_rebuild();
 }
@@ -111,11 +134,11 @@ std::vector<std::string> wrap(const std::string& text, size_t width) {
 // Regions relative to the window centre; the game places its own title and Close button.
 struct Frame {
     float w, h;
-    float sub_y() const { return h / 2 - 60; }
-    float body_top() const { return h / 2 - 86; }
+    float header_y() const { return h / 2 - 60; }
+    float body_top() const { return h / 2 - 90; }
     float body_bottom() const { return -h / 2 + 66; }
     float footer_y() const { return -h / 2 + 50; }
-    float left() const { return -w / 2 + 34.0f; }
+    float left() const { return -w / 2 + 40.0f; }
 };
 
 bool changed() { return g.disabled != g.initial; }
@@ -138,20 +161,39 @@ void populate_list(cadence::ui::Popup& p, const Frame& f) {
     int total = static_cast<int>(g.rows.size());
     int off = 0;
     for (const Row& r : g.rows) off += g.disabled.count(lowercase(r.filename)) ? 1 : 0;
+
+    // Header line: the summary on the left, the search box on the right.
     snprintf(buf, sizeof(buf), "%d mods, %d switched off   |   GD %s   |   loader %d", total, off, cadence::gd_version(),
              cadence::loader_version());
-    p.label(buf, 0.0f, f.sub_y(), 0.3f, "chatFont.fnt");
+    p.label(buf, f.left(), f.header_y(), 0.28f, "chatFont.fnt", true, 190.0f);
+    p.button(g.typing ? "Done" : "Search", f.w / 2 - 56.0f, f.header_y(), [] { set_typing(!g.typing); }, 0.32f, 20.0f,
+             g.typing ? "GJ_button_02.png" : "GJ_button_01.png", 62.0f);
+    if (g.typing) snprintf(buf, sizeof(buf), "%s_", g.query.c_str());
+    else if (!g.query.empty()) snprintf(buf, sizeof(buf), "%s", g.query.c_str());
+    else snprintf(buf, sizeof(buf), "(click Search to filter)");
+    p.label(buf, f.w / 2 - 222.0f, f.header_y(), 0.32f, g.typing ? "bigFont.fnt" : "chatFont.fnt", true, 128.0f);
 
+    // The filtered list.
+    std::vector<int> view;
+    for (int i = 0; i < total; i++)
+        if (matches(g.rows[i])) view.push_back(i);
+    g.shown = static_cast<int>(view.size());
     g.visible = std::max(1, static_cast<int>((f.body_top() - f.body_bottom()) / kRowStep) + 1);
-    g.first = std::clamp(g.first, 0, std::max(0, total - g.visible));
+    g.first = std::clamp(g.first, 0, std::max(0, g.shown - g.visible));
+
+    if (view.empty()) {
+        snprintf(buf, sizeof(buf), g.query.empty() ? "No mods installed." : "No mod matches \"%s\".", g.query.c_str());
+        p.label(buf, 0.0f, f.body_top() - 20.0f, 0.4f, "bigFont.fnt");
+    }
 
     const std::string self = own_filename();
-    const float name_x = f.left();
+    const float name_x = f.left() + 18.0f;
     const float meta_x = name_x + 215.0f;
-    const float info_x = f.w / 2 - 70.0f;
+    const float info_x = f.w / 2 - 56.0f;
     float y = f.body_top();
-    int last = std::min(total, g.first + g.visible);
-    for (int i = g.first; i < last; i++, y -= kRowStep) {
+    int last = std::min(g.shown, g.first + g.visible);
+    for (int v = g.first; v < last; v++, y -= kRowStep) {
+        const int i = view[v];
         const Row& r = g.rows[i];
         const std::string key = lowercase(r.filename);
         if (key == self) {
@@ -164,13 +206,22 @@ void populate_list(cadence::ui::Popup& p, const Frame& f) {
         snprintf(buf, sizeof(buf), "%s%s%s", r.version.empty() ? "" : ("v" + r.version).c_str(),
                  (r.version.empty() || r.author.empty()) ? "" : "  by ", r.author.c_str());
         p.label(buf, meta_x, y, 0.3f, "chatFont.fnt", true, 120.0f);
-        p.icon_button("GJ_infoIcon_001.png", info_x, y, [i] { g.view = View::Detail; g.detail = i; request_rebuild(); }, 0.5f);
+        p.icon_button("GJ_infoIcon_001.png", info_x, y, [i] { set_typing(false); g.view = View::Detail; g.detail = i; request_rebuild(); }, 0.5f);
     }
 
-    if (total > g.visible) {
-        p.button("^", f.w / 2 - 22.0f, f.body_top(), [] { scroll_by(-1); }, 0.35f, 22.0f);
-        p.button("v", f.w / 2 - 22.0f, f.body_bottom(), [] { scroll_by(+1); }, 0.35f, 22.0f);
+    // Page arrows, only where there is another page to go to.
+    const float mid = (f.body_top() + f.body_bottom()) / 2.0f;
+    const int pages = std::max(1, (g.shown + g.visible - 1) / g.visible);
+    const int page = std::min(pages, g.first / g.visible + 1);
+    if (g.first > 0)
+        p.icon_button("GJ_arrow_03_001.png", -f.w / 2 + 26.0f, mid, [] { g.first = std::max(0, g.first - g.visible); request_rebuild(); }, 0.55f, true);
+    if (g.first + g.visible < g.shown)
+        p.icon_button("GJ_arrow_03_001.png", f.w / 2 - 26.0f, mid, [] { g.first += g.visible; request_rebuild(); }, 0.55f);
+    if (pages > 1) {
+        snprintf(buf, sizeof(buf), "Page %d / %d", page, pages);
+        p.label(buf, f.left(), f.footer_y(), 0.3f, "chatFont.fnt", true, 80.0f);
     }
+
     if (changed()) {
         p.button("Apply and reload", 0.0f, f.footer_y(), apply, 0.5f, 26.0f, "GJ_button_02.png");
     } else if (!g.note.empty()) {
@@ -179,7 +230,6 @@ void populate_list(cadence::ui::Popup& p, const Frame& f) {
         p.label("Tick a mod to run it, untick to switch it off, then Apply.", 0.0f, f.footer_y(), 0.3f, "chatFont.fnt");
     }
 }
-
 void populate_detail(cadence::ui::Popup& p, const Frame& f) {
     if (g.detail >= g.rows.size()) { g.view = View::List; return; }
     const Row& r = g.rows[g.detail];
@@ -223,6 +273,8 @@ void open_menu() {
     g.initial = g.disabled;
     g.view = View::List;
     g.first = 0;
+    g.query.clear();
+    set_typing(false);
     g.note.clear();
     g.rebuild = false;
     g.popup = std::make_unique<cadence::ui::Popup>("Cadence", kAskWidth, kAskHeight, true);
@@ -234,9 +286,12 @@ void open_menu() {
 void(__fastcall* orig_drawScene)(void*) = nullptr;
 using dispatch_scroll_t = bool(__fastcall*)(void* self, float y, float x);
 dispatch_scroll_t orig_scroll = nullptr;
+using dispatch_key_t = bool(__fastcall*)(void* self, int key, bool down, bool repeat, double timestamp);
+dispatch_key_t orig_key = nullptr;
 
 void __fastcall hook_drawScene(void* director) {
-    if (cadence::key_pressed(VK_INSERT)) {
+    if (g.typing && !(g.popup && g.popup->is_open())) set_typing(false);      // closed with the Close button mid-search
+    if (cadence::key_pressed(VK_INSERT)) {                                      // (false while typing: Done / Enter first)
         if (g.popup && g.popup->is_open()) g.popup->close();
         else open_menu();
     }
@@ -245,6 +300,31 @@ void __fastcall hook_drawScene(void* director) {
         if (g.popup && g.popup->is_open()) populate();
     }
     orig_drawScene(director);
+}
+
+// While the player is typing in the search box every key belongs to it: letters and digits are added, Backspace
+// removes, Enter ends the search, Escape clears it and ends it. None of them reach the game (so Escape does not
+// also close the popup).
+bool __fastcall hook_key(void* self, int key, bool down, bool repeat, double timestamp) {
+    if (!g.typing || !(g.popup && g.popup->is_open()) || g.view != View::List)
+        return orig_key(self, key, down, repeat, timestamp);
+    if (down) {
+        if (key == VK_RETURN) {
+            set_typing(false);
+        } else if (key == VK_ESCAPE) {
+            set_typing(false);
+            set_query("");
+        } else if (key == VK_BACK) {
+            if (!g.query.empty()) { std::string q = g.query; q.pop_back(); set_query(q); }
+        } else if (g.query.size() < 24) {
+            char c = 0;
+            if ((key >= 'A' && key <= 'Z')) c = static_cast<char>(key - 'A' + 'a');
+            else if ((key >= '0' && key <= '9') || key == ' ') c = static_cast<char>(key);
+            else if (key == VK_OEM_MINUS) c = '-';
+            if (c) set_query(g.query + c);
+        }
+    }
+    return false;
 }
 
 // While the menu is open the mouse wheel scrolls its list and is not passed on to the game.
@@ -259,6 +339,7 @@ bool __fastcall hook_scroll(void* self, float y, float x) {
 } // namespace
 
 extern "C" __declspec(dllexport) void mod_unload() {
+    set_typing(false);                                         // give the keyboard back
     if (g.popup && g.popup->is_open()) g.popup->close();      // no popup left pointing into a retired mod
     g.popup.reset();
 }
@@ -273,5 +354,7 @@ extern "C" __declspec(dllexport) void mod_main(const LoaderAPI* api) {
     }
     if (void* scroll = cadence::cocos("?dispatchScrollMSG@CCMouseDispatcher@cocos2d@@QEAA_NMM@Z"))
         cadence::hook(scroll, reinterpret_cast<void*>(hook_scroll), reinterpret_cast<void**>(&orig_scroll));
+    if (void* key = cadence::cocos("?dispatchKeyboardMSG@CCKeyboardDispatcher@cocos2d@@QEAA_NW4enumKeyCodes@2@_N1N@Z"))
+        cadence::hook(key, reinterpret_cast<void*>(hook_key), reinterpret_cast<void**>(&orig_key));
     cadence::log("modmenu: ready, press Insert (loader version %d)", cadence::loader_version());
 }

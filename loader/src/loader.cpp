@@ -267,6 +267,7 @@ struct ModInfoInternal {
 };
 
 static std::vector<ModInfoInternal> g_loaded_mods;
+static std::atomic<int> g_input_claims{0};      // see cadence_claim_input at the bottom of this file
 static std::filesystem::path g_base_dir;
 
 static void rebuild_mod_entries() {
@@ -335,6 +336,7 @@ static int g_generation = 0;
 // either into a crash. So a retired mod gets mod_unload() and has every hook
 // removed, but its DLL stays mapped for the rest of the session (a few KB).
 static void unload_all_mods() {
+    g_input_claims = 0;                        // a retired mod can no longer release a claim it made
     for (auto it = g_loaded_mods.rbegin(); it != g_loaded_mods.rend(); ++it) {
         if (!it->handle) continue;                 // a disabled mod: it was never running
         auto unload = reinterpret_cast<ModUnloadFunc>(GetProcAddress(it->handle, "mod_unload"));
@@ -509,6 +511,17 @@ void reload_mods() {
     g_reload_pending = true;
 }
 
+void claim_input(bool claim) {
+    if (claim) {
+        g_input_claims++;
+    } else {
+        int now = g_input_claims.load();
+        while (now > 0 && !g_input_claims.compare_exchange_weak(now, now - 1)) {}   // never below zero
+    }
+}
+
+bool input_claimed() { return g_input_claims.load() > 0; }
+
 // Polls F6 for the life of the process; it only sets a flag, the reload itself
 // happens on the render thread in hook_drawScene.
 static DWORD WINAPI hotkey_thread(LPVOID) {
@@ -596,7 +609,14 @@ bool init() {
 
 // Exported by name (see proxy.def) so a mod can use them when the loader is new enough and simply find nothing
 // (GetProcAddress returns null) on an older one, with no change to the LoaderAPI table.
-//   cadence_loader_version(): 1 = 1.0 / 1.1; 2 = adds cadence_disabled.txt and cadence_reload_mods().
+//   cadence_loader_version(): 1 = 1.0 / 1.1; 2 = adds cadence_disabled.txt and cadence_reload_mods();
+//                             3 = adds cadence_claim_input / cadence_input_claimed.
 //   cadence_reload_mods():    the same as pressing F6 (it only sets a flag; the reload happens next frame).
-extern "C" int cadence_loader_version() { return 2; }
+extern "C" int cadence_loader_version() { return 3; }
 extern "C" void cadence_reload_mods() { loader::reload_mods(); }
+
+// Text input. A mod that is reading typed text (a search box) claims the keyboard so that mods which poll keys with
+// cadence::key_pressed do not also react to every letter. Claims are counted, so two mods can overlap; a reload
+// clears them, because a retired mod can no longer release its claim.
+extern "C" void cadence_claim_input(int claim) { loader::claim_input(claim != 0); }
+extern "C" int cadence_input_claimed() { return loader::input_claimed() ? 1 : 0; }

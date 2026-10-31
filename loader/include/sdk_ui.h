@@ -1,4 +1,4 @@
-﻿// Optional: GD's own UI from a mod. Popups, buttons and checkboxes that look and
+// Optional: GD's own UI from a mod. Popups, buttons and checkboxes that look and
 // behave like the game's, built from the game's own classes (FLAlertLayer,
 // ButtonSprite, CCMenuItemSpriteExtra, CCMenuItemToggler). Like sdk_extras.h,
 // nothing else depends on this file.
@@ -53,6 +53,7 @@ struct Cocos {
     void(__fastcall* set_scale)(void* node, float scale) = nullptr;
     void(__fastcall* set_anchor)(void* node, const cocos2d::CCPoint* anchor) = nullptr;
     void(__fastcall* remove_from_parent)(void* node) = nullptr;
+    void(__fastcall* set_flip_x)(void* sprite, bool flip) = nullptr;       // optional: not needed for ok()
 
     bool ok() const {
         return label && frame_sprite && node && retain && add_child && set_position && set_scale && set_anchor &&
@@ -75,6 +76,7 @@ inline const Cocos& api() {
         x.set_scale = lookup<decltype(x.set_scale)>("?setScale@CCNode@cocos2d@@UEAAXM@Z");
         x.set_anchor = lookup<decltype(x.set_anchor)>("?setAnchorPoint@CCNode@cocos2d@@UEAAXAEBVCCPoint@2@@Z");
         x.remove_from_parent = lookup<decltype(x.remove_from_parent)>("?removeFromParent@CCNode@cocos2d@@UEAAXXZ");
+        x.set_flip_x = lookup<decltype(x.set_flip_x)>("?setFlipX@CCSprite@cocos2d@@QEAAX_N@Z");
         if (!x.ok()) cadence::log("sdk_ui: a cocos2d export is missing, ui:: calls will do nothing");
         return x;
     }();
@@ -284,10 +286,12 @@ public:
 
     // A button that is one of the game's sprite frames (e.g. "GJ_infoIcon_001.png",
     // "GJ_plus3Btn_001.png"), shrinking when pressed like the others.
-    Popup& icon_button(const char* frame, float x, float y, std::function<void()> on_click, float scale = 1.0f) {
+    Popup& icon_button(const char* frame, float x, float y, std::function<void()> on_click, float scale = 1.0f,
+                       bool flip_x = false) {
         if (!usable()) return *this;
         void* sprite = detail::api().frame_sprite(frame);
         if (!sprite) return *this;
+        if (flip_x && detail::api().set_flip_x) detail::api().set_flip_x(sprite, true);     // e.g. a left arrow from a right one
         detail::api().set_scale(sprite, scale);
         CCMenuItemSpriteExtra* item = detail::make_item(sprite, [fn = std::move(on_click)](void*) { if (fn) fn(); });
         if (item) place(item, x, y);

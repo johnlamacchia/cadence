@@ -260,7 +260,7 @@ Press keys while **in a level** with GD focused unless noted.
 | Mod | What it does | Key |
 |---|---|---|
 | `example` | Clicking the RobTop logo on the main menu shows "Hello" in GD's own `FLAlertLayer` | click |
-| `modmenu` | The Cadence menu: every installed mod, with a tick box to switch each one on or off (saved in `cadence_disabled.txt`) | **Insert** |
+| `modmenu` | The Cadence menu: every installed mod with a tick box to switch it on or off (saved in `cadence_disabled.txt`), page arrows, mouse-wheel scrolling and a search box | **Insert** |
 | `fpsdisplay` | FPS counter, top-left, on every scene | always on |
 | `hitboxes` | Show the game's debug hitboxes | **H** |
 | `noclip` | Survive all hazards | **N** |

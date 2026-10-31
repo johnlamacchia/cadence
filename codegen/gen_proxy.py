@@ -55,7 +55,7 @@ def generate(out_dir: Path):
     for name in exports:
         def_lines.append(f"    {name} = proxy_{name}")
     # Cadence's own exports, looked up by name with GetProcAddress (null on an older loader).
-    def_lines += ["    cadence_reload_mods", "    cadence_loader_version"]
+    def_lines += ["    cadence_reload_mods", "    cadence_loader_version", "    cadence_claim_input", "    cadence_input_claimed"]
     (out_dir / "proxy.def").write_text("\n".join(def_lines), encoding="utf-8")
 
     # --- proxy_table.h (init code) ---

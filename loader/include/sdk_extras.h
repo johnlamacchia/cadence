@@ -24,9 +24,32 @@ inline PlayLayer* play_layer() {
 }
 
 #ifdef _WIN32
+// ---- Typing --------------------------------------------------------------------------------
+//
+// A mod that reads typed text (a search box) calls claim_input(true) while it does and claim_input(false) when
+// it is done. While any claim is held, key_pressed() reports nothing, so mods that poll keys do not also react
+// to every letter meant for the text box (typing "h" must not toggle the hitboxes). Claims are counted, and the
+// loader clears them on a reload. Needs loader version 3; on an older loader both do nothing and false is returned.
+inline bool input_claimed() {
+    static int(*claimed)() = [] {
+        HMODULE loader = GetModuleHandleW(L"winmm.dll");     // the loader is Cadence's winmm.dll proxy
+        return loader ? reinterpret_cast<int(*)()>(GetProcAddress(loader, "cadence_input_claimed")) : nullptr;
+    }();
+    return claimed && claimed();
+}
+
+inline void claim_input(bool claim) {
+    static void(*set)(int) = [] {
+        HMODULE loader = GetModuleHandleW(L"winmm.dll");
+        return loader ? reinterpret_cast<void(*)(int)>(GetProcAddress(loader, "cadence_claim_input")) : nullptr;
+    }();
+    if (set) set(claim ? 1 : 0);
+}
+
 // True once per physical key press, and only while Geometry Dash is the
 // foreground window. Call it at most once per key per frame, from a game-thread
 // hook (CCDirector::drawScene is a good one). No polling thread needed.
+// Always false while a mod holds claim_input(true), see above.
 inline bool key_pressed(int vk) {
     static bool was_down[256] = {};
     if (vk < 0 || vk > 255) return false;
@@ -34,8 +57,8 @@ inline bool key_pressed(int vk) {
     GetWindowThreadProcessId(GetForegroundWindow(), &pid);
     bool down = pid == GetCurrentProcessId() && (GetAsyncKeyState(vk) & 0x8000) != 0;
     bool pressed = down && !was_down[vk];
-    was_down[vk] = down;
-    return pressed;
+    was_down[vk] = down;                       // keep tracking while claimed, so a held key is not a new press afterwards
+    return pressed && !input_claimed();
 }
 #endif
 

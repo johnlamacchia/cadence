@@ -183,3 +183,5 @@ EXPORTS
     waveOutWrite = proxy_waveOutWrite
     cadence_reload_mods
     cadence_loader_version
+    cadence_claim_input
+    cadence_input_claimed

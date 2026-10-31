@@ -123,6 +123,13 @@ the working version of this. Both features need loader version 2; on an older lo
 `cadence_loader_version` and `cadence_reload_mods`, not added to the `LoaderAPI` table, so a mod built against the old header
 keeps working.) A mod must not disable itself.
 
+**Reading typed text.** If your mod has a text box, call `cadence::claim_input(true)` while the player types and
+`cadence::claim_input(false)` when done. While any mod holds a claim, `cadence::key_pressed()` returns false everywhere,
+so other mods that poll keys do not react to letters meant for your box (typing "h" would otherwise toggle the hitboxes).
+Claims are counted, the loader clears them on a reload, and the game must be told too: hook
+`CCKeyboardDispatcher::dispatchKeyboardMSG` and return false for the keys you consume, as the `modmenu` search box does.
+Needs loader version 3. Mods that poll `GetAsyncKeyState` themselves are not covered; only `cadence::key_pressed` honours it.
+
 ### GD's own UI: `sdk_ui.h`
 
 Also optional. Popups, buttons and checkboxes built from the game's own classes, with no cocos2d
