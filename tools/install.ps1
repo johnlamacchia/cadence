@@ -32,7 +32,8 @@ if (-not (Test-Path "$src\winmm.dll")) { throw "winmm.dll not found next to this
 Copy-Item "$src\winmm.dll" $GdDir -Force
 $pkg = if (Test-Path "$PSScriptRoot\generated") { $PSScriptRoot } else { Split-Path -Parent $PSScriptRoot }
 New-Item -ItemType Directory -Force "$GdDir\generated", "$GdDir\mods" | Out-Null
-Copy-Item "$pkg\generated\addresses_*.json", "$pkg\generated\layout_hashes_*.json" "$GdDir\generated" -Force
+Get-ChildItem "$pkg\generated\addresses_*.json" | Where-Object { $_.Name -notlike "addresses_rejected_*" } | Copy-Item -Destination "$GdDir\generated" -Force
+Copy-Item "$pkg\generated\layout_hashes_*.json" "$GdDir\generated" -Force
 if (Test-Path "$PSScriptRoot\mods") {
     Copy-Item "$PSScriptRoot\mods\*.dll" "$GdDir\mods" -Force
 } else {

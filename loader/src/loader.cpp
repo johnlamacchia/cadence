@@ -215,7 +215,8 @@ static int add_addresses(const std::unordered_map<std::string, std::string>& dat
 static bool load_addresses(const std::filesystem::path& base_dir) {
     for (auto& entry : std::filesystem::directory_iterator(base_dir)) {
         auto name = entry.path().filename().string();
-        if (name.starts_with("addresses_") && name.ends_with(".json")) {
+        // addresses_rejected_<ver>.json is a report of addresses dropped at generation time, not an address file.
+        if (name.starts_with("addresses_") && name.ends_with(".json") && !name.starts_with("addresses_rejected_")) {
             g_gd_version = name.substr(10, name.size() - 15); // strip "addresses_" and ".json"
             int n = add_addresses(json_reader::parse_file(entry.path().string()), name.c_str());
             log("[INFO] loaded %d addresses for GD %s", n, g_gd_version.c_str());

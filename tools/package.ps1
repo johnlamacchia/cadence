@@ -19,14 +19,20 @@ if ($LASTEXITCODE -ne 0) { throw "hook_test failed" }
 powershell -NoProfile -File "$root\tests\run_loader_smoke.ps1" -BuildDir build
 if ($LASTEXITCODE -ne 0) { throw "loader smoke test failed" }
 
-$addr = Get-ChildItem generated\addresses_*.json | Select-Object -First 1
+& $cmake --build build --config Release --target CadenceInstaller
+if ($LASTEXITCODE -ne 0) { throw "installer build failed" }
+powershell -NoProfile -ExecutionPolicy Bypass -File "$root\tests\run_installer_test.ps1" -Installer "$root\build\installer\Release\CadenceInstaller.exe"
+if ($LASTEXITCODE -ne 0) { throw "installer test failed" }
+
+$addr = Get-ChildItem generated\addresses_*.json | Where-Object { $_.Name -notlike "addresses_rejected_*" } | Select-Object -First 1
 $ver = $addr.BaseName -replace "addresses_", ""
 $stage = Join-Path $root "dist\Cadence-$ver"
 if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
 New-Item -ItemType Directory -Force "$stage\generated", "$stage\mods", "$stage\sdk\loader\include", "$stage\sdk\generated", "$stage\sdk\cmake", "$stage\sdk\template", "$stage\sdk\tools" | Out-Null
 
 Copy-Item build\loader\Release\winmm.dll $stage
-Copy-Item generated\addresses_*.json, generated\layout_hashes_*.json "$stage\generated"
+Get-ChildItem generated\addresses_*.json | Where-Object { $_.Name -notlike "addresses_rejected_*" } | Copy-Item -Destination "$stage\generated"
+Copy-Item generated\layout_hashes_*.json "$stage\generated"
 Get-ChildItem build\mods -Recurse -Filter *.dll | Where-Object { $_.FullName -like "*\Release\*" } | Copy-Item -Destination "$stage\mods"
 
 Copy-Item loader\include\sdk.h, loader\include\sdk_extras.h, loader\include\sdk_ui.h, loader\include\cadence_abi.h "$stage\sdk\loader\include"
@@ -55,4 +61,8 @@ try {
     $archive.Dispose()
     $stream.Dispose()
 }
+# The installer is the download for players; the zip is for mod developers.
+$installer = Join-Path $root "dist\CadenceInstaller.exe"
+Copy-Item "$root\build\installer\Release\CadenceInstaller.exe" $installer -Force
 Write-Host "`nPackaged: $zip" -ForegroundColor Green
+Write-Host "Installer: $installer  (sha256 $((Get-FileHash $installer).Hash))" -ForegroundColor Green

@@ -44,7 +44,17 @@ hot reload on the game thread.
 
 You need Geometry Dash 2.2091 on Windows.
 
-**From a release zip**
+**With the installer (players)**
+
+Download `CadenceInstaller.exe` from the [latest release](../../releases/latest) and run it. It finds your Steam copy of
+Geometry Dash, checks that it is 2.2091, and installs the loader, the example mods and the address data. If another mod
+loader's `winmm.dll` is already there it is moved aside (never overwritten) and put back when you uninstall. Uninstall
+removes exactly what it installed and leaves your own mods, settings and logs alone.
+
+Close Geometry Dash first. If Windows warns about an unsigned program, that is because the exe is not code-signed. For
+a script-friendly install: `CadenceInstaller.exe --silent` (also `--uninstall`, `--gd-dir <folder>`, `--no-mods`).
+
+**From a release zip (mod developers)**
 
 ```powershell
 powershell -File install.ps1                          # auto-detects the Steam install
@@ -304,6 +314,7 @@ until exit, because their detours can still be on the call stack and UI they bui
 
 ```
 loader/            winmm proxy, mod loader, hook engine, crash handler
+installer/         CadenceInstaller.exe: a window that installs / uninstalls, with the files inside it
   include/sdk.h        the entire mod-facing API
   include/sdk_extras.h optional helpers
   include/sdk_ui.h     optional GD-style popups, buttons, checkboxes
@@ -314,7 +325,7 @@ cmake/             cadence_add_mod() build helper
 codegen/           Broma parser, layout calculator, header + data generator
 generated/         addresses, layout hashes and report, class sizes, include/gd/** headers
 gdport/            address porting between GD versions
-tests/             hook engine, loader smoke test, header compile check
+tests/             hook engine, loader smoke test, installer test, header compile check
 tools/             new_mod, sdk_update, layout_check, verify_addresses, offset_probe, install, package
 docs/              GUIDE.md, ADDRESS_VERIFICATION.md
 ```

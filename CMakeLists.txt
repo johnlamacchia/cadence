@@ -15,6 +15,9 @@ foreach(dir ${mod_dirs})
     endif()
 endforeach()
 
+# The installer bundles the loader and every mod above that is not NOT_BUNDLED.
+add_subdirectory(installer)
+
 # Compiles every generated GD header and evaluates all their static_asserts
 # (class sizes, member offsets). Not part of the default build:
 #   cmake --build build --config Release --target gd_headers_check
@@ -36,5 +39,10 @@ add_test(NAME hook_test COMMAND hook_test)
 # Loads the real loader and every built mod in a scratch folder (no GD needed).
 add_executable(loader_smoke tests/loader_smoke.cpp)
 add_dependencies(loader_smoke loader)
+# Installs, upgrades, uninstalls and restores into throwaway folders with the real installer exe (no GD needed).
+add_test(NAME installer
+    COMMAND powershell -NoProfile -ExecutionPolicy Bypass -File "${CMAKE_SOURCE_DIR}/tests/run_installer_test.ps1"
+            -Installer "$<TARGET_FILE:CadenceInstaller>")
+
 add_test(NAME loader_smoke
     COMMAND powershell -NoProfile -File "${CMAKE_SOURCE_DIR}/tests/run_loader_smoke.ps1" -BuildDir "${CMAKE_BINARY_DIR}")
