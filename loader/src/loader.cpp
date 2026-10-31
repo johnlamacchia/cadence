@@ -82,7 +82,7 @@ namespace json_reader {
                         skip_value();
                     }
                 } else {
-                    // numbers, bools etc — read as raw string
+                    // numbers, bools etc: read as raw string
                     const char* start = p;
                     skip_value();
                     m[key] = std::string(start, p);
@@ -528,7 +528,7 @@ bool init() {
     if (!std::filesystem::exists(gen_dir)) gen_dir = g_base_dir;
 
     if (!load_addresses(gen_dir)) {
-        log("[ERROR] no address file found — mods will not be able to resolve functions");
+        log("[ERROR] no address file found, mods will not be able to resolve functions");
     }
     load_layout_hashes(gen_dir);
 

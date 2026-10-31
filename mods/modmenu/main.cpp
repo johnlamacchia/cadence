@@ -84,13 +84,13 @@ static void build_menu(void* scene) {
 
     if (fn_setPosition) fn_setPosition(g_panel, margin, screen_h - panel_h - margin);
 
-    // Title — gold font
+    // Title, gold font
     char title[64];
     snprintf(title, sizeof(title), "Cadence  [%d mods]", mod_count);
     void* lbl = make_label(title, pad, panel_h - 6.0f, 0.35f, "goldFont.fnt");
     if (lbl) fn_addChild(g_panel, lbl, 1);
 
-    // GD version — small, right side
+    // GD version, small, right side
     char ver[32];
     snprintf(ver, sizeof(ver), "GD %s", cadence::gd_version());
     lbl = make_label(ver, panel_w - 120.0f, panel_h - 10.0f, 0.22f, "chatFont.fnt");
