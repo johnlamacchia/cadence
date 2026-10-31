@@ -15,6 +15,6 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJUnlockableItem) == 0x38, "GJUnlockableItem: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_GJUnlockableItem("GJUnlockableItem", "f62ffc2c2a467ca9");

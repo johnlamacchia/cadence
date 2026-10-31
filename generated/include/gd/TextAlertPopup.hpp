@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(TextAlertPopup) == 0x158, "TextAlertPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(TextAlertPopup, m_width) == 0x140, "TextAlertPopup::m_width");
 static_assert(offsetof(TextAlertPopup, m_height) == 0x144, "TextAlertPopup::m_height");

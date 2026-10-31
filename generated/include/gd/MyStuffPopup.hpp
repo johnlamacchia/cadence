@@ -17,7 +17,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(MyStuffPopup) == 0x298, "MyStuffPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_MyStuffPopup("MyStuffPopup", "8e034298e217c794");
 namespace cadence {

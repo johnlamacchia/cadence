@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(AchievementNotifier) == 0x158, "AchievementNotifier: size differs from the layout computed from the bindings");
 static_assert(offsetof(AchievementNotifier, m_nextScene) == 0x140, "AchievementNotifier::m_nextScene");
 static_assert(offsetof(AchievementNotifier, m_achievementBarArray) == 0x148, "AchievementNotifier::m_achievementBarArray");

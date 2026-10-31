@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(DashRingObject) == 0x758, "DashRingObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(DashRingObject, m_dashSpeed) == 0x748, "DashRingObject::m_dashSpeed");
 static_assert(offsetof(DashRingObject, m_endBoost) == 0x74c, "DashRingObject::m_endBoost");

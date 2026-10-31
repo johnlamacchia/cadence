@@ -37,7 +37,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJComment) == 0x1e0, "GJComment: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJComment, m_commentString) == 0x140, "GJComment::m_commentString");
 static_assert(offsetof(GJComment, m_userName) == 0x160, "GJComment::m_userName");

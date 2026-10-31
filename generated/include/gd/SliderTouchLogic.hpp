@@ -28,7 +28,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SliderTouchLogic) == 0x1e8, "SliderTouchLogic: size differs from the layout computed from the bindings");
 static_assert(offsetof(SliderTouchLogic, m_unknownUnused) == 0x1c0, "SliderTouchLogic::m_unknownUnused");
 static_assert(offsetof(SliderTouchLogic, m_length) == 0x1c4, "SliderTouchLogic::m_length");

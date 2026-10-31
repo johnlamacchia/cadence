@@ -33,7 +33,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(LevelAreaInnerLayer) == 0x1b8, "LevelAreaInnerLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(LevelAreaInnerLayer, m_nextFloorButton) == 0x1a0, "LevelAreaInnerLayer::m_nextFloorButton");
 static_assert(offsetof(LevelAreaInnerLayer, m_enteringLevel) == 0x1a8, "LevelAreaInnerLayer::m_enteringLevel");

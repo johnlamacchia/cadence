@@ -17,7 +17,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(AchievementCell) == 0x230, "AchievementCell: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_AchievementCell("AchievementCell", "732414bd04a5252e");
 namespace cadence {

@@ -25,12 +25,11 @@ public:
     bool m_undoTransform;
     GJTransformState m_transformState;
     bool m_unk8c;
-    int m_unk90;
 };
 
 
-// layout: unverified
-static_assert(sizeof(UndoObject) == 0xa8, "UndoObject: size differs from the layout computed from the bindings");
+// layout: corrected
+static_assert(sizeof(UndoObject) == 0xa0, "UndoObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(UndoObject, m_objectCopy) == 0x38, "UndoObject::m_objectCopy");
 static_assert(offsetof(UndoObject, m_command) == 0x40, "UndoObject::m_command");
 static_assert(offsetof(UndoObject, m_objects) == 0x48, "UndoObject::m_objects");
@@ -38,5 +37,4 @@ static_assert(offsetof(UndoObject, m_redo) == 0x50, "UndoObject::m_redo");
 static_assert(offsetof(UndoObject, m_undoTransform) == 0x51, "UndoObject::m_undoTransform");
 static_assert(offsetof(UndoObject, m_transformState) == 0x54, "UndoObject::m_transformState");
 static_assert(offsetof(UndoObject, m_unk8c) == 0x9c, "UndoObject::m_unk8c");
-static_assert(offsetof(UndoObject, m_unk90) == 0xa0, "UndoObject::m_unk90");
-inline const cadence::detail::LayoutRegistration cadence_layout_UndoObject("UndoObject", "23226ae32506c25f");
+inline const cadence::detail::LayoutRegistration cadence_layout_UndoObject("UndoObject", "3b1964798f5d2884");

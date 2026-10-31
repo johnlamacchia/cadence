@@ -38,7 +38,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCPartAnimSprite) == 0x280, "CCPartAnimSprite: size differs from the layout computed from the bindings");
 static_assert(offsetof(CCPartAnimSprite, m_spritePartIDs) == 0x258, "CCPartAnimSprite::m_spritePartIDs");
 static_assert(offsetof(CCPartAnimSprite, m_spriteFrame) == 0x260, "CCPartAnimSprite::m_spriteFrame");

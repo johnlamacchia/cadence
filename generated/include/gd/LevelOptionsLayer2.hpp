@@ -16,7 +16,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(LevelOptionsLayer2) == 0x478, "LevelOptionsLayer2: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_LevelOptionsLayer2("LevelOptionsLayer2", "31d066eed8838c32");
 namespace cadence {

@@ -43,7 +43,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(LabelGameObject) == 0x790, "LabelGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(LabelGameObject, m_label) == 0x740, "LabelGameObject::m_label");
 static_assert(offsetof(LabelGameObject, m_labelDirty) == 0x748, "LabelGameObject::m_labelDirty");

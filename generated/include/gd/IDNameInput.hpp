@@ -42,12 +42,13 @@ public:
     TodoReturn useRank(int);
     TodoReturn useRankLess(std::unordered_map<int, int> const&, int, int);
 
+    uint8_t _unmapped_tail[184];
 };
 
 
-// layout: unverified
-static_assert(sizeof(IDNameInput) == 0x158, "IDNameInput: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_IDNameInput("IDNameInput", "bdca48ada1097674");
+// layout: tail-padded
+static_assert(sizeof(IDNameInput) == 0x210, "IDNameInput: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_IDNameInput("IDNameInput", "142a656ffcd45148");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&IDNameInput::idNameBrowserClosed> = "IDNameInput::idNameBrowserClosed(IDNameBrowserPopup*, int)";
 template <> inline constexpr const char* fn_sig<&IDNameInput::textChanged> = "IDNameInput::textChanged(CCTextInputNode*)";

@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SpecialAnimGameObject) == 0x5c0, "SpecialAnimGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(SpecialAnimGameObject, m_skipMainColorUpdate) == 0x5b8, "SpecialAnimGameObject::m_skipMainColorUpdate");
 static_assert(offsetof(SpecialAnimGameObject, m_skipSecondaryColorUpdate) == 0x5b9, "SpecialAnimGameObject::m_skipSecondaryColorUpdate");

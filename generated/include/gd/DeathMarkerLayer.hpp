@@ -25,7 +25,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(DeathMarkerLayer) == 0x140, "DeathMarkerLayer: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_DeathMarkerLayer("DeathMarkerLayer", "11f4537e62b2b14e");
 namespace cadence {

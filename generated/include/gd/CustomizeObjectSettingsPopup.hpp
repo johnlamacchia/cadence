@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CustomizeObjectSettingsPopup) == 0x3f8, "CustomizeObjectSettingsPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(CustomizeObjectSettingsPopup, m_customizeLayer) == 0x3e8, "CustomizeObjectSettingsPopup::m_customizeLayer");
 static_assert(offsetof(CustomizeObjectSettingsPopup, m_settingsChanged) == 0x3f0, "CustomizeObjectSettingsPopup::m_settingsChanged");

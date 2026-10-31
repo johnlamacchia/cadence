@@ -13,12 +13,13 @@ public:
     virtual void ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
     TodoReturn arrowForTouch(cocos2d::CCTouch*);
 
+    uint8_t _unmapped_tail[56];
 };
 
 
-// layout: unverified
-static_assert(sizeof(DpadMenu) == 0x1c0, "DpadMenu: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_DpadMenu("DpadMenu", "8bd104e0daf50cad");
+// layout: tail-padded
+static_assert(sizeof(DpadMenu) == 0x1f8, "DpadMenu: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_DpadMenu("DpadMenu", "053e4192badf1205");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&DpadMenu::ccTouchBegan> = "DpadMenu::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)";
 template <> inline constexpr const char* fn_sig<&DpadMenu::ccTouchMoved> = "DpadMenu::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)";

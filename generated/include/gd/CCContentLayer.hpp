@@ -14,7 +14,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCContentLayer) == 0x220, "CCContentLayer: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_CCContentLayer("CCContentLayer", "f5c8626f4df7e6c8");
 namespace cadence {

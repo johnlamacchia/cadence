@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJGradientLayer) == 0x260, "GJGradientLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJGradientLayer, m_baseColor) == 0x238, "GJGradientLayer::m_baseColor");
 static_assert(offsetof(GJGradientLayer, m_detailColor) == 0x23c, "GJGradientLayer::m_detailColor");

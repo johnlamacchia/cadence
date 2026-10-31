@@ -37,7 +37,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(ThreadDescPopup) == 0x3f8, "ThreadDescPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_ThreadDescPopup("ThreadDescPopup", "b0ab9326e963a9be");
 namespace cadence {

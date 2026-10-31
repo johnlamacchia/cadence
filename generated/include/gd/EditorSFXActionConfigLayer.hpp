@@ -33,7 +33,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(EditorSFXActionConfigLayer) == 0x3f0, "EditorSFXActionConfigLayer: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_EditorSFXActionConfigLayer("EditorSFXActionConfigLayer", "37b902527e76e618");
 namespace cadence {

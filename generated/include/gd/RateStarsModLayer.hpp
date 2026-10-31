@@ -29,7 +29,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(RateStarsModLayer) == 0x2a8, "RateStarsModLayer: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_RateStarsModLayer("RateStarsModLayer", "b8e7bf01f9953efc");
 namespace cadence {

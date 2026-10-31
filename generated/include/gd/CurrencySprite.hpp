@@ -28,7 +28,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CurrencySprite) == 0x2a8, "CurrencySprite: size differs from the layout computed from the bindings");
 static_assert(offsetof(CurrencySprite, m_unkFloat1) == 0x270, "CurrencySprite::m_unkFloat1");
 static_assert(offsetof(CurrencySprite, m_unkFloat2) == 0x274, "CurrencySprite::m_unkFloat2");

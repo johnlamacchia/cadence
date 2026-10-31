@@ -28,7 +28,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SetupAreaMoveTriggerPopup) == 0x3f8, "SetupAreaMoveTriggerPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(SetupAreaMoveTriggerPopup, m_modeButtons) == 0x3e8, "SetupAreaMoveTriggerPopup::m_modeButtons");
 static_assert(offsetof(SetupAreaMoveTriggerPopup, m_targetButtons) == 0x3f0, "SetupAreaMoveTriggerPopup::m_targetButtons");

@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SetupAudioLineGuidePopup) == 0x3f8, "SetupAudioLineGuidePopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(SetupAudioLineGuidePopup, m_speedSprite) == 0x3f0, "SetupAudioLineGuidePopup::m_speedSprite");
 inline const cadence::detail::LayoutRegistration cadence_layout_SetupAudioLineGuidePopup("SetupAudioLineGuidePopup", "a95259b03c49ffc4");

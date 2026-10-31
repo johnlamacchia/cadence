@@ -17,7 +17,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ObjectControlGameObject) == 0x740, "ObjectControlGameObject: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_ObjectControlGameObject("ObjectControlGameObject", "5ab1c74f4fc331b9");
 namespace cadence {

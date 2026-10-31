@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ObjectToolbox) == 0x150, "ObjectToolbox: size differs from the layout computed from the bindings");
 static_assert(offsetof(ObjectToolbox, m_allKeys) == 0x140, "ObjectToolbox::m_allKeys");
 inline const cadence::detail::LayoutRegistration cadence_layout_ObjectToolbox("ObjectToolbox", "787957f954cee621");

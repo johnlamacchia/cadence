@@ -33,7 +33,7 @@ Copy-Item loader\include\sdk.h, loader\include\sdk_extras.h, loader\include\sdk_
 Copy-Item generated\include "$stage\sdk\generated\include" -Recurse
 Copy-Item cmake\CadenceMod.cmake "$stage\sdk\cmake"
 Copy-Item template\* "$stage\sdk\template"
-Copy-Item tools\offset_probe.py, tools\layout_check.py, tools\verify_addresses.py "$stage\sdk\tools"
+Copy-Item tools\offset_probe.py, tools\layout_check.py, tools\rtti_sizes.py, tools\offset_audit.py, tools\verify_addresses.py "$stage\sdk\tools"
 Copy-Item README.md, LICENSE, THIRD_PARTY_LICENSES.txt $stage
 Copy-Item docs "$stage\docs" -Recurse
 Copy-Item tools\install.ps1 $stage

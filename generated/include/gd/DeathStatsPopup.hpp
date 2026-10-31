@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(DeathStatsPopup) == 0x3e8, "DeathStatsPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_DeathStatsPopup("DeathStatsPopup", "b9ea375218c06de7");
 namespace cadence {

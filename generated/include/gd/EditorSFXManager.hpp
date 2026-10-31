@@ -64,7 +64,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(EditorSFXManager) == 0x1, "EditorSFXManager: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_EditorSFXManager("EditorSFXManager", "dd8f8b2397a97b60");
 namespace cadence {

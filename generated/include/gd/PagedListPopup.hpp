@@ -35,7 +35,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(PagedListPopup) == 0x308, "PagedListPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_PagedListPopup("PagedListPopup", "a73fd15267ce607a");
 namespace cadence {

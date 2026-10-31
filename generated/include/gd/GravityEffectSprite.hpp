@@ -17,7 +17,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GravityEffectSprite) == 0x258, "GravityEffectSprite: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_GravityEffectSprite("GravityEffectSprite", "9f66df23e99bc873");
 namespace cadence {

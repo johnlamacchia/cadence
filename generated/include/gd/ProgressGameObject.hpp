@@ -13,12 +13,13 @@ public:
     virtual void customObjectSetup(std::vector<std::string>&, std::vector<void*>&);
     virtual std::string getSaveString(GJBaseGameLayer*);
 
+    uint8_t _unmapped_tail[8];
 };
 
 
-// layout: unverified
-static_assert(sizeof(ProgressGameObject) == 0x740, "ProgressGameObject: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_ProgressGameObject("ProgressGameObject", "5ab1c74f4fc331b9");
+// layout: tail-padded
+static_assert(sizeof(ProgressGameObject) == 0x748, "ProgressGameObject: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_ProgressGameObject("ProgressGameObject", "8c814334c2de41ab");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&ProgressGameObject::init> = "ProgressGameObject::init()";
 template <> inline constexpr const char* fn_sig<&ProgressGameObject::customObjectSetup> = "ProgressGameObject::customObjectSetup(std::vector<std::string>&, std::vector<void*>&)";

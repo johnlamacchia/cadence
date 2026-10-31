@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(AudioLineGuideGameObject) == 0x750, "AudioLineGuideGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(AudioLineGuideGameObject, m_beatsPerMinute) == 0x740, "AudioLineGuideGameObject::m_beatsPerMinute");
 static_assert(offsetof(AudioLineGuideGameObject, m_beatsPerBar) == 0x744, "AudioLineGuideGameObject::m_beatsPerBar");

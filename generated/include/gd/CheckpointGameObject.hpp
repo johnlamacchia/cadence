@@ -28,7 +28,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CheckpointGameObject) == 0x750, "CheckpointGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(CheckpointGameObject, m_checkpointActivated) == 0x740, "CheckpointGameObject::m_checkpointActivated");
 static_assert(offsetof(CheckpointGameObject, m_respawnID) == 0x744, "CheckpointGameObject::m_respawnID");

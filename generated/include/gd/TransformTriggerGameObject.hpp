@@ -27,7 +27,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(TransformTriggerGameObject) == 0x758, "TransformTriggerGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(TransformTriggerGameObject, m_objectScaleX) == 0x740, "TransformTriggerGameObject::m_objectScaleX");
 static_assert(offsetof(TransformTriggerGameObject, m_objectScaleY) == 0x744, "TransformTriggerGameObject::m_objectScaleY");

@@ -16,7 +16,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SetLevelOrderPopup) == 0x2c8, "SetLevelOrderPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(SetLevelOrderPopup, m_levelID) == 0x2c0, "SetLevelOrderPopup::m_levelID");
 inline const cadence::detail::LayoutRegistration cadence_layout_SetLevelOrderPopup("SetLevelOrderPopup", "7a207ea3b574b0d7");

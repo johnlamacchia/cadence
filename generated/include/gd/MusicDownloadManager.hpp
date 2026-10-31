@@ -206,15 +206,11 @@ public:
     uint8_t _pad_34[36];
     int m_newsPages;
     uint8_t _pad_36[8];
-    bool m_updatingNewsFeed;
-    bool m_unkBool2;
-    bool m_requestedNewsFeedUpdate;
-    int m_unkInt5;
 };
 
 
-// layout: unverified
-static_assert(sizeof(MusicDownloadManager) == 0x3d8, "MusicDownloadManager: size differs from the layout computed from the bindings");
+// layout: corrected
+static_assert(sizeof(MusicDownloadManager) == 0x3d0, "MusicDownloadManager: size differs from the layout computed from the bindings");
 static_assert(offsetof(MusicDownloadManager, m_activeDownloads) == 0x148, "MusicDownloadManager::m_activeDownloads");
 static_assert(offsetof(MusicDownloadManager, m_musicDownloadDelegates) == 0x150, "MusicDownloadManager::m_musicDownloadDelegates");
 static_assert(offsetof(MusicDownloadManager, m_songObjects) == 0x158, "MusicDownloadManager::m_songObjects");
@@ -250,11 +246,7 @@ static_assert(offsetof(MusicDownloadManager, m_unk378) == 0x378, "MusicDownloadM
 static_assert(offsetof(MusicDownloadManager, m_unk388) == 0x388, "MusicDownloadManager::m_unk388");
 static_assert(offsetof(MusicDownloadManager, m_unk398) == 0x398, "MusicDownloadManager::m_unk398");
 static_assert(offsetof(MusicDownloadManager, m_newsPages) == 0x3c4, "MusicDownloadManager::m_newsPages");
-static_assert(offsetof(MusicDownloadManager, m_updatingNewsFeed) == 0x3d0, "MusicDownloadManager::m_updatingNewsFeed");
-static_assert(offsetof(MusicDownloadManager, m_unkBool2) == 0x3d1, "MusicDownloadManager::m_unkBool2");
-static_assert(offsetof(MusicDownloadManager, m_requestedNewsFeedUpdate) == 0x3d2, "MusicDownloadManager::m_requestedNewsFeedUpdate");
-static_assert(offsetof(MusicDownloadManager, m_unkInt5) == 0x3d4, "MusicDownloadManager::m_unkInt5");
-inline const cadence::detail::LayoutRegistration cadence_layout_MusicDownloadManager("MusicDownloadManager", "0b13af0a5f54ec81");
+inline const cadence::detail::LayoutRegistration cadence_layout_MusicDownloadManager("MusicDownloadManager", "425c6782c8ea4f44");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&MusicDownloadManager::sharedState> = "MusicDownloadManager::sharedState()";
 template <> inline constexpr const char* fn_sig<&MusicDownloadManager::init> = "MusicDownloadManager::init()";

@@ -517,7 +517,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(EditorUI) == 0x6b8, "EditorUI: size differs from the layout computed from the bindings");
 static_assert(offsetof(EditorUI, m_objectEditorStates) == 0x1d0, "EditorUI::m_objectEditorStates");
 static_assert(offsetof(EditorUI, m_transformState) == 0x210, "EditorUI::m_transformState");

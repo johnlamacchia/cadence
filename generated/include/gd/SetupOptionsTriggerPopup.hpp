@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SetupOptionsTriggerPopup) == 0x3f8, "SetupOptionsTriggerPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(SetupOptionsTriggerPopup, m_togglePosition) == 0x3e8, "SetupOptionsTriggerPopup::m_togglePosition");
 static_assert(offsetof(SetupOptionsTriggerPopup, m_togglePage) == 0x3f0, "SetupOptionsTriggerPopup::m_togglePage");

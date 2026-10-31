@@ -31,7 +31,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(NumberInputLayer) == 0x300, "NumberInputLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(NumberInputLayer, m_inputLabel) == 0x298, "NumberInputLayer::m_inputLabel");
 static_assert(offsetof(NumberInputLayer, m_title) == 0x2a0, "NumberInputLayer::m_title");

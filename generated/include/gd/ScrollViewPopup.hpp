@@ -17,12 +17,13 @@ public:
     TodoReturn initPopup(cocos2d::CCArray*, char const*, char const*, float, float);
     void onClose(cocos2d::CCObject* sender);
 
+    uint8_t _unmapped_tail[16];
 };
 
 
-// layout: unverified
-static_assert(sizeof(ScrollViewPopup) == 0x298, "ScrollViewPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_ScrollViewPopup("ScrollViewPopup", "8e034298e217c794");
+// layout: tail-padded
+static_assert(sizeof(ScrollViewPopup) == 0x2a8, "ScrollViewPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_ScrollViewPopup("ScrollViewPopup", "a2a1642846a93667");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&ScrollViewPopup::ccTouchBegan> = "ScrollViewPopup::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)";
 template <> inline constexpr const char* fn_sig<&ScrollViewPopup::ccTouchMoved> = "ScrollViewPopup::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)";

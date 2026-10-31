@@ -25,7 +25,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCAnimateFrameCache) == 0x50, "CCAnimateFrameCache: size differs from the layout computed from the bindings");
 static_assert(offsetof(CCAnimateFrameCache, m_animateFrames) == 0x38, "CCAnimateFrameCache::m_animateFrames");
 static_assert(offsetof(CCAnimateFrameCache, m_unk040) == 0x40, "CCAnimateFrameCache::m_unk040");

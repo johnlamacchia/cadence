@@ -31,7 +31,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(LevelAreaLayer) == 0x1b8, "LevelAreaLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(LevelAreaLayer, m_towerSprite) == 0x1a0, "LevelAreaLayer::m_towerSprite");
 static_assert(offsetof(LevelAreaLayer, m_godRays) == 0x1a8, "LevelAreaLayer::m_godRays");

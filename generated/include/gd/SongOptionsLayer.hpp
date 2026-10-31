@@ -26,7 +26,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SongOptionsLayer) == 0x2b0, "SongOptionsLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(SongOptionsLayer, m_delegate) == 0x298, "SongOptionsLayer::m_delegate");
 static_assert(offsetof(SongOptionsLayer, m_offsetInput) == 0x2a0, "SongOptionsLayer::m_offsetInput");

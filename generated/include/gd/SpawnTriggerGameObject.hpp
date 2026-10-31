@@ -32,7 +32,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SpawnTriggerGameObject) == 0x790, "SpawnTriggerGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(SpawnTriggerGameObject, m_remapObjects) == 0x740, "SpawnTriggerGameObject::m_remapObjects");
 static_assert(offsetof(SpawnTriggerGameObject, m_remapKey) == 0x758, "SpawnTriggerGameObject::m_remapKey");

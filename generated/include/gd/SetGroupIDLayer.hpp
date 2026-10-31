@@ -102,7 +102,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(SetGroupIDLayer) == 0x360, "SetGroupIDLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(SetGroupIDLayer, m_targetObject) == 0x2a0, "SetGroupIDLayer::m_targetObject");
 static_assert(offsetof(SetGroupIDLayer, m_targetObjects) == 0x2a8, "SetGroupIDLayer::m_targetObjects");

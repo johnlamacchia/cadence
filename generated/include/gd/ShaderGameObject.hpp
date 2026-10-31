@@ -45,7 +45,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ShaderGameObject) == 0x790, "ShaderGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(ShaderGameObject, m_speed) == 0x740, "ShaderGameObject::m_speed");
 static_assert(offsetof(ShaderGameObject, m_strength) == 0x744, "ShaderGameObject::m_strength");

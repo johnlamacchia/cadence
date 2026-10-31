@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(TriggerControlGameObject) == 0x768, "TriggerControlGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(TriggerControlGameObject, m_triggerControlFrame) == 0x740, "TriggerControlGameObject::m_triggerControlFrame");
 static_assert(offsetof(TriggerControlGameObject, m_customTriggerValue) == 0x760, "TriggerControlGameObject::m_customTriggerValue");

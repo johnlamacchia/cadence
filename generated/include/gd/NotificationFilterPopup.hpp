@@ -22,12 +22,13 @@ public:
     TodoReturn savedMask();
     TodoReturn toggleSource(int);
 
+    uint8_t _unmapped_tail[16];
 };
 
 
-// layout: unverified
-static_assert(sizeof(NotificationFilterPopup) == 0x3e8, "NotificationFilterPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_NotificationFilterPopup("NotificationFilterPopup", "b9ea375218c06de7");
+// layout: tail-padded
+static_assert(sizeof(NotificationFilterPopup) == 0x3f8, "NotificationFilterPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_NotificationFilterPopup("NotificationFilterPopup", "cccddb507244a1ad");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&NotificationFilterPopup::keyBackClicked> = "NotificationFilterPopup::keyBackClicked()";
 template <> inline constexpr const char* fn_sig<&NotificationFilterPopup::onClose> = "NotificationFilterPopup::onClose(cocos2d::CCObject* sender)";

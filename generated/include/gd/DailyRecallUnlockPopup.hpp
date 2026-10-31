@@ -15,7 +15,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(DailyRecallUnlockPopup) == 0x298, "DailyRecallUnlockPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_DailyRecallUnlockPopup("DailyRecallUnlockPopup", "8e034298e217c794");
 namespace cadence {

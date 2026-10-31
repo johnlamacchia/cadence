@@ -16,9 +16,10 @@ public:
     void setCount(int);
     void setStripVisible(bool);
 
+    uint8_t _unmapped_tail[88];
 };
 
 
-// layout: unverified
-static_assert(sizeof(GJSelectionStrip) == 0x140, "GJSelectionStrip: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_GJSelectionStrip("GJSelectionStrip", "11f4537e62b2b14e");
+// layout: tail-padded
+static_assert(sizeof(GJSelectionStrip) == 0x198, "GJSelectionStrip: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_GJSelectionStrip("GJSelectionStrip", "85a0a4f1eecbbd35");

@@ -32,7 +32,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ScrollingLayer) == 0x260, "ScrollingLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(ScrollingLayer, m_position) == 0x220, "ScrollingLayer::m_position");
 static_assert(offsetof(ScrollingLayer, m_size) == 0x228, "ScrollingLayer::m_size");

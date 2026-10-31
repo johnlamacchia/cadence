@@ -41,9 +41,10 @@ public:
     void use();
     char const* vertexShaderLog();
 
+    uint8_t _unmapped_tail[64];
 };
 }
 
-// layout: unverified
-static_assert(sizeof(cocos2d::CCGLProgram) == 0x38, "cocos2d::CCGLProgram: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_cocos2d__CCGLProgram("cocos2d::CCGLProgram", "f62ffc2c2a467ca9");
+// layout: tail-padded
+static_assert(sizeof(cocos2d::CCGLProgram) == 0x78, "cocos2d::CCGLProgram: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_cocos2d__CCGLProgram("cocos2d::CCGLProgram", "c0ca0cf3db7d08d0");

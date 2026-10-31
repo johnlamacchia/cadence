@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(LevelListCell) == 0x240, "LevelListCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(LevelListCell, m_levelList) == 0x230, "LevelListCell::m_levelList");
 static_assert(offsetof(LevelListCell, m_addingLevel) == 0x238, "LevelListCell::m_addingLevel");

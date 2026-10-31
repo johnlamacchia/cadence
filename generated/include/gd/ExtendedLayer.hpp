@@ -17,7 +17,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ExtendedLayer) == 0x1a0, "ExtendedLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(ExtendedLayer, m_delegate) == 0x198, "ExtendedLayer::m_delegate");
 inline const cadence::detail::LayoutRegistration cadence_layout_ExtendedLayer("ExtendedLayer", "aa7bccbdb3485150");

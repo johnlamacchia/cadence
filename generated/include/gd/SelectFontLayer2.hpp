@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(SelectFontLayer2) == 0x2a0, "SelectFontLayer2: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_SelectFontLayer2("SelectFontLayer2", "ce72bb1d2a97e77d");
 namespace cadence {

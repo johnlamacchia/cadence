@@ -11,9 +11,10 @@ public:
     static GJNotification* create();
     TodoReturn rewardKey();
 
+    uint8_t _unmapped_tail[240];
 };
 
 
-// layout: unverified
-static_assert(sizeof(GJNotification) == 0x38, "GJNotification: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_GJNotification("GJNotification", "f62ffc2c2a467ca9");
+// layout: tail-padded
+static_assert(sizeof(GJNotification) == 0x128, "GJNotification: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_GJNotification("GJNotification", "cc53584ca21d0e63");

@@ -16,9 +16,9 @@ public:
 };
 
 
-// layout: unverified
-static_assert(sizeof(SFXChangelogPopup) == 0x298, "SFXChangelogPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_SFXChangelogPopup("SFXChangelogPopup", "23974556de7be399");
+// layout: verified
+static_assert(sizeof(SFXChangelogPopup) == 0x2a8, "SFXChangelogPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_SFXChangelogPopup("SFXChangelogPopup", "f9e0f627ae76982a");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&SFXChangelogPopup::buildContent> = "SFXChangelogPopup::buildContent(cocos2d::CCNode*, float, float)";
 template <> inline constexpr const char* fn_sig<&SFXChangelogPopup::onCredits> = "SFXChangelogPopup::onCredits(cocos2d::CCObject* sender)";

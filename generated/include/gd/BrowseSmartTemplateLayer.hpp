@@ -33,7 +33,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(BrowseSmartTemplateLayer) == 0x2c8, "BrowseSmartTemplateLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(BrowseSmartTemplateLayer, m_template) == 0x298, "BrowseSmartTemplateLayer::m_template");
 static_assert(offsetof(BrowseSmartTemplateLayer, m_pages) == 0x2a0, "BrowseSmartTemplateLayer::m_pages");

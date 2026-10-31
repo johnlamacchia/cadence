@@ -26,7 +26,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(AchievementsLayer) == 0x288, "AchievementsLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(AchievementsLayer, m_currentPage) == 0x260, "AchievementsLayer::m_currentPage");
 static_assert(offsetof(AchievementsLayer, m_nextPageButton) == 0x268, "AchievementsLayer::m_nextPageButton");

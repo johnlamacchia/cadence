@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(EndTriggerGameObject) == 0x748, "EndTriggerGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(EndTriggerGameObject, m_noEffects) == 0x740, "EndTriggerGameObject::m_noEffects");
 static_assert(offsetof(EndTriggerGameObject, m_noSFX) == 0x741, "EndTriggerGameObject::m_noSFX");

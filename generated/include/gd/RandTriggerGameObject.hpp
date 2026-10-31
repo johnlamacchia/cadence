@@ -20,7 +20,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(RandTriggerGameObject) == 0x758, "RandTriggerGameObject: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_RandTriggerGameObject("RandTriggerGameObject", "1a879c802080bd91");
 namespace cadence {

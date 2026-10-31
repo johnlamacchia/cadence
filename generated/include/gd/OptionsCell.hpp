@@ -17,7 +17,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(OptionsCell) == 0x238, "OptionsCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(OptionsCell, m_optionsObject) == 0x230, "OptionsCell::m_optionsObject");
 inline const cadence::detail::LayoutRegistration cadence_layout_OptionsCell("OptionsCell", "97c99393966836f1");

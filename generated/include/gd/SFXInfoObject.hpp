@@ -26,7 +26,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SFXInfoObject) == 0xb0, "SFXInfoObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(SFXInfoObject, m_sfxID) == 0x38, "SFXInfoObject::m_sfxID");
 static_assert(offsetof(SFXInfoObject, m_folderID) == 0x3c, "SFXInfoObject::m_folderID");

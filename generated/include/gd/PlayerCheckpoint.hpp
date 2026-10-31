@@ -201,7 +201,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(PlayerCheckpoint) == 0x568, "PlayerCheckpoint: size differs from the layout computed from the bindings");
 static_assert(offsetof(PlayerCheckpoint, m_position) == 0x140, "PlayerCheckpoint::m_position");
 static_assert(offsetof(PlayerCheckpoint, m_lastPosition) == 0x148, "PlayerCheckpoint::m_lastPosition");

@@ -26,7 +26,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(EditorSoundConfigUploadPopup) == 0x3f0, "EditorSoundConfigUploadPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_EditorSoundConfigUploadPopup("EditorSoundConfigUploadPopup", "6eec1cf1f5ca694b");
 namespace cadence {

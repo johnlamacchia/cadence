@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(BitmapFontCache) == 0x40, "BitmapFontCache: size differs from the layout computed from the bindings");
 static_assert(offsetof(BitmapFontCache, m_cache) == 0x38, "BitmapFontCache::m_cache");
 inline const cadence::detail::LayoutRegistration cadence_layout_BitmapFontCache("BitmapFontCache", "4807c9b937d64914");

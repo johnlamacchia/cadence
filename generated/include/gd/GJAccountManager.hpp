@@ -64,7 +64,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJAccountManager) == 0x210, "GJAccountManager: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJAccountManager, m_activeDownloads) == 0x140, "GJAccountManager::m_activeDownloads");
 static_assert(offsetof(GJAccountManager, m_username) == 0x148, "GJAccountManager::m_username");

@@ -29,12 +29,13 @@ public:
     TodoReturn updateFrequencyLabel(int);
     TodoReturn updateTimescaleLabel(int);
 
+    uint8_t _unmapped_tail[40];
 };
 
 
-// layout: unverified
-static_assert(sizeof(DeathMarkerSettingsPopup) == 0x3f0, "DeathMarkerSettingsPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_DeathMarkerSettingsPopup("DeathMarkerSettingsPopup", "552888795da6d36f");
+// layout: tail-padded
+static_assert(sizeof(DeathMarkerSettingsPopup) == 0x418, "DeathMarkerSettingsPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_DeathMarkerSettingsPopup("DeathMarkerSettingsPopup", "051eb99311d0d081");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&DeathMarkerSettingsPopup::keyBackClicked> = "DeathMarkerSettingsPopup::keyBackClicked()";
 template <> inline constexpr const char* fn_sig<&DeathMarkerSettingsPopup::onClose> = "DeathMarkerSettingsPopup::onClose(cocos2d::CCObject* sender)";

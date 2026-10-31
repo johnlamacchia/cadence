@@ -35,7 +35,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(NewsPopup) == 0x2a8, "NewsPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_NewsPopup("NewsPopup", "cc1a7cc5c36f6e0c");
 namespace cadence {

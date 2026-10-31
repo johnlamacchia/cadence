@@ -24,7 +24,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ForceBlockGameObject) == 0x758, "ForceBlockGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(ForceBlockGameObject, m_force) == 0x740, "ForceBlockGameObject::m_force");
 static_assert(offsetof(ForceBlockGameObject, m_minForce) == 0x744, "ForceBlockGameObject::m_minForce");

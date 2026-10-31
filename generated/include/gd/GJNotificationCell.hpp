@@ -26,7 +26,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJNotificationCell) == 0x248, "GJNotificationCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJNotificationCell, m_notification) == 0x238, "GJNotificationCell::m_notification");
 static_assert(offsetof(GJNotificationCell, m_claimBtn) == 0x240, "GJNotificationCell::m_claimBtn");

@@ -25,7 +25,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCLightStrip) == 0x160, "CCLightStrip: size differs from the layout computed from the bindings");
 static_assert(offsetof(CCLightStrip, m_objectWidth) == 0x140, "CCLightStrip::m_objectWidth");
 static_assert(offsetof(CCLightStrip, m_toWidth) == 0x144, "CCLightStrip::m_toWidth");

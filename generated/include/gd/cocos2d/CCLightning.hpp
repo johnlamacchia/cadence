@@ -56,7 +56,7 @@ public:
 };
 }
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(cocos2d::CCLightning) == 0x198, "cocos2d::CCLightning: size differs from the layout computed from the bindings");
 static_assert(offsetof(cocos2d::CCLightning, m_strikePoint) == 0x148, "cocos2d::CCLightning::m_strikePoint");
 static_assert(offsetof(cocos2d::CCLightning, m_strikePoint2) == 0x150, "cocos2d::CCLightning::m_strikePoint2");

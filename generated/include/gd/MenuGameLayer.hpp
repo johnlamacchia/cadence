@@ -36,7 +36,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(MenuGameLayer) == 0x1d0, "MenuGameLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(MenuGameLayer, m_videoOptionsOpen) == 0x198, "MenuGameLayer::m_videoOptionsOpen");
 static_assert(offsetof(MenuGameLayer, m_deltaCount) == 0x19c, "MenuGameLayer::m_deltaCount");

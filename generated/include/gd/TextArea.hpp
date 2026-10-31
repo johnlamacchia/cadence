@@ -52,7 +52,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(TextArea) == 0x2e0, "TextArea: size differs from the layout computed from the bindings");
 static_assert(offsetof(TextArea, m_disableColor) == 0x258, "TextArea::m_disableColor");
 static_assert(offsetof(TextArea, m_unk259) == 0x259, "TextArea::m_unk259");

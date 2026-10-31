@@ -48,7 +48,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(AchievementManager) == 0x188, "AchievementManager: size differs from the layout computed from the bindings");
 static_assert(offsetof(AchievementManager, m_allAchievements) == 0x140, "AchievementManager::m_allAchievements");
 static_assert(offsetof(AchievementManager, m_platformAchievements) == 0x148, "AchievementManager::m_platformAchievements");

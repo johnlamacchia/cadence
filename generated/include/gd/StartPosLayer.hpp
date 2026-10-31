@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(StartPosLayer) == 0x3f0, "StartPosLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(StartPosLayer, m_startPosObject) == 0x3e8, "StartPosLayer::m_startPosObject");
 inline const cadence::detail::LayoutRegistration cadence_layout_StartPosLayer("StartPosLayer", "55bd849e3b76e8c4");

@@ -42,7 +42,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJDropDownLayer) == 0x260, "GJDropDownLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJDropDownLayer, m_endPosition) == 0x220, "GJDropDownLayer::m_endPosition");
 static_assert(offsetof(GJDropDownLayer, m_startPosition) == 0x228, "GJDropDownLayer::m_startPosition");

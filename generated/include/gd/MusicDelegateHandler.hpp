@@ -16,7 +16,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(MusicDelegateHandler) == 0x148, "MusicDelegateHandler: size differs from the layout computed from the bindings");
 static_assert(offsetof(MusicDelegateHandler, m_delegate) == 0x140, "MusicDelegateHandler::m_delegate");
 inline const cadence::detail::LayoutRegistration cadence_layout_MusicDelegateHandler("MusicDelegateHandler", "2dc8722eda2f1da5");

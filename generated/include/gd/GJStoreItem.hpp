@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJStoreItem) == 0x178, "GJStoreItem: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJStoreItem, m_index) == 0x140, "GJStoreItem::m_index");
 static_assert(offsetof(GJStoreItem, m_typeID) == 0x14c, "GJStoreItem::m_typeID");

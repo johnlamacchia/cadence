@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(NCSInfoLayer) == 0x2a8, "NCSInfoLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(NCSInfoLayer, m_songLayer) == 0x2a0, "NCSInfoLayer::m_songLayer");
 inline const cadence::detail::LayoutRegistration cadence_layout_NCSInfoLayer("NCSInfoLayer", "afc34dd1ef8d55bb");

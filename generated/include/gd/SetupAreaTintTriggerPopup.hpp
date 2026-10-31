@@ -25,7 +25,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SetupAreaTintTriggerPopup) == 0x420, "SetupAreaTintTriggerPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(SetupAreaTintTriggerPopup, m_hsvButton) == 0x400, "SetupAreaTintTriggerPopup::m_hsvButton");
 static_assert(offsetof(SetupAreaTintTriggerPopup, m_hsvValue) == 0x408, "SetupAreaTintTriggerPopup::m_hsvValue");

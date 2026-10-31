@@ -36,7 +36,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(KeyframeGameObject) == 0x778, "KeyframeGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(KeyframeGameObject, m_shadowObjects) == 0x740, "KeyframeGameObject::m_shadowObjects");
 static_assert(offsetof(KeyframeGameObject, m_previewSprite) == 0x748, "KeyframeGameObject::m_previewSprite");

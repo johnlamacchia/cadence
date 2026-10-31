@@ -48,7 +48,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJSearchObject) == 0x1d8, "GJSearchObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJSearchObject, m_searchType) == 0x140, "GJSearchObject::m_searchType");
 static_assert(offsetof(GJSearchObject, m_searchQuery) == 0x148, "GJSearchObject::m_searchQuery");

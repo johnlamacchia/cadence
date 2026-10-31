@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCSpriteGrayscale) == 0x298, "CCSpriteGrayscale: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_CCSpriteGrayscale("CCSpriteGrayscale", "c83d24ca754c58b5");
 namespace cadence {

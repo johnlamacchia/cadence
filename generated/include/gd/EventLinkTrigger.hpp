@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(EventLinkTrigger) == 0x760, "EventLinkTrigger: size differs from the layout computed from the bindings");
 static_assert(offsetof(EventLinkTrigger, m_eventIDs) == 0x740, "EventLinkTrigger::m_eventIDs");
 static_assert(offsetof(EventLinkTrigger, m_resetRemap) == 0x750, "EventLinkTrigger::m_resetRemap");

@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SmartTemplateCell) == 0x238, "SmartTemplateCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(SmartTemplateCell, m_smartTemplate) == 0x230, "SmartTemplateCell::m_smartTemplate");
 inline const cadence::detail::LayoutRegistration cadence_layout_SmartTemplateCell("SmartTemplateCell", "9205f8b9a1a18c6d");

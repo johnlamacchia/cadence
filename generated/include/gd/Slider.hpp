@@ -44,7 +44,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(Slider) == 0x1c8, "Slider: size differs from the layout computed from the bindings");
 static_assert(offsetof(Slider, m_touchLogic) == 0x198, "Slider::m_touchLogic");
 static_assert(offsetof(Slider, m_sliderBar) == 0x1a0, "Slider::m_sliderBar");

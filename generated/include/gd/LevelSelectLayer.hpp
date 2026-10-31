@@ -41,7 +41,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(LevelSelectLayer) == 0x1e0, "LevelSelectLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(LevelSelectLayer, m_width) == 0x1a8, "LevelSelectLayer::m_width");
 static_assert(offsetof(LevelSelectLayer, m_backgroundSprite) == 0x1b0, "LevelSelectLayer::m_backgroundSprite");

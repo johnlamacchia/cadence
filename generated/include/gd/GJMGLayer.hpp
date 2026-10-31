@@ -45,7 +45,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJMGLayer) == 0x1e8, "GJMGLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJMGLayer, m_ground1Sprite) == 0x198, "GJMGLayer::m_ground1Sprite");
 static_assert(offsetof(GJMGLayer, m_ground2Sprite) == 0x1a0, "GJMGLayer::m_ground2Sprite");

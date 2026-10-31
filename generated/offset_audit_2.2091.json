@@ -1,0 +1,3974 @@
+{
+ "AccountHelpLayer": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "AccountLayer": {
+  "counts": {
+   "consistent": 36
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AccountLoginLayer": {
+  "counts": {
+   "consistent": 42
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AccountRegisterLayer": {
+  "counts": {
+   "consistent": 46
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "AccountReviewPopup": {
+  "counts": {
+   "consistent": 20,
+   "unmapped": 100
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "AchievementBar": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AchievementCell": {
+  "counts": {
+   "consistent": 10
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AchievementManager": {
+  "counts": {
+   "consistent": 22
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AchievementNotifier": {
+  "counts": {
+   "consistent": 8
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AchievementsLayer": {
+  "counts": {
+   "consistent": 19
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AdminActionConfirmPopup": {
+  "counts": {
+   "consistent": 1,
+   "unmapped": 7
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "AdvancedFollowEditObject": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AdvancedFollowTriggerObject": {
+  "counts": {
+   "consistent": 80
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AnimatedGameObject": {
+  "counts": {
+   "consistent": 40
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AnimatedShopKeeper": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AppDelegate": {
+  "counts": {
+   "consistent": 6,
+   "inconsistent": 3,
+   "unmapped": 1
+  },
+  "inconsistent": [
+   [
+    "applicationDidFinishLaunching",
+    "0xe1",
+    1
+   ],
+   [
+    "applicationDidFinishLaunching",
+    "0xf2",
+    1
+   ],
+   [
+    "applicationDidFinishLaunching",
+    "0xf4",
+    1
+   ]
+  ],
+  "status": "tail-padded"
+ },
+ "ArtTriggerGameObject": {
+  "counts": {
+   "consistent": 7
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ArtistCell": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AudioAssetsBrowser": {
+  "counts": {
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "AudioAssetsPopup": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "AudioEffectsLayer": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "AudioLineGuideGameObject": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "AutoBackupOptionsPopup": {
+  "counts": {
+   "consistent": 37,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "AutoBackupPopup": {
+  "counts": {
+   "consistent": 6,
+   "unmapped": 49
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "AutoSaveSettingsLayer": {
+  "counts": {
+   "consistent": 19,
+   "unmapped": 4
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "BitmapFontCache": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "BoomListView": {
+  "counts": {
+   "consistent": 40
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "BrowseSmartKeyLayer": {
+  "counts": {
+   "consistent": 18
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "BrowseSmartTemplateLayer": {
+  "counts": {
+   "consistent": 47
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ButtonSprite": {
+  "counts": {
+   "consistent": 32
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCAnimateFrameCache": {
+  "counts": {
+   "consistent": 8
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCAnimatedSprite": {
+  "counts": {
+   "consistent": 44
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCBlockLayer": {
+  "counts": {
+   "consistent": 28
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCCircleWave": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCContentLayer": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCCounterLabel": {
+  "counts": {
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCLightFlash": {
+  "counts": {
+   "consistent": 8
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CCLightStrip": {
+  "counts": {
+   "consistent": 4
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCMenuItemSpriteExtra": {
+  "counts": {
+   "consistent": 42,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCMenuItemToggler": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCNodeContainer": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCPartAnimSprite": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCSpritePart": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCSpritePlus": {
+  "counts": {
+   "consistent": 39
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCSpriteWithHue": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CCTextInputMenu": {
+  "counts": {
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "CCTextInputNode": {
+  "counts": {
+   "consistent": 55
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CameraTriggerGameObject": {
+  "counts": {
+   "consistent": 44
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ChallengeNode": {
+  "counts": {
+   "consistent": 8
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ChallengesPage": {
+  "counts": {
+   "consistent": 22
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ChanceTriggerGameObject": {
+  "counts": {
+   "consistent": 2
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CharacterColorPage": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CheckpointGameObject": {
+  "counts": {
+   "consistent": 37
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CheckpointObject": {
+  "counts": {
+   "consistent": 23
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ClearPlatformerSavesOptionsPopup": {
+  "counts": {
+   "consistent": 33,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "ClearPlatformerSavesPopup": {
+  "counts": {
+   "beyond": 5,
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CollisionBlockPopup": {
+  "counts": {
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ColorAction": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ColorChannelSprite": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ColorSelectLiveOverlay": {
+  "counts": {
+   "consistent": 80
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ColorSelectPopup": {
+  "counts": {
+   "consistent": 124
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CommentCell": {
+  "counts": {
+   "consistent": 35
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CommentOptionsPopup": {
+  "counts": {
+   "beyond": 4,
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CommunityCreditNode": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CommunityCreditsPage": {
+  "counts": {
+   "consistent": 6
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ConfigureHSVWidget": {
+  "counts": {
+   "consistent": 52
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ConfigureValuePopup": {
+  "counts": {
+   "consistent": 36
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ControlSlotsPopup": {
+  "counts": {
+   "consistent": 41,
+   "unmapped": 6
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "ControllerInputNode": {
+  "counts": {
+   "consistent": 1,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "CountTriggerGameObject": {
+  "counts": {
+   "consistent": 27
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CreateGuidelinesLayer": {
+  "counts": {
+   "consistent": 55
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CreateMenuItem": {
+  "counts": {
+   "consistent": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CreateParticlePopup": {
+  "counts": {
+   "consistent": 150
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CreateStartPosPopup": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CreatorLayer": {
+  "counts": {
+   "consistent": 24
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CreatorSettingsDelegate": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CreatorSettingsPopup": {
+  "counts": {
+   "consistent": 21,
+   "unmapped": 5
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "CurrencyRewardLayer": {
+  "counts": {
+   "consistent": 58
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CurrencySprite": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CustomListView": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CustomMusicCell": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CustomSFXCell": {
+  "counts": {
+   "consistent": 28,
+   "unmapped": 4
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CustomSFXWidget": {
+  "counts": {
+   "consistent": 66
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CustomSongCell": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CustomSongLayer": {
+  "counts": {
+   "consistent": 31
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "CustomSongWidget": {
+  "counts": {
+   "consistent": 131
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CustomizeObjectLayer": {
+  "counts": {
+   "consistent": 109
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "CustomizeObjectSettingsPopup": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "DailyLevelNode": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "DailyLevelPage": {
+  "counts": {
+   "consistent": 44,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "DailyRecallUnlockPopup": {
+  "counts": {
+   "consistent": 18
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "DashRingObject": {
+  "counts": {
+   "consistent": 8
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "DeathHistogram": {
+  "counts": {
+   "unmapped": 15
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "DeathMarkerLayer": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "DeathMarkerSettingsPopup": {
+  "counts": {
+   "consistent": 32
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "DeathStatsPopup": {
+  "counts": {
+   "beyond": 16,
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "DeathTrackerOptionsPopup": {
+  "counts": {
+   "consistent": 34,
+   "unmapped": 3
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "DeathTrackerPopup": {
+  "counts": {
+   "consistent": 7,
+   "unmapped": 58
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "DemonFilterSelectLayer": {
+  "counts": {
+   "consistent": 8
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "DemonInfoPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "DialogLayer": {
+  "counts": {
+   "consistent": 25,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "DrawGridLayer": {
+  "counts": {
+   "consistent": 43
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "Dropdown": {
+  "counts": {
+   "consistent": 3,
+   "unmapped": 16
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "DropdownListPopup": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "DungeonBarsSprite": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EasingSelectPopup": {
+  "counts": {
+   "beyond": 12,
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EditButtonBar": {
+  "counts": {
+   "consistent": 21
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EditGameObjectPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EditLevelLayer": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EditTriggersPopup": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EditorCommandsPopup": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EditorOptionsLayer": {
+  "counts": {
+   "beyond": 3,
+   "inconsistent": 1
+  },
+  "inconsistent": [
+   [
+    "onButtonsPerRow",
+    "0x484",
+    4
+   ]
+  ],
+  "status": "unverified"
+ },
+ "EditorPauseLayer": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EditorSFXActionConfigLayer": {
+  "counts": {
+   "beyond": 17,
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EditorSFXManager": {
+  "counts": {
+   "beyond": 15
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EditorSFXSettingsPopup": {
+  "counts": {
+   "consistent": 35,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "EditorSoundBrowserLayer": {
+  "counts": {
+   "consistent": 32,
+   "unmapped": 37
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "EditorSoundConfigCell": {
+  "counts": {
+   "beyond": 12,
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "EditorSoundConfigInfoLayer": {
+  "counts": {
+   "consistent": 26,
+   "unmapped": 39
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "EditorSoundConfigUploadPopup": {
+  "counts": {
+   "beyond": 31,
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EditorSoundsLayer": {
+  "counts": {
+   "consistent": 30,
+   "unmapped": 22
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "EditorSoundsSettingsPopup": {
+  "counts": {
+   "consistent": 15,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "EditorUI": {
+  "counts": {
+   "consistent": 563
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EditorWindowPopup": {
+  "counts": {
+   "consistent": 125
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EffectGameObject": {
+  "counts": {
+   "consistent": 263
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EffectManagerState": {
+  "counts": {
+   "consistent": 24
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EmotePickerPopup": {
+  "counts": {
+   "consistent": 31
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EmoteSprite": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EndLevelLayer": {
+  "counts": {
+   "consistent": 51
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EndPortalObject": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EndTriggerGameObject": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EnhancedGameObject": {
+  "counts": {
+   "consistent": 225
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EnhancedTriggerObject": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EnterEffectInstance": {
+  "counts": {
+   "consistent": 68
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "EnterEffectObject": {
+  "counts": {
+   "consistent": 131
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "EventLinkTrigger": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ExplodeItemNode": {
+  "counts": {
+   "consistent": 6
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ExtendedLayer": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "FLAlertLayer": {
+  "counts": {
+   "consistent": 56
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "FMODAudioEngine": {
+  "counts": {
+   "consistent": 121
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "FMODAudioState": {
+  "counts": {
+   "consistent": 7
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "FMODLevelVisualizer": {
+  "counts": {
+   "consistent": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "FRequestProfilePage": {
+  "counts": {
+   "consistent": 63
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "FindBPMLayer": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "FindObjectOptionsLayer": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "FindObjectPopup": {
+  "counts": {
+   "consistent": 21
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "FollowRewardPage": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "FontPreviewCell": {
+  "counts": {
+   "consistent": 11,
+   "unmapped": 3
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "ForceBlockGameObject": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "FriendPickerPopup": {
+  "counts": {
+   "consistent": 14,
+   "unmapped": 38
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "FriendRequestPopup": {
+  "counts": {
+   "consistent": 29,
+   "inconsistent": 4
+  },
+  "inconsistent": [
+   [
+    "init",
+    "0x2b1",
+    1
+   ],
+   [
+    "loadFromGJFriendRequest",
+    "0x2b1",
+    1
+   ],
+   [
+    "onClose",
+    "0x2b1",
+    1
+   ],
+   [
+    "onRemove",
+    "0x2b1",
+    1
+   ]
+  ],
+  "status": "verified"
+ },
+ "FriendRowEdges": {
+  "counts": {
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "FriendsProfilePage": {
+  "counts": {
+   "consistent": 34,
+   "unmapped": 22
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "GJAccountManager": {
+  "counts": {
+   "consistent": 35
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJAccountSettingsLayer": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJBaseGameLayer": {
+  "counts": {
+   "consistent": 1489,
+   "inconsistent": 1,
+   "unmapped": 7
+  },
+  "inconsistent": [
+   [
+    "addDeathMarkerLayer",
+    "0x899",
+    1
+   ]
+  ],
+  "status": "verified"
+ },
+ "GJChallengeItem": {
+  "counts": {
+   "consistent": 10
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJChestSprite": {
+  "counts": {
+   "consistent": 6
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJColorSetupLayer": {
+  "counts": {
+   "consistent": 46
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJCommentListLayer": {
+  "counts": {
+   "consistent": 10
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJCompactUserCell": {
+  "counts": {
+   "beyond": 4,
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJDifficultySprite": {
+  "counts": {
+   "consistent": 4
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJDropDownLayer": {
+  "counts": {
+   "consistent": 37
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJEditorSoundConfig": {
+  "counts": {
+   "consistent": 1,
+   "unmapped": 38
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "GJEffectManager": {
+  "counts": {
+   "consistent": 166
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJFollowCommandLayer": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJFriendRequest": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJGameLevel": {
+  "counts": {
+   "beyond": 640,
+   "consistent": 49
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJGameLoadingLayer": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJGameState": {
+  "counts": {
+   "consistent": 7
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJGarageLayer": {
+  "counts": {
+   "consistent": 43
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJGroundLayer": {
+  "counts": {
+   "consistent": 24
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJHttpResult": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJItemIcon": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJLevelList": {
+  "counts": {
+   "consistent": 63
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJLevelScoreCell": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJListLayer": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJLocalLevelScoreCell": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJMGLayer": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJMapPack": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJMessageCell": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJMessagePopup": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJMessageThread": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJMultiplayerManager": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJNotificationCell": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJOptionsLayer": {
+  "counts": {
+   "consistent": 30,
+   "inconsistent": 1,
+   "unmapped": 1
+  },
+  "inconsistent": [
+   [
+    "addToggleInternal",
+    "0x29c",
+    4
+   ]
+  ],
+  "status": "verified"
+ },
+ "GJPFollowCommandLayer": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJPathPage": {
+  "counts": {
+   "consistent": 34
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJPathRewardPopup": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJPathSprite": {
+  "counts": {
+   "consistent": 7
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJPathsLayer": {
+  "counts": {
+   "consistent": 19
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJPromoPopup": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJRateLevelLayer": {
+  "counts": {
+   "consistent": 26,
+   "inconsistent": 2
+  },
+  "inconsistent": [
+   [
+    "onRate",
+    "0x2cc",
+    4
+   ],
+   [
+    "onRate",
+    "0x2f4",
+    4
+   ]
+  ],
+  "status": "unverified"
+ },
+ "GJRequestCell": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJRewardItem": {
+  "counts": {
+   "consistent": 8
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJRewardObject": {
+  "counts": {
+   "consistent": 4
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJRobotSprite": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJRotationControl": {
+  "counts": {
+   "consistent": 2
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJScaleControl": {
+  "counts": {
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJScoreCell": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJSearchObject": {
+  "counts": {
+   "consistent": 40
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJShaderState": {
+  "counts": {
+   "consistent": 92
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJShopLayer": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJSmartBlockPreview": {
+  "counts": {
+   "consistent": 5
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJSmartBlockPreviewSprite": {
+  "counts": {
+   "consistent": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJSmartPrefab": {
+  "counts": {
+   "consistent": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJSmartTemplate": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJSongBrowser": {
+  "counts": {
+   "consistent": 21
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJSpecialColorSelect": {
+  "counts": {
+   "consistent": 18
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJSpiderSprite": {
+  "counts": {
+   "consistent": 3
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJThreadCell": {
+  "counts": {
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJTransformControl": {
+  "counts": {
+   "consistent": 42
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJUINode": {
+  "counts": {
+   "consistent": 28
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJUserMessage": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GJUserScore": {
+  "counts": {
+   "consistent": 90
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GJValueTween": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GManager": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GameCell": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GameLevelManager": {
+  "counts": {
+   "consistent": 474
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GameLevelOptionsLayer": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GameManager": {
+  "counts": {
+   "consistent": 541,
+   "unmapped": 3
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GameObject": {
+  "counts": {
+   "consistent": 628
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GameObjectCopy": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GameOptionsTrigger": {
+  "counts": {
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GameSettingsLayer": {
+  "counts": {
+   "consistent": 36,
+   "unmapped": 17
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "GameStatsManager": {
+  "counts": {
+   "consistent": 230
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GauntletLayer": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GauntletNode": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GauntletSelectLayer": {
+  "counts": {
+   "consistent": 50
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GauntletSprite": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GhostTrailEffect": {
+  "counts": {
+   "consistent": 18
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GooglePlayManager": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GradientTriggerObject": {
+  "counts": {
+   "consistent": 22
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GraphicsReloadLayer": {
+  "counts": {
+   "consistent": 6
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "GridSettingsLayer": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "GroupCommandObject2": {
+  "counts": {
+   "consistent": 86
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "HSVLiveOverlay": {
+  "counts": {
+   "consistent": 25
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "HSVWidgetPopup": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "HardStreak": {
+  "counts": {
+   "consistent": 18
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "IDNameBrowserPopup": {
+  "counts": {
+   "beyond": 23,
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "IDNameInput": {
+  "counts": {
+   "consistent": 4,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "InfoAlertButton": {
+  "counts": {
+   "consistent": 5
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "InfoLayer": {
+  "counts": {
+   "consistent": 100
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "InputCaptureDelegate": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "InvitesPopup": {
+  "counts": {
+   "beyond": 15,
+   "consistent": 13,
+   "unmapped": 10
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ItemInfoPopup": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ItemTriggerGameObject": {
+  "counts": {
+   "consistent": 35
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "KeybindCapturePopup": {
+  "counts": {
+   "consistent": 59
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "KeybindSet": {
+  "counts": {
+   "consistent": 1,
+   "unmapped": 8
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "KeybindingsLayer": {
+  "counts": {
+   "consistent": 51,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "KeybindingsSettingsPopup": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "KeyframeAnimTriggerObject": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "KeyframeGameObject": {
+  "counts": {
+   "consistent": 37
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "KeyframeObject": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "LabelGameObject": {
+  "counts": {
+   "consistent": 38,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LeaderboardsLayer": {
+  "counts": {
+   "consistent": 35
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "LevelAreaInnerLayer": {
+  "counts": {
+   "consistent": 18
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelAreaLayer": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelBadgePopup": {
+  "counts": {
+   "consistent": 17,
+   "unmapped": 4
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "LevelBindingsLayer": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelBrowserLayer": {
+  "counts": {
+   "consistent": 140
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelCell": {
+  "counts": {
+   "consistent": 55,
+   "unmapped": 3
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelControlConfig": {
+  "counts": {
+   "consistent": 14,
+   "unmapped": 8
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelEditorLayer": {
+  "counts": {
+   "consistent": 649,
+   "unmapped": 3
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelInfoLayer": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 105
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "LevelLeaderboard": {
+  "counts": {
+   "consistent": 50
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelListCell": {
+  "counts": {
+   "consistent": 18,
+   "unmapped": 3
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelListLayer": {
+  "counts": {
+   "consistent": 59
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "LevelOptionsLayer": {
+  "counts": {
+   "consistent": 37
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelOptionsLayer2": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelPage": {
+  "counts": {
+   "consistent": 32
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "LevelPickerPopup": {
+  "counts": {
+   "beyond": 35,
+   "consistent": 13,
+   "unmapped": 15
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "LevelSearchLayer": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "LevelSelectLayer": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LevelSettingsLayer": {
+  "counts": {
+   "consistent": 54
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "LevelSettingsObject": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 34,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "LevelStatsInfoPopup": {
+  "counts": {
+   "consistent": 18,
+   "unmapped": 22
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "LikeItemLayer": {
+  "counts": {
+   "consistent": 25
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ListButtonBar": {
+  "counts": {
+   "consistent": 8
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ListCell": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LoadingCircle": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LoadingCircleSprite": {
+  "counts": {
+   "consistent": 4
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LoadingLayer": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "LocalLevelManager": {
+  "counts": {
+   "consistent": 27
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "MapPackCell": {
+  "counts": {
+   "consistent": 24
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "MemberListPopup": {
+  "counts": {
+   "consistent": 16,
+   "unmapped": 53
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "MenuGameLayer": {
+  "counts": {
+   "consistent": 27
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "MenuLayer": {
+  "counts": {
+   "consistent": 31
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "MessageThreadsPage": {
+  "counts": {
+   "consistent": 23,
+   "unmapped": 65
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "MessagesProfilePage": {
+  "counts": {
+   "consistent": 34,
+   "unmapped": 3
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "MoreSearchLayer": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "MoreVideoOptionsLayer": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "MoveStepPopup": {
+  "counts": {
+   "consistent": 36
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "MultiTriggerPopup": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "MultilineBitmapFont": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "MusicArtistObject": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "MusicBrowser": {
+  "counts": {
+   "consistent": 70
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "MusicChangelogEntry": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "MusicChangelogPopup": {
+  "counts": {
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "MusicDelegateHandler": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "MusicDownloadManager": {
+  "counts": {
+   "consistent": 82,
+   "inconsistent": 1,
+   "unmapped": 8
+  },
+  "inconsistent": [
+   [
+    "onGetAudioFilesizeCompleted",
+    "0x194",
+    4
+   ]
+  ],
+  "status": "corrected"
+ },
+ "MusicSearchResult": {
+  "counts": {
+   "consistent": 30
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "MyStuffPopup": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "NCSInfoLayer": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "NewThreadPopup": {
+  "counts": {
+   "consistent": 19,
+   "unmapped": 43
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "NewgroundsInfoLayer": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "NewsPopup": {
+  "counts": {
+   "beyond": 20,
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "NotificationFilterPopup": {
+  "counts": {
+   "consistent": 33,
+   "unmapped": 4
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "NotificationsPage": {
+  "counts": {
+   "beyond": 3,
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "NumberInputLayer": {
+  "counts": {
+   "consistent": 49
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "OBB2D": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ObjectControlGameObject": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ObjectManager": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ObjectToolbox": {
+  "counts": {
+   "consistent": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "OptionsCell": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "OptionsLayer": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 23
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "OptionsObject": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "OptionsScrollLayer": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "PagedListPopup": {
+  "counts": {
+   "consistent": 12,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ParentalGateLayer": {
+  "counts": {
+   "consistent": 3
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ParentalOptionsLayer": {
+  "counts": {
+   "consistent": 18
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ParentalPrivacyPopup": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "ParticleGameObject": {
+  "counts": {
+   "consistent": 82,
+   "unmapped": 15
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "ParticlePreviewLayer": {
+  "counts": {
+   "consistent": 4
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "PauseLayer": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "PlatformerControlsPopup": {
+  "counts": {
+   "consistent": 21,
+   "unmapped": 63
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "PlayLayer": {
+  "counts": {
+   "consistent": 845,
+   "inconsistent": 2,
+   "unmapped": 1
+  },
+  "inconsistent": [
+   [
+    "setupHasCompleted",
+    "0x899",
+    1
+   ],
+   [
+    "tryShowDeathMarkers",
+    "0x899",
+    1
+   ]
+  ],
+  "status": "verified"
+ },
+ "PlayerCheckpoint": {
+  "counts": {
+   "consistent": 132,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "PlayerControlGameObject": {
+  "counts": {
+   "consistent": 22
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "PlayerFireBoostSprite": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "PlayerObject": {
+  "counts": {
+   "consistent": 1839,
+   "unmapped": 8
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ProfilePage": {
+  "counts": {
+   "consistent": 102
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ProgressGameObject": {
+  "counts": {
+   "consistent": 14,
+   "unmapped": 6
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "PurchaseItemPopup": {
+  "counts": {
+   "consistent": 19
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "RandTriggerGameObject": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "RateDemonLayer": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "RateLevelLayer": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "RateStarsLayer": {
+  "counts": {
+   "consistent": 28
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "RateStarsModLayer": {
+  "counts": {
+   "beyond": 10,
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "RenameThreadPopup": {
+  "counts": {
+   "beyond": 7,
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ReportPopup": {
+  "counts": {
+   "consistent": 5,
+   "unmapped": 10
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "ReportQueuePopup": {
+  "counts": {
+   "beyond": 16,
+   "consistent": 12,
+   "unmapped": 12
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "RetryLevelLayer": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ReviewChoiceSheet": {
+  "counts": {
+   "consistent": 34,
+   "unmapped": 7
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "RewardUnlockLayer": {
+  "counts": {
+   "consistent": 36
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "RewardsPage": {
+  "counts": {
+   "consistent": 19
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "RingObject": {
+  "counts": {
+   "beyond": 5,
+   "consistent": 29,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "RotateGameplayGameObject": {
+  "counts": {
+   "consistent": 21
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "RowPressItem": {
+  "counts": {
+   "consistent": 3,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "SFXBrowser": {
+  "counts": {
+   "beyond": 58,
+   "consistent": 43,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SFXChangelogEntry": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SFXChangelogPopup": {
+  "counts": {
+   "consistent": 10,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SFXFolderPickerPopup": {
+  "counts": {
+   "consistent": 17,
+   "unmapped": 20
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "SFXInfoObject": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SFXSearchResult": {
+  "counts": {
+   "consistent": 9,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SFXSettingsPopup": {
+  "counts": {
+   "consistent": 13,
+   "unmapped": 4
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "SFXTriggerGameObject": {
+  "counts": {
+   "consistent": 81
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ScrollViewPopup": {
+  "counts": {
+   "consistent": 10,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "ScrollingLayer": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SecretLayer": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SecretLayer2": {
+  "counts": {
+   "consistent": 25
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SecretLayer3": {
+  "counts": {
+   "consistent": 22
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SecretLayer4": {
+  "counts": {
+   "consistent": 24
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SecretLayer5": {
+  "counts": {
+   "consistent": 43
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SecretNumberLayer": {
+  "counts": {
+   "consistent": 6
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SecretRewardsLayer": {
+  "counts": {
+   "consistent": 40
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SectionedContentNode": {
+  "counts": {
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "SelectArtLayer": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SelectEventLayer": {
+  "counts": {
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SelectFontLayer": {
+  "counts": {
+   "consistent": 1
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SelectFontLayer2": {
+  "counts": {
+   "beyond": 5,
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SelectListIconLayer": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SelectPremadeLayer": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SelectSFXSortLayer": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SelectSettingLayer": {
+  "counts": {
+   "consistent": 22
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SequenceTriggerGameObject": {
+  "counts": {
+   "consistent": 31
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetColorIDPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetFolderPopup": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetGroupIDLayer": {
+  "counts": {
+   "beyond": 1,
+   "consistent": 105
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetIDPopup": {
+  "counts": {
+   "consistent": 60
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetItemIDLayer": {
+  "counts": {
+   "consistent": 18
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetLevelOrderPopup": {
+  "counts": {
+   "consistent": 4
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetTargetIDLayer": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetTextPopup": {
+  "counts": {
+   "consistent": 40
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupAdvFollowEditPhysicsPopup": {
+  "counts": {
+   "consistent": 34
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupAdvFollowPopup": {
+  "counts": {
+   "consistent": 46
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupAdvFollowRetargetPopup": {
+  "counts": {
+   "consistent": 39
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupAnimSettingsPopup": {
+  "counts": {
+   "consistent": 35
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupAnimationPopup": {
+  "counts": {
+   "consistent": 27
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupAreaAnimTriggerPopup": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupAreaFadeTriggerPopup": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupAreaMoveTriggerPopup": {
+  "counts": {
+   "consistent": 49
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupAreaRotateTriggerPopup": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupAreaTintTriggerPopup": {
+  "counts": {
+   "consistent": 46
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupAreaTransformTriggerPopup": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupAreaTriggerPopup": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupArtSwitchPopup": {
+  "counts": {
+   "consistent": 39
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupAudioLineGuidePopup": {
+  "counts": {
+   "consistent": 40
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupAudioTriggerPopup": {
+  "counts": {
+   "consistent": 19
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupBGSpeedTrigger": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupCameraEdgePopup": {
+  "counts": {
+   "consistent": 30
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupCameraGuidePopup": {
+  "counts": {
+   "consistent": 36
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupCameraModePopup": {
+  "counts": {
+   "consistent": 46
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupCameraOffsetTrigger": {
+  "counts": {
+   "consistent": 67
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupCameraRotatePopup": {
+  "counts": {
+   "consistent": 3
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupCameraRotatePopup2": {
+  "counts": {
+   "consistent": 31
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupCheckpointPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupCoinLayer": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupCollisionStateTriggerPopup": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupCollisionTriggerPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupCountTriggerPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupDashRingPopup": {
+  "counts": {
+   "consistent": 35
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupEndPopup": {
+  "counts": {
+   "consistent": 31,
+   "unmapped": 2
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupEnterEffectPopup": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupEnterTriggerPopup": {
+  "counts": {
+   "consistent": 25
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupEventLinkPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupForceBlockPopup": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupGameplayOffsetPopup": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupGradientPopup": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupGravityTriggerPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupInstantCollisionTriggerPopup": {
+  "counts": {
+   "consistent": 45
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupInstantCountPopup": {
+  "counts": {
+   "consistent": 44
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupInteractObjectPopup": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupItemCompareTriggerPopup": {
+  "counts": {
+   "consistent": 36
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupItemEditTriggerPopup": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupKeyframeAnimPopup": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupKeyframePopup": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupMGTrigger": {
+  "counts": {
+   "consistent": 56
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupMoveCommandPopup": {
+  "counts": {
+   "consistent": 24
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupObjectControlPopup": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupObjectOptions2Popup": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SetupObjectOptionsPopup": {
+  "counts": {
+   "consistent": 67
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupObjectTogglePopup": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupOpacityPopup": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupOptionsTriggerPopup": {
+  "counts": {
+   "consistent": 42
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupPersistentItemTriggerPopup": {
+  "counts": {
+   "consistent": 34
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupPickupTriggerPopup": {
+  "counts": {
+   "consistent": 36
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupPlatformerEndPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupPlayerControlPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupProgressPopup": {
+  "counts": {
+   "consistent": 31
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupPulsePopup": {
+  "counts": {
+   "consistent": 136
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupRandAdvTriggerPopup": {
+  "counts": {
+   "consistent": 37
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupRandTriggerPopup": {
+  "counts": {
+   "consistent": 39
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupResetTriggerPopup": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupReverbPopup": {
+  "counts": {
+   "consistent": 42
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupRotateCommandPopup": {
+  "counts": {
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupRotateGameplayPopup": {
+  "counts": {
+   "consistent": 36
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupRotatePopup": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupSFXEditPopup": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupSFXPopup": {
+  "counts": {
+   "consistent": 34,
+   "unmapped": 1
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupSequenceTriggerPopup": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupShaderEffectPopup": {
+  "counts": {
+   "consistent": 50,
+   "inconsistent": 1
+  },
+  "inconsistent": [
+   [
+    "zLayerToString",
+    "0x2",
+    1
+   ]
+  ],
+  "status": "unverified"
+ },
+ "SetupShakePopup": {
+  "counts": {
+   "consistent": 53
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupSmartBlockLayer": {
+  "counts": {
+   "consistent": 44
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupSmartTemplateLayer": {
+  "counts": {
+   "consistent": 21
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupSongTriggerPopup": {
+  "counts": {
+   "consistent": 30
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupSpawnParticlePopup": {
+  "counts": {
+   "consistent": 35
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupSpawnPopup": {
+  "counts": {
+   "consistent": 37,
+   "inconsistent": 1
+  },
+  "inconsistent": [
+   [
+    "onSelectRemap",
+    "0x4",
+    4
+   ]
+  ],
+  "status": "verified"
+ },
+ "SetupStaticCameraPopup": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupStopTriggerPopup": {
+  "counts": {
+   "consistent": 37
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupTeleportPopup": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupTimeWarpPopup": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupTimerControlTriggerPopup": {
+  "counts": {
+   "consistent": 34
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupTimerEventTriggerPopup": {
+  "counts": {
+   "consistent": 31
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupTimerTriggerPopup": {
+  "counts": {
+   "consistent": 31
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupTouchTogglePopup": {
+  "counts": {
+   "consistent": 43
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupTransformPopup": {
+  "counts": {
+   "consistent": 35
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupTriggerPopup": {
+  "counts": {
+   "consistent": 203
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SetupZoomTriggerPopup": {
+  "counts": {
+   "consistent": 17
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ShaderGameObject": {
+  "counts": {
+   "consistent": 40
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ShaderLayer": {
+  "counts": {
+   "consistent": 240
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ShardsPage": {
+  "counts": {
+   "consistent": 4
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ShareCommentLayer": {
+  "counts": {
+   "consistent": 42
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ShareLevelLayer": {
+  "counts": {
+   "consistent": 21
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ShareLevelSettingsLayer": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ShareListLayer": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SimplePlayer": {
+  "counts": {
+   "consistent": 35
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "Slider": {
+  "counts": {
+   "consistent": 7
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SliderThumb": {
+  "counts": {
+   "consistent": 8
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SmartGameObject": {
+  "counts": {
+   "consistent": 4
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SmartTemplateCell": {
+  "counts": {
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SocialLinksPopup": {
+  "counts": {
+   "beyond": 6,
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SongCell": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SongInfoLayer": {
+  "counts": {
+   "consistent": 24
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SongInfoObject": {
+  "counts": {
+   "consistent": 37
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "SongOptionsLayer": {
+  "counts": {
+   "consistent": 23
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SongSelectNode": {
+  "counts": {
+   "consistent": 38
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SongTriggerGameObject": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SongUsagePopup": {
+  "counts": {
+   "consistent": 16,
+   "unmapped": 8
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "SongsLayer": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SoundPackDescPopup": {
+  "counts": {
+   "beyond": 13,
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SpawnParticleGameObject": {
+  "counts": {
+   "consistent": 21
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SpawnTriggerGameObject": {
+  "counts": {
+   "consistent": 33
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SpecialAnimGameObject": {
+  "counts": {
+   "consistent": 25
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SpriteAnimationManager": {
+  "counts": {
+   "consistent": 20
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "SpriteDescription": {
+  "counts": {
+   "consistent": 5
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "StarInfoPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "StartPosBrowser": {
+  "counts": {
+   "beyond": 6,
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "StartPosLayer": {
+  "counts": {
+   "beyond": 10,
+   "consistent": 35
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "StartPosObject": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "StatsCell": {
+  "counts": {
+   "consistent": 11
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "StatsLayer": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "SupportLayer": {
+  "counts": {
+   "consistent": 7
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "TOSPopup": {
+  "counts": {
+   "consistent": 13
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "TabbedPopupLayer": {
+  "counts": {
+   "consistent": 23
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "TableViewCell": {
+  "counts": {
+   "consistent": 6
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "TeleportPortalObject": {
+  "counts": {
+   "consistent": 40,
+   "unmapped": 4
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "TextAlertPopup": {
+  "counts": {
+   "consistent": 5
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "TextArea": {
+  "counts": {
+   "consistent": 25
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "TextGameObject": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "ThreadDescPopup": {
+  "counts": {
+   "beyond": 13,
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ThreadMessageOptionsPopup": {
+  "counts": {
+   "beyond": 8,
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ThreadOptionsPopup": {
+  "counts": {
+   "consistent": 19,
+   "unmapped": 19
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "ThreadRequestPopup": {
+  "counts": {
+   "beyond": 10,
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ThreadSearchPopup": {
+  "counts": {
+   "beyond": 21,
+   "consistent": 16
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "ThreadViewPopup": {
+  "counts": {
+   "consistent": 109,
+   "unmapped": 20
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "TimeSpeedControl": {
+  "counts": {
+   "consistent": 1,
+   "unmapped": 7
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "TimerTriggerGameObject": {
+  "counts": {
+   "consistent": 21
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "TopArtistsLayer": {
+  "counts": {
+   "consistent": 21
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "TouchControlEditLayer": {
+  "counts": {
+   "consistent": 18,
+   "unmapped": 32
+  },
+  "inconsistent": [],
+  "status": "tail-padded"
+ },
+ "TransformTriggerGameObject": {
+  "counts": {
+   "consistent": 21
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "TriggerControlGameObject": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "TutorialLayer": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "UIButtonConfig": {
+  "counts": {
+   "consistent": 12
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "UILayer": {
+  "counts": {
+   "consistent": 42
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "UIObjectSettingsPopup": {
+  "counts": {
+   "consistent": 34
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "UIPOptionsLayer": {
+  "counts": {
+   "consistent": 42
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "UISettingsGameObject": {
+  "counts": {
+   "consistent": 22
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "URLCell": {
+  "counts": {
+   "consistent": 14
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "URLViewLayer": {
+  "counts": {
+   "consistent": 9
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "UpdateAccountSettingsPopup": {
+  "counts": {
+   "consistent": 3
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "UploadActionPopup": {
+  "counts": {
+   "consistent": 26
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "UploadListPopup": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "UploadPopup": {
+  "counts": {
+   "consistent": 15
+  },
+  "inconsistent": [],
+  "status": "unverified"
+ },
+ "VideoOptionsLayer": {
+  "counts": {
+   "consistent": 68
+  },
+  "inconsistent": [],
+  "status": "verified"
+ },
+ "cocos2d::CCLightning": {
+  "counts": {
+   "consistent": 25
+  },
+  "inconsistent": [],
+  "status": "verified"
+ }
+}

@@ -18,12 +18,13 @@ public:
     void onPrune(cocos2d::CCObject* sender);
     TodoReturn refreshStats();
 
+    uint8_t _unmapped_tail[16];
 };
 
 
-// layout: unverified
-static_assert(sizeof(AutoBackupOptionsPopup) == 0x3f0, "AutoBackupOptionsPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_AutoBackupOptionsPopup("AutoBackupOptionsPopup", "552888795da6d36f");
+// layout: tail-padded
+static_assert(sizeof(AutoBackupOptionsPopup) == 0x400, "AutoBackupOptionsPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_AutoBackupOptionsPopup("AutoBackupOptionsPopup", "c21f2e2d6595f2b5");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&AutoBackupOptionsPopup::valueDidChange> = "AutoBackupOptionsPopup::valueDidChange(int, float)";
 template <> inline constexpr const char* fn_sig<&AutoBackupOptionsPopup::getValue> = "AutoBackupOptionsPopup::getValue(int)";

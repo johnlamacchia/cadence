@@ -28,7 +28,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(DailyLevelNode) == 0x178, "DailyLevelNode: size differs from the layout computed from the bindings");
 static_assert(offsetof(DailyLevelNode, m_level) == 0x148, "DailyLevelNode::m_level");
 static_assert(offsetof(DailyLevelNode, m_page) == 0x150, "DailyLevelNode::m_page");

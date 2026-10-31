@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(URLCell) == 0x238, "URLCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(URLCell, m_urlObject) == 0x230, "URLCell::m_urlObject");
 inline const cadence::detail::LayoutRegistration cadence_layout_URLCell("URLCell", "2711c2d96ccbf7fd");

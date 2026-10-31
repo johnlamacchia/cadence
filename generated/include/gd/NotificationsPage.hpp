@@ -34,7 +34,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(NotificationsPage) == 0x2a0, "NotificationsPage: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_NotificationsPage("NotificationsPage", "f3dadd5ec523a93a");
 namespace cadence {

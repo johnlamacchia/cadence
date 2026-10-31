@@ -30,7 +30,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCCounterLabel) == 0x238, "CCCounterLabel: size differs from the layout computed from the bindings");
 static_assert(offsetof(CCCounterLabel, m_stepSize) == 0x218, "CCCounterLabel::m_stepSize");
 static_assert(offsetof(CCCounterLabel, m_targetCount) == 0x21c, "CCCounterLabel::m_targetCount");

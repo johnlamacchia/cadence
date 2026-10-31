@@ -26,7 +26,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CustomSongCell) == 0x248, "CustomSongCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(CustomSongCell, m_songInfoObject) == 0x238, "CustomSongCell::m_songInfoObject");
 static_assert(offsetof(CustomSongCell, m_selected) == 0x240, "CustomSongCell::m_selected");

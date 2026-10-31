@@ -12,12 +12,13 @@ public:
     virtual bool init();
     void onBackupToggle(cocos2d::CCObject* sender);
 
+    uint8_t _unmapped_tail[8];
 };
 
 
-// layout: unverified
-static_assert(sizeof(ClearPlatformerSavesOptionsPopup) == 0x3e8, "ClearPlatformerSavesOptionsPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_ClearPlatformerSavesOptionsPopup("ClearPlatformerSavesOptionsPopup", "b9ea375218c06de7");
+// layout: tail-padded
+static_assert(sizeof(ClearPlatformerSavesOptionsPopup) == 0x3f0, "ClearPlatformerSavesOptionsPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_ClearPlatformerSavesOptionsPopup("ClearPlatformerSavesOptionsPopup", "a599009c7a8a5a71");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&ClearPlatformerSavesOptionsPopup::init> = "ClearPlatformerSavesOptionsPopup::init()";
 template <> inline constexpr const char* fn_sig<&ClearPlatformerSavesOptionsPopup::onBackupToggle> = "ClearPlatformerSavesOptionsPopup::onBackupToggle(cocos2d::CCObject* sender)";

@@ -32,7 +32,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJMapPack) == 0x1a8, "GJMapPack: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJMapPack, m_levels) == 0x140, "GJMapPack::m_levels");
 static_assert(offsetof(GJMapPack, m_packID) == 0x148, "GJMapPack::m_packID");

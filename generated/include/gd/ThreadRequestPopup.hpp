@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(ThreadRequestPopup) == 0x298, "ThreadRequestPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_ThreadRequestPopup("ThreadRequestPopup", "8e034298e217c794");
 namespace cadence {

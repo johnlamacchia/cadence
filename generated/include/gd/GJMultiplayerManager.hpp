@@ -43,7 +43,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJMultiplayerManager) == 0x170, "GJMultiplayerManager: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJMultiplayerManager, m_activeDownloads) == 0x140, "GJMultiplayerManager::m_activeDownloads");
 static_assert(offsetof(GJMultiplayerManager, m_lobbyScores) == 0x148, "GJMultiplayerManager::m_lobbyScores");

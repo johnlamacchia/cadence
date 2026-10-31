@@ -244,7 +244,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GameStatsManager) == 0x3e8, "GameStatsManager: size differs from the layout computed from the bindings");
 static_assert(offsetof(GameStatsManager, m_usePlayerStatsCCDictionary) == 0x140, "GameStatsManager::m_usePlayerStatsCCDictionary");
 static_assert(offsetof(GameStatsManager, m_trueString) == 0x148, "GameStatsManager::m_trueString");

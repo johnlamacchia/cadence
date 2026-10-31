@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJGameLoadingLayer) == 0x1a8, "GJGameLoadingLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJGameLoadingLayer, m_level) == 0x198, "GJGameLoadingLayer::m_level");
 static_assert(offsetof(GJGameLoadingLayer, m_editor) == 0x1a0, "GJGameLoadingLayer::m_editor");

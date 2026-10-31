@@ -46,7 +46,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJMessageThread) == 0x188, "GJMessageThread: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJMessageThread, m_threadID) == 0x38, "GJMessageThread::m_threadID");
 static_assert(offsetof(GJMessageThread, m_accountID) == 0x3c, "GJMessageThread::m_accountID");

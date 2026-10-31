@@ -278,15 +278,37 @@ model of MSVC and the compiler's disagree for any class or member, the generated
 build. Whether the *bindings* describe the real class correctly is a separate question, and we
 check that against the game binary:
 
-| Status in `generated/layout_report_<ver>.json` | Meaning |
-|---|---|
-| `verified` | The class's `sizeof` read out of `GeometryDash.exe` (from `X::create`'s `operator new(size)`) equals the size computed from the bindings. |
-| `tail-padded` | The binary's class is **larger** than the bindings describe: members Geode never mapped. Every mapped member's offset is still computed from the front, and an explicit `_unmapped_tail` pad makes `sizeof` right. Anything in the tail is invisible to you. |
-| `unverified` | Computed from the bindings; there is no independent size to compare against. Treat offsets deep in a large class with care. |
-| `incomplete` / `not generated` | A type the bindings use is not defined (or it is FMOD, the audio library). No header; the class is only forward-declared. |
+| Status in `generated/layout_report_<ver>.json` | Classes (2.2091) | Meaning |
+|---|---|---|
+| `verified` | 351 | The class's `sizeof` read out of `GeometryDash.exe` equals the size computed from the bindings. |
+| `tail-padded` | 62 | The binary's class is **larger** than the bindings describe: members Geode never mapped. Every mapped member's offset is still computed from the front, and an explicit `_unmapped_tail` pad makes `sizeof` right. Anything in the tail is invisible to you. |
+| `corrected` | 3 | The bindings describe **more** than the binary has (`CCSet`, `UndoObject`, `MusicDownloadManager`): members that would end past the real size cannot exist there, so the generator drops them (listed as `dropped_members`) and pads to the binary's size. |
+| `known-short` | 35 | No binary size is known, but the game's own code uses memory past where the bindings say the class ends: it has members the bindings never named, so `sizeof` in the header is too small (`GJGameLevel` is the big one). Members near the front are still at the right offsets. None of these is a base class of another class, so no other class's offsets are shifted by the gap. |
+| `unverified` | 653 | Computed from the bindings; there is no size in the binary to compare against. See the offset audit below for how much evidence there is for their offsets anyway. |
+| `incomplete` / `not generated` | 6 / 10 | A type the bindings use is not defined (or it is FMOD, the audio library). No header; the class is only forward-declared. |
 
-Independently, `tools/layout_check.py check` confirms offsets that were read from machine code
-(for example `GJBaseGameLayer::m_isPracticeMode` at `0x32E0` and `m_debugDrawNode` at `0x3870`).
+**Where the binary sizes come from** (`tools/layout_check.py harvest` and `tools/rtti_sizes.py`), two
+independent places that must agree, and the generator refuses to run if they ever do not:
+
+- `X::create` starts with `mov ecx, sizeof(X); call operator new`.
+- The class's vtable holds a deleting destructor ending in `mov edx, sizeof(X); call operator delete`.
+  The vtables are found through the exe's RTTI.
+
+On the 88 classes both cover, they agree on all 88. Two more ideas were tried and rejected because they
+failed that same check: scanning more than the first four vtable slots (it picks up unrelated
+functions and returns wrong sizes) and reading the size from `new` + constructor call sites (a derived
+class's constructor calls its base's, so the base is reported with the derived size).
+
+**The offset audit** (`tools/offset_audit.py`) is a second test, because a class can have the right size
+and still have a member at the wrong offset. It reads the machine code of every member function with a
+Windows address, follows `this`, and checks each `[this + offset]` access against the layout. On 2.2091
+it traced **21,656 accesses that agree with the layouts and 17 that do not** (0.08%), across 536 classes.
+The 17 are in 10 classes and all trace back to placeholder members the bindings leave as one wide field
+(for example `GJBaseGameLayer::m_unk7b0`, which the game reads byte by byte); no named member was found
+at a wrong offset. This finds contradictions; it cannot prove a layout right.
+
+Also confirmed by hand from machine code: the offsets `tools/layout_check.py check` lists (for example
+`GJBaseGameLayer::m_isPracticeMode` at `0x32E0` and `m_debugDrawNode` at `0x3870`).
 
 **Virtual calls through the headers** (`node->setVisible(false)`) dispatch through the vtable,
 so they rely on the bindings listing virtual functions in the game's vtable order, as Geode

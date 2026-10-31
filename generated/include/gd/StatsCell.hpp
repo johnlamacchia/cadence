@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(StatsCell) == 0x230, "StatsCell: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_StatsCell("StatsCell", "732414bd04a5252e");
 namespace cadence {

@@ -16,7 +16,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJObjectDecoder) == 0x148, "GJObjectDecoder: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_GJObjectDecoder("GJObjectDecoder", "93b7d536d487f1f0");
 namespace cadence {

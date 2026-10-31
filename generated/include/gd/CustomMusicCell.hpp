@@ -15,7 +15,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CustomMusicCell) == 0x248, "CustomMusicCell: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_CustomMusicCell("CustomMusicCell", "c018c49f5f922135");
 namespace cadence {

@@ -16,7 +16,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SFXFolderObject) == 0xb8, "SFXFolderObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(SFXFolderObject, m_sfxObjects) == 0xb0, "SFXFolderObject::m_sfxObjects");
 inline const cadence::detail::LayoutRegistration cadence_layout_SFXFolderObject("SFXFolderObject", "30dd0ef41adc7bbe");

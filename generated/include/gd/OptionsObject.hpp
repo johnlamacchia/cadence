@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(OptionsObject) == 0x78, "OptionsObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(OptionsObject, m_optionID) == 0x38, "OptionsObject::m_optionID");
 static_assert(offsetof(OptionsObject, m_enabled) == 0x3c, "OptionsObject::m_enabled");

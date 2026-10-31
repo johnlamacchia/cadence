@@ -24,7 +24,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SpawnParticleGameObject) == 0x768, "SpawnParticleGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(SpawnParticleGameObject, m_offset) == 0x740, "SpawnParticleGameObject::m_offset");
 static_assert(offsetof(SpawnParticleGameObject, m_offsetVariance) == 0x748, "SpawnParticleGameObject::m_offsetVariance");

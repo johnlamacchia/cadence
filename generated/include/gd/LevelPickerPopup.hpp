@@ -33,7 +33,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(LevelPickerPopup) == 0x318, "LevelPickerPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_LevelPickerPopup("LevelPickerPopup", "4f62bb76a63e7f1b");
 namespace cadence {

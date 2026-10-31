@@ -36,7 +36,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ItemTriggerGameObject) == 0x778, "ItemTriggerGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(ItemTriggerGameObject, m_item1Mode) == 0x740, "ItemTriggerGameObject::m_item1Mode");
 static_assert(offsetof(ItemTriggerGameObject, m_item2Mode) == 0x744, "ItemTriggerGameObject::m_item2Mode");

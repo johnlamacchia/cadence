@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ListCell) == 0x238, "ListCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(ListCell, m_bgColor) == 0x230, "ListCell::m_bgColor");
 inline const cadence::detail::LayoutRegistration cadence_layout_ListCell("ListCell", "0d6838720ee8bece");

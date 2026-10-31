@@ -9,9 +9,10 @@ class AdminReportQueueEntry : public cocos2d::CCObject {
 public:
     virtual ~AdminReportQueueEntry();
 
+    uint8_t _unmapped_tail[208];
 };
 
 
-// layout: unverified
-static_assert(sizeof(AdminReportQueueEntry) == 0x38, "AdminReportQueueEntry: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_AdminReportQueueEntry("AdminReportQueueEntry", "f62ffc2c2a467ca9");
+// layout: tail-padded
+static_assert(sizeof(AdminReportQueueEntry) == 0x108, "AdminReportQueueEntry: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_AdminReportQueueEntry("AdminReportQueueEntry", "e6b7b29176ea57b2");

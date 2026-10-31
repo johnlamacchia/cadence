@@ -20,7 +20,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SetupReverbPopup) == 0x3f0, "SetupReverbPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(SetupReverbPopup, m_reverbLabel) == 0x3e8, "SetupReverbPopup::m_reverbLabel");
 inline const cadence::detail::LayoutRegistration cadence_layout_SetupReverbPopup("SetupReverbPopup", "baff4927fc9d61eb");

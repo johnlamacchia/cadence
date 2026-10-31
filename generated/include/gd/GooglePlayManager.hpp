@@ -17,7 +17,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GooglePlayManager) == 0x150, "GooglePlayManager: size differs from the layout computed from the bindings");
 static_assert(offsetof(GooglePlayManager, m_delegate1) == 0x140, "GooglePlayManager::m_delegate1");
 static_assert(offsetof(GooglePlayManager, m_delegate2) == 0x148, "GooglePlayManager::m_delegate2");

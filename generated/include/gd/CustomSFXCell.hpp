@@ -31,7 +31,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CustomSFXCell) == 0x248, "CustomSFXCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(CustomSFXCell, m_sfxObject) == 0x238, "CustomSFXCell::m_sfxObject");
 static_assert(offsetof(CustomSFXCell, m_selected) == 0x240, "CustomSFXCell::m_selected");

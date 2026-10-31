@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ArtTriggerGameObject) == 0x748, "ArtTriggerGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(ArtTriggerGameObject, m_artIndex) == 0x740, "ArtTriggerGameObject::m_artIndex");
 inline const cadence::detail::LayoutRegistration cadence_layout_ArtTriggerGameObject("ArtTriggerGameObject", "d5a30dc7d1594a58");

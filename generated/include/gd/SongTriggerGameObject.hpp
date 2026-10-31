@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SongTriggerGameObject) == 0x810, "SongTriggerGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(SongTriggerGameObject, m_unk7a9) == 0x808, "SongTriggerGameObject::m_unk7a9");
 static_assert(offsetof(SongTriggerGameObject, m_prep) == 0x809, "SongTriggerGameObject::m_prep");

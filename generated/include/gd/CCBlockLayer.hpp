@@ -36,7 +36,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCBlockLayer) == 0x228, "CCBlockLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(CCBlockLayer, m_closeOnHide) == 0x220, "CCBlockLayer::m_closeOnHide");
 static_assert(offsetof(CCBlockLayer, m_forcePrioRegistered) == 0x221, "CCBlockLayer::m_forcePrioRegistered");

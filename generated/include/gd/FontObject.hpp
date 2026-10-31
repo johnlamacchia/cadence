@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(FontObject) == 0xb8, "FontObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(FontObject, m_fontWidths) == 0x38, "FontObject::m_fontWidths");
 static_assert(offsetof(FontObject, m_fontAdvances) == 0x78, "FontObject::m_fontAdvances");

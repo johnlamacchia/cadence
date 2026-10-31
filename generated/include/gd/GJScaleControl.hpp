@@ -64,7 +64,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJScaleControl) == 0x268, "GJScaleControl: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJScaleControl, m_sliderX) == 0x198, "GJScaleControl::m_sliderX");
 static_assert(offsetof(GJScaleControl, m_sliderY) == 0x1a0, "GJScaleControl::m_sliderY");

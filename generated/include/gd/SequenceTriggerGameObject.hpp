@@ -32,7 +32,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SequenceTriggerGameObject) == 0x7f0, "SequenceTriggerGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(SequenceTriggerGameObject, m_sequenceState) == 0x758, "SequenceTriggerGameObject::m_sequenceState");
 static_assert(offsetof(SequenceTriggerGameObject, m_minInt) == 0x7d8, "SequenceTriggerGameObject::m_minInt");

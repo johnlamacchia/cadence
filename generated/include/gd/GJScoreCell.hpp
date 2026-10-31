@@ -24,7 +24,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJScoreCell) == 0x240, "GJScoreCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJScoreCell, m_score) == 0x238, "GJScoreCell::m_score");
 inline const cadence::detail::LayoutRegistration cadence_layout_GJScoreCell("GJScoreCell", "1468d1796079df91");

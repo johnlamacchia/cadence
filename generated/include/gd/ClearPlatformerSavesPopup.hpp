@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(ClearPlatformerSavesPopup) == 0x2a0, "ClearPlatformerSavesPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_ClearPlatformerSavesPopup("ClearPlatformerSavesPopup", "b95b458c21817432");
 namespace cadence {

@@ -15,12 +15,13 @@ public:
     void setActiveKey(int);
     void setController2(bool);
 
+    uint8_t _unmapped_tail[120];
 };
 
 
-// layout: unverified
-static_assert(sizeof(ControllerInputNode) == 0x140, "ControllerInputNode: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_ControllerInputNode("ControllerInputNode", "11f4537e62b2b14e");
+// layout: tail-padded
+static_assert(sizeof(ControllerInputNode) == 0x1b8, "ControllerInputNode: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_ControllerInputNode("ControllerInputNode", "05973aab60d53593");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&ControllerInputNode::init> = "ControllerInputNode::init(InputCaptureDelegate*, cocos2d::CCSize const&)";
 }

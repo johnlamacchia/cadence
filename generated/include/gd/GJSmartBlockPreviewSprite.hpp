@@ -16,7 +16,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJSmartBlockPreviewSprite) == 0x140, "GJSmartBlockPreviewSprite: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_GJSmartBlockPreviewSprite("GJSmartBlockPreviewSprite", "11f4537e62b2b14e");
 namespace cadence {

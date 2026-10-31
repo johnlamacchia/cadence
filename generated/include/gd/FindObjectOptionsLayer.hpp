@@ -15,7 +15,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(FindObjectOptionsLayer) == 0x470, "FindObjectOptionsLayer: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_FindObjectOptionsLayer("FindObjectOptionsLayer", "9665691a7cbdbd9d");
 namespace cadence {

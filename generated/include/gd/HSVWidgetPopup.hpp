@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(HSVWidgetPopup) == 0x2a8, "HSVWidgetPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(HSVWidgetPopup, m_widget) == 0x298, "HSVWidgetPopup::m_widget");
 static_assert(offsetof(HSVWidgetPopup, m_delegate) == 0x2a0, "HSVWidgetPopup::m_delegate");

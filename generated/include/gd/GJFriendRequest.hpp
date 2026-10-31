@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJFriendRequest) == 0x198, "GJFriendRequest: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJFriendRequest, m_requestID) == 0x140, "GJFriendRequest::m_requestID");
 static_assert(offsetof(GJFriendRequest, m_accountID) == 0x144, "GJFriendRequest::m_accountID");

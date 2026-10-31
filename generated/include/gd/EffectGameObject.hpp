@@ -165,7 +165,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(EffectGameObject) == 0x740, "EffectGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(EffectGameObject, m_unknownBool) == 0x5b8, "EffectGameObject::m_unknownBool");
 static_assert(offsetof(EffectGameObject, m_triggerTargetColor) == 0x5b9, "EffectGameObject::m_triggerTargetColor");

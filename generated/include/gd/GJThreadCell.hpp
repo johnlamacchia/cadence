@@ -24,7 +24,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJThreadCell) == 0x240, "GJThreadCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJThreadCell, m_thread) == 0x230, "GJThreadCell::m_thread");
 static_assert(offsetof(GJThreadCell, m_toggler) == 0x238, "GJThreadCell::m_toggler");

@@ -31,7 +31,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ConfigureValuePopup) == 0x2c8, "ConfigureValuePopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(ConfigureValuePopup, m_type) == 0x298, "ConfigureValuePopup::m_type");
 static_assert(offsetof(ConfigureValuePopup, m_value) == 0x29c, "ConfigureValuePopup::m_value");

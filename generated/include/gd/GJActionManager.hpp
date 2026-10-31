@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJActionManager) == 0x148, "GJActionManager: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJActionManager, m_internalActions) == 0x140, "GJActionManager::m_internalActions");
 inline const cadence::detail::LayoutRegistration cadence_layout_GJActionManager("GJActionManager", "5db9177e0a4374aa");

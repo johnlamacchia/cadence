@@ -294,7 +294,9 @@ until exit, because their detours can still be on the call stack and UI they bui
 ## Limits
 
 - Geometry Dash **2.2091** only. Other versions need `sdk_update.py` and the matching bindings.
-- Layouts: see the table in the guide. Most classes' layouts come from the bindings and are not independently verified.
+- Layouts: 416 of 1,120 classes have a size confirmed against the exe (two independent sources that agree), and
+  the game's own code was checked against the layouts at 21,656 member accesses (17 disagree, all explained). The other
+  653 classes' layouts come from the bindings alone. Full table: [the guide](docs/GUIDE.md#class-layouts-and-how-far-to-trust-them).
 - Virtual calls through the headers rely on the bindings listing virtual functions in vtable order; not verified class by class.
 - Build mods in **Release**; the headers refuse the debug STL.
 

@@ -45,7 +45,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCSpriteWithHue) == 0x298, "CCSpriteWithHue: size differs from the layout computed from the bindings");
 static_assert(offsetof(CCSpriteWithHue, m_hue) == 0x258, "CCSpriteWithHue::m_hue");
 static_assert(offsetof(CCSpriteWithHue, m_luminance) == 0x25c, "CCSpriteWithHue::m_luminance");

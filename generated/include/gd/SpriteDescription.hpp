@@ -25,7 +25,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SpriteDescription) == 0x68, "SpriteDescription: size differs from the layout computed from the bindings");
 static_assert(offsetof(SpriteDescription, m_position) == 0x38, "SpriteDescription::m_position");
 static_assert(offsetof(SpriteDescription, m_scale) == 0x40, "SpriteDescription::m_scale");

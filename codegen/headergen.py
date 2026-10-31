@@ -1,4 +1,4 @@
-﻿"""
+"""
 C++ header generator.
 
 Emits, per GD/cocos2d class, a header with:
@@ -257,12 +257,17 @@ class Names:
 def apply_binary_sizes(classes, layouter_factory, sizes: dict):
     """
     Reconcile computed sizes with sizes read from the game binary.
-    Where the binary's class is larger than the bindings describe (members Geode
-    never mapped), append an explicit tail pad so sizeof and every derived class
-    are right. Where the bindings describe more than the binary has, give up on
-    that class. Returns {class: status}.
+
+    - The binary's class is larger than the bindings describe (members Geode never
+      mapped): append an explicit tail pad so sizeof and every derived class are right.
+    - The bindings describe more than the binary has: a member that would end past the
+      binary's real size cannot exist there, so those members are dropped (and listed),
+      then the class is padded to the binary's size. Its status is "corrected".
+    - Anything still different afterwards is a "conflict" (reported, not hidden).
+
+    Returns ({class: status}, {class: [names of dropped members]}).
     """
-    status = {}
+    status, corrected = {}, {}
     for _ in range(10):
         L = layouter_factory()
         changed = False
@@ -271,6 +276,19 @@ def apply_binary_sizes(classes, layouter_factory, sizes: dict):
                 continue
             lay = L.layout(name)
             if not lay.complete:
+                continue
+            if lay.size > want:
+                too_far = {f.name for f in lay.fields if f.offset + f.size > want}
+                if too_far == {"_unmapped_tail"}:
+                    # Our own pad, added before a base class grew: no longer needed. Not a bindings error.
+                    classes[name].members = [m for m in classes[name].members if m.name != "_unmapped_tail"]
+                    status.pop(name, None)
+                    changed = True
+                    continue
+                if too_far and name not in corrected:
+                    classes[name].members = [m for m in classes[name].members if m.name not in too_far]
+                    corrected[name] = sorted(too_far)
+                    changed = True
                 continue
             if name in status and status[name] == "tail-padded":
                 continue
@@ -289,10 +307,10 @@ def apply_binary_sizes(classes, layouter_factory, sizes: dict):
         if not lay.complete:
             continue
         if lay.size == want:
-            status.setdefault(name, "verified")
+            status[name] = "corrected" if name in corrected else status.get(name, "verified")
         else:
             status[name] = "conflict"
-    return status
+    return status, corrected
 
 
 def write_prelude(out: Path, classes, enums_src: Path):
@@ -506,7 +524,8 @@ def emit_class(name, cls, lay, layouter, status, hashes, names, stats):
     return "\n".join(L) + "\n", rel
 
 
-def generate(parser, bindings_dir: Path, version: str, out_dir: Path, sizes: dict):
+def generate(parser, bindings_dir: Path, version: str, out_dir: Path, sizes: dict, size_sources: dict = None,
+             audit: dict = None):
     classes = parser.classes
     enums_hpp = bindings_dir / "include" / "Geode" / "Enums.hpp"
     enums = parse_enums(enums_hpp)
@@ -514,7 +533,15 @@ def generate(parser, bindings_dir: Path, version: str, out_dir: Path, sizes: dic
     def factory():
         return Layouter(classes, enums, GEODE_RUNTIME_TYPES)
 
-    status = apply_binary_sizes(classes, factory, sizes)
+    status, corrected = apply_binary_sizes(classes, factory, sizes)
+    size_sources = size_sources or {}
+    audit = audit or {}
+    # The game's own code reaches past the end of these classes as the bindings describe them, so the
+    # bindings are missing trailing members. Members near the front are still at the right offsets,
+    # but sizeof is too small. (tools/offset_audit.py)
+    for name, a in audit.items():
+        if status.get(name, "unverified") == "unverified" and a.get("counts", {}).get("beyond", 0) > 0:
+            status[name] = "known-short"
     layouter = factory()
 
     hashes = {}
@@ -551,7 +578,14 @@ def generate(parser, bindings_dir: Path, version: str, out_dir: Path, sizes: dic
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(text, encoding="utf-8")
         written.append(rel)
-        report["classes"][name] = {"status": status.get(name, "unverified"), "size": lay.size, "error": None}
+        entry = {"status": status.get(name, "unverified"), "size": lay.size, "error": None}
+        if name in size_sources:
+            entry["size_source"] = size_sources[name]       # where the binary's size for this class came from
+        if name in corrected:
+            entry["dropped_members"] = corrected[name]      # bindings members that cannot exist at those offsets
+        if name in audit:
+            entry["offset_audit"] = audit[name]["counts"]   # how the game's own code used this class's offsets
+        report["classes"][name] = entry
     report["functions"] = stats
 
     umbrella = ["// Generated by codegen. Includes every class header (slow; include only what you use).", "#pragma once"]

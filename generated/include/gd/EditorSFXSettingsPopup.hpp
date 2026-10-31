@@ -13,12 +13,13 @@ public:
     virtual float getValue(int);
     bool init(int);
 
+    uint8_t _unmapped_tail[8];
 };
 
 
-// layout: unverified
-static_assert(sizeof(EditorSFXSettingsPopup) == 0x3e8, "EditorSFXSettingsPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_EditorSFXSettingsPopup("EditorSFXSettingsPopup", "b9ea375218c06de7");
+// layout: tail-padded
+static_assert(sizeof(EditorSFXSettingsPopup) == 0x3f0, "EditorSFXSettingsPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_EditorSFXSettingsPopup("EditorSFXSettingsPopup", "a599009c7a8a5a71");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&EditorSFXSettingsPopup::valueDidChange> = "EditorSFXSettingsPopup::valueDidChange(int, float)";
 template <> inline constexpr const char* fn_sig<&EditorSFXSettingsPopup::getValue> = "EditorSFXSettingsPopup::getValue(int)";

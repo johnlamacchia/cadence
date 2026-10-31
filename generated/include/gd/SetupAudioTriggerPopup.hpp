@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SetupAudioTriggerPopup) == 0x3f0, "SetupAudioTriggerPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(SetupAudioTriggerPopup, m_proximityButtons) == 0x3e8, "SetupAudioTriggerPopup::m_proximityButtons");
 inline const cadence::detail::LayoutRegistration cadence_layout_SetupAudioTriggerPopup("SetupAudioTriggerPopup", "ada120fb6b209c9c");

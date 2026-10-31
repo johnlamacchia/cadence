@@ -29,7 +29,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(LoadingLayer) == 0x1c8, "LoadingLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(LoadingLayer, m_unknown) == 0x198, "LoadingLayer::m_unknown");
 static_assert(offsetof(LoadingLayer, m_unknown2) == 0x199, "LoadingLayer::m_unknown2");

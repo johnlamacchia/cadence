@@ -76,7 +76,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(EnterEffectObject) == 0x828, "EnterEffectObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(EnterEffectObject, m_enterType) == 0x740, "EnterEffectObject::m_enterType");
 static_assert(offsetof(EnterEffectObject, m_length) == 0x744, "EnterEffectObject::m_length");

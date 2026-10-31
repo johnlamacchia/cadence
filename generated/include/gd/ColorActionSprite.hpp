@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ColorActionSprite) == 0x160, "ColorActionSprite: size differs from the layout computed from the bindings");
 static_assert(offsetof(ColorActionSprite, m_opacity) == 0x140, "ColorActionSprite::m_opacity");
 static_assert(offsetof(ColorActionSprite, m_color) == 0x144, "ColorActionSprite::m_color");

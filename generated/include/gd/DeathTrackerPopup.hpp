@@ -46,12 +46,13 @@ public:
     void setView(int);
     TodoReturn updatePanel();
 
+    uint8_t _unmapped_tail[360];
 };
 
 
-// layout: unverified
-static_assert(sizeof(DeathTrackerPopup) == 0x2a8, "DeathTrackerPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_DeathTrackerPopup("DeathTrackerPopup", "5798a74af281968e");
+// layout: tail-padded
+static_assert(sizeof(DeathTrackerPopup) == 0x410, "DeathTrackerPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_DeathTrackerPopup("DeathTrackerPopup", "07277befce0e7859");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&DeathTrackerPopup::ccTouchBegan> = "DeathTrackerPopup::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)";
 template <> inline constexpr const char* fn_sig<&DeathTrackerPopup::ccTouchMoved> = "DeathTrackerPopup::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)";

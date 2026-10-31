@@ -25,7 +25,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ObjectManager) == 0x150, "ObjectManager: size differs from the layout computed from the bindings");
 static_assert(offsetof(ObjectManager, m_objectDefinitions) == 0x140, "ObjectManager::m_objectDefinitions");
 static_assert(offsetof(ObjectManager, m_loadedAnimations) == 0x148, "ObjectManager::m_loadedAnimations");

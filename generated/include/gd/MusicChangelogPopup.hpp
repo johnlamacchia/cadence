@@ -15,9 +15,9 @@ public:
 };
 
 
-// layout: unverified
-static_assert(sizeof(MusicChangelogPopup) == 0x298, "MusicChangelogPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_MusicChangelogPopup("MusicChangelogPopup", "23974556de7be399");
+// layout: verified
+static_assert(sizeof(MusicChangelogPopup) == 0x2a8, "MusicChangelogPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_MusicChangelogPopup("MusicChangelogPopup", "f9e0f627ae76982a");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&MusicChangelogPopup::buildContent> = "MusicChangelogPopup::buildContent(cocos2d::CCNode*, float, float)";
 }

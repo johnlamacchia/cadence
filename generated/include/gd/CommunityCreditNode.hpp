@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CommunityCreditNode) == 0x170, "CommunityCreditNode: size differs from the layout computed from the bindings");
 static_assert(offsetof(CommunityCreditNode, m_unlockType) == 0x140, "CommunityCreditNode::m_unlockType");
 static_assert(offsetof(CommunityCreditNode, m_iconID) == 0x144, "CommunityCreditNode::m_iconID");

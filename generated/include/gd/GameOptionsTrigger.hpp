@@ -31,7 +31,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GameOptionsTrigger) == 0x778, "GameOptionsTrigger: size differs from the layout computed from the bindings");
 static_assert(offsetof(GameOptionsTrigger, m_streakAdditive) == 0x740, "GameOptionsTrigger::m_streakAdditive");
 static_assert(offsetof(GameOptionsTrigger, m_unlinkDualGravity) == 0x744, "GameOptionsTrigger::m_unlinkDualGravity");

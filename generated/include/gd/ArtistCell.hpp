@@ -20,7 +20,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ArtistCell) == 0x238, "ArtistCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(ArtistCell, m_songInfo) == 0x230, "ArtistCell::m_songInfo");
 inline const cadence::detail::LayoutRegistration cadence_layout_ArtistCell("ArtistCell", "12fde2415c0e524e");

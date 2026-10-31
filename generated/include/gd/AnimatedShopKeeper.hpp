@@ -25,7 +25,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(AnimatedShopKeeper) == 0x300, "AnimatedShopKeeper: size differs from the layout computed from the bindings");
 static_assert(offsetof(AnimatedShopKeeper, m_type) == 0x2e8, "AnimatedShopKeeper::m_type");
 static_assert(offsetof(AnimatedShopKeeper, m_idleInt1) == 0x2ec, "AnimatedShopKeeper::m_idleInt1");

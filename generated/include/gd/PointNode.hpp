@@ -16,7 +16,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(PointNode) == 0x40, "PointNode: size differs from the layout computed from the bindings");
 static_assert(offsetof(PointNode, m_point) == 0x38, "PointNode::m_point");
 inline const cadence::detail::LayoutRegistration cadence_layout_PointNode("PointNode", "9a7acd25717096fa");

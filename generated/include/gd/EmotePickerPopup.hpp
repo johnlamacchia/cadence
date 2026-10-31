@@ -38,7 +38,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(EmotePickerPopup) == 0x4c8, "EmotePickerPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(EmotePickerPopup, m_input) == 0x480, "EmotePickerPopup::m_input");
 static_assert(offsetof(EmotePickerPopup, m_maxEmotes) == 0x488, "EmotePickerPopup::m_maxEmotes");

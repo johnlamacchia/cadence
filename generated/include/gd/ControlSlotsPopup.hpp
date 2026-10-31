@@ -14,12 +14,13 @@ public:
     void onLoad(cocos2d::CCObject* sender);
     void onSave(cocos2d::CCObject* sender);
 
+    uint8_t _unmapped_tail[16];
 };
 
 
-// layout: unverified
-static_assert(sizeof(ControlSlotsPopup) == 0x3e8, "ControlSlotsPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_ControlSlotsPopup("ControlSlotsPopup", "b9ea375218c06de7");
+// layout: tail-padded
+static_assert(sizeof(ControlSlotsPopup) == 0x3f8, "ControlSlotsPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_ControlSlotsPopup("ControlSlotsPopup", "cccddb507244a1ad");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&ControlSlotsPopup::onClose> = "ControlSlotsPopup::onClose(cocos2d::CCObject* sender)";
 template <> inline constexpr const char* fn_sig<&ControlSlotsPopup::init> = "ControlSlotsPopup::init(TouchControlEditLayer*, bool)";

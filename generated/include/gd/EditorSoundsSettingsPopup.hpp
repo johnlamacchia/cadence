@@ -17,12 +17,13 @@ public:
     void onClose(cocos2d::CCObject* sender);
     void onDownloadAll(cocos2d::CCObject* sender);
 
+    uint8_t _unmapped_tail[16];
 };
 
 
-// layout: unverified
-static_assert(sizeof(EditorSoundsSettingsPopup) == 0x2a0, "EditorSoundsSettingsPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_EditorSoundsSettingsPopup("EditorSoundsSettingsPopup", "b95b458c21817432");
+// layout: tail-padded
+static_assert(sizeof(EditorSoundsSettingsPopup) == 0x2b0, "EditorSoundsSettingsPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_EditorSoundsSettingsPopup("EditorSoundsSettingsPopup", "2c6c3b4e6f2a7adc");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&EditorSoundsSettingsPopup::keyBackClicked> = "EditorSoundsSettingsPopup::keyBackClicked()";
 template <> inline constexpr const char* fn_sig<&EditorSoundsSettingsPopup::FLAlert_Clicked> = "EditorSoundsSettingsPopup::FLAlert_Clicked(FLAlertLayer*, bool)";

@@ -34,7 +34,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(TabbedPopupLayer) == 0x430, "TabbedPopupLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(TabbedPopupLayer, m_tabs) == 0x3e8, "TabbedPopupLayer::m_tabs");
 static_assert(offsetof(TabbedPopupLayer, m_tabPages) == 0x400, "TabbedPopupLayer::m_tabPages");

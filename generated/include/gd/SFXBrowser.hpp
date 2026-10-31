@@ -99,7 +99,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(SFXBrowser) == 0x360, "SFXBrowser: size differs from the layout computed from the bindings");
 static_assert(offsetof(SFXBrowser, m_searchResult) == 0x2c8, "SFXBrowser::m_searchResult");
 static_assert(offsetof(SFXBrowser, m_sfxObjects) == 0x2d0, "SFXBrowser::m_sfxObjects");

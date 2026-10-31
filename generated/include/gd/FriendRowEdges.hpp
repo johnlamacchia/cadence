@@ -10,12 +10,13 @@ public:
     virtual ~FriendRowEdges();
     virtual void draw();
 
+    uint8_t _unmapped_tail[8];
 };
 
 
-// layout: unverified
-static_assert(sizeof(FriendRowEdges) == 0x140, "FriendRowEdges: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_FriendRowEdges("FriendRowEdges", "11f4537e62b2b14e");
+// layout: tail-padded
+static_assert(sizeof(FriendRowEdges) == 0x148, "FriendRowEdges: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_FriendRowEdges("FriendRowEdges", "3ab9dc730a338772");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&FriendRowEdges::draw> = "FriendRowEdges::draw()";
 }

@@ -16,7 +16,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SongObject) == 0x40, "SongObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(SongObject, m_audioID) == 0x38, "SongObject::m_audioID");
 inline const cadence::detail::LayoutRegistration cadence_layout_SongObject("SongObject", "452411db5f4ae4fb");

@@ -11,12 +11,13 @@ public:
     virtual void addChild(cocos2d::CCNode*, int, int);
     virtual void removeAllChildrenWithCleanup(bool);
 
+    uint8_t _unmapped_tail[8];
 };
 
 
-// layout: unverified
-static_assert(sizeof(SectionedContentNode) == 0x140, "SectionedContentNode: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_SectionedContentNode("SectionedContentNode", "11f4537e62b2b14e");
+// layout: tail-padded
+static_assert(sizeof(SectionedContentNode) == 0x148, "SectionedContentNode: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_SectionedContentNode("SectionedContentNode", "3ab9dc730a338772");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&SectionedContentNode::addChild> = "SectionedContentNode::addChild(cocos2d::CCNode*, int, int)";
 template <> inline constexpr const char* fn_sig<&SectionedContentNode::removeAllChildrenWithCleanup> = "SectionedContentNode::removeAllChildrenWithCleanup(bool)";

@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(InfoAlertButton) == 0x250, "InfoAlertButton: size differs from the layout computed from the bindings");
 static_assert(offsetof(InfoAlertButton, m_title) == 0x208, "InfoAlertButton::m_title");
 static_assert(offsetof(InfoAlertButton, m_description) == 0x228, "InfoAlertButton::m_description");

@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJLocalLevelScoreCell) == 0x238, "GJLocalLevelScoreCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJLocalLevelScoreCell, m_localScore) == 0x230, "GJLocalLevelScoreCell::m_localScore");
 inline const cadence::detail::LayoutRegistration cadence_layout_GJLocalLevelScoreCell("GJLocalLevelScoreCell", "52e4353a64fcef77");

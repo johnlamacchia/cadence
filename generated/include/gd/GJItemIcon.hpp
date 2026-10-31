@@ -30,7 +30,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJItemIcon) == 0x278, "GJItemIcon: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJItemIcon, m_player) == 0x258, "GJItemIcon::m_player");
 static_assert(offsetof(GJItemIcon, m_iconRequestID) == 0x260, "GJItemIcon::m_iconRequestID");

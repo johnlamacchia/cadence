@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(EditorOptionsLayer) == 0x488, "EditorOptionsLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(EditorOptionsLayer, m_buttonsPerRow) == 0x470, "EditorOptionsLayer::m_buttonsPerRow");
 static_assert(offsetof(EditorOptionsLayer, m_buttonRows) == 0x474, "EditorOptionsLayer::m_buttonRows");

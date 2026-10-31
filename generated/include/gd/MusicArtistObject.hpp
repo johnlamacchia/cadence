@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(MusicArtistObject) == 0x78, "MusicArtistObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(MusicArtistObject, m_artistID) == 0x38, "MusicArtistObject::m_artistID");
 static_assert(offsetof(MusicArtistObject, m_artistName) == 0x40, "MusicArtistObject::m_artistName");

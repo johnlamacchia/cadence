@@ -82,7 +82,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(AdvancedFollowTriggerObject) == 0x838, "AdvancedFollowTriggerObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(AdvancedFollowTriggerObject, m_delay) == 0x740, "AdvancedFollowTriggerObject::m_delay");
 static_assert(offsetof(AdvancedFollowTriggerObject, m_delayVariance) == 0x744, "AdvancedFollowTriggerObject::m_delayVariance");

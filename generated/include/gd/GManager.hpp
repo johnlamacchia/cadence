@@ -33,7 +33,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GManager) == 0x168, "GManager: size differs from the layout computed from the bindings");
 static_assert(offsetof(GManager, m_fileName) == 0x140, "GManager::m_fileName");
 static_assert(offsetof(GManager, m_setup) == 0x160, "GManager::m_setup");

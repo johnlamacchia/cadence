@@ -177,7 +177,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SetupTriggerPopup) == 0x3e8, "SetupTriggerPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(SetupTriggerPopup, m_gameObject) == 0x2a8, "SetupTriggerPopup::m_gameObject");
 static_assert(offsetof(SetupTriggerPopup, m_gameObjects) == 0x2b0, "SetupTriggerPopup::m_gameObjects");

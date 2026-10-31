@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJLevelScoreCell) == 0x238, "GJLevelScoreCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJLevelScoreCell, m_userScore) == 0x230, "GJLevelScoreCell::m_userScore");
 inline const cadence::detail::LayoutRegistration cadence_layout_GJLevelScoreCell("GJLevelScoreCell", "1fc79b6b39fc1389");

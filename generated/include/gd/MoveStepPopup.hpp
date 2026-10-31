@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(MoveStepPopup) == 0x480, "MoveStepPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_MoveStepPopup("MoveStepPopup", "c6bcd69f3dafed2a");
 namespace cadence {

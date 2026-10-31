@@ -21,12 +21,13 @@ public:
     void setProgression(std::vector<int> const&, std::vector<int> const&, std::vector<int> const&);
     void setSurvival(std::vector<int> const&, bool, bool, int);
 
+    uint8_t _unmapped_tail[72];
 };
 
 
-// layout: unverified
-static_assert(sizeof(DeathHistogram) == 0x140, "DeathHistogram: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_DeathHistogram("DeathHistogram", "11f4537e62b2b14e");
+// layout: tail-padded
+static_assert(sizeof(DeathHistogram) == 0x188, "DeathHistogram: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_DeathHistogram("DeathHistogram", "1928a83604296654");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&DeathHistogram::rebuildAxis> = "DeathHistogram::rebuildAxis(char const*, int, float, float, char const*)";
 template <> inline constexpr const char* fn_sig<&DeathHistogram::setAttemptLine> = "DeathHistogram::setAttemptLine(std::vector<int> const&, std::vector<int> const&, cocos2d::ccColor3B, int, cocos2d::ccColor3B, bool)";

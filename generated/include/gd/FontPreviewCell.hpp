@@ -15,12 +15,13 @@ public:
     void onSelectFont(cocos2d::CCObject* sender);
     TodoReturn updateBGColor(int);
 
+    uint8_t _unmapped_tail[8];
 };
 
 
-// layout: unverified
-static_assert(sizeof(FontPreviewCell) == 0x230, "FontPreviewCell: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_FontPreviewCell("FontPreviewCell", "732414bd04a5252e");
+// layout: tail-padded
+static_assert(sizeof(FontPreviewCell) == 0x238, "FontPreviewCell: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_FontPreviewCell("FontPreviewCell", "73262a6ad57ec74a");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&FontPreviewCell::init> = "FontPreviewCell::init()";
 template <> inline constexpr const char* fn_sig<&FontPreviewCell::draw> = "FontPreviewCell::draw()";

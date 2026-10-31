@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(LevelOptionsLayer) == 0x478, "LevelOptionsLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(LevelOptionsLayer, m_settingsObject) == 0x470, "LevelOptionsLayer::m_settingsObject");
 inline const cadence::detail::LayoutRegistration cadence_layout_LevelOptionsLayer("LevelOptionsLayer", "6d6ddcba1e9f8861");

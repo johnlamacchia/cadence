@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(PlayerControlGameObject) == 0x748, "PlayerControlGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(PlayerControlGameObject, m_stopJump) == 0x740, "PlayerControlGameObject::m_stopJump");
 static_assert(offsetof(PlayerControlGameObject, m_stopMove) == 0x741, "PlayerControlGameObject::m_stopMove");

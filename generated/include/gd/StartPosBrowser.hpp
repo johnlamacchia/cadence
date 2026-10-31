@@ -24,7 +24,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(StartPosBrowser) == 0x2a8, "StartPosBrowser: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_StartPosBrowser("StartPosBrowser", "db4417cb56965e46");
 namespace cadence {

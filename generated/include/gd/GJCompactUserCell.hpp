@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJCompactUserCell) == 0x238, "GJCompactUserCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJCompactUserCell, m_userScore) == 0x230, "GJCompactUserCell::m_userScore");
 inline const cadence::detail::LayoutRegistration cadence_layout_GJCompactUserCell("GJCompactUserCell", "1fc79b6b39fc1389");

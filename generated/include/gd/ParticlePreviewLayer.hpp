@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ParticlePreviewLayer) == 0x238, "ParticlePreviewLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(ParticlePreviewLayer, m_particleMode) == 0x220, "ParticlePreviewLayer::m_particleMode");
 static_assert(offsetof(ParticlePreviewLayer, m_drawMode) == 0x224, "ParticlePreviewLayer::m_drawMode");

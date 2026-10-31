@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(UISettingsGameObject) == 0x750, "UISettingsGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(UISettingsGameObject, m_xRef) == 0x740, "UISettingsGameObject::m_xRef");
 static_assert(offsetof(UISettingsGameObject, m_yRef) == 0x744, "UISettingsGameObject::m_yRef");

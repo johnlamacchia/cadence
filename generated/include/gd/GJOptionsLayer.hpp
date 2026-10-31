@@ -50,7 +50,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJOptionsLayer) == 0x470, "GJOptionsLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJOptionsLayer, m_gap) == 0x3e8, "GJOptionsLayer::m_gap");
 static_assert(offsetof(GJOptionsLayer, m_page) == 0x3ec, "GJOptionsLayer::m_page");

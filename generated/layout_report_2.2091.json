@@ -7,21 +7,35 @@
   },
   "AccountHelpLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 664,
    "status": "unverified"
   },
   "AccountLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 36
+   },
    "size": 720,
+   "size_source": "create",
    "status": "verified"
   },
   "AccountLoginLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 42
+   },
    "size": 784,
+   "size_source": "create",
    "status": "verified"
   },
   "AccountRegisterLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 46
+   },
    "size": 784,
    "status": "unverified"
   },
@@ -32,33 +46,58 @@
   },
   "AccountReviewPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20,
+    "unmapped": 100
+   },
    "size": 1576,
+   "size_source": "both",
    "status": "tail-padded"
   },
   "AchievementBar": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 416,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AchievementCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 10
+   },
    "size": 560,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AchievementManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 22
+   },
    "size": 392,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AchievementNotifier": {
    "error": null,
+   "offset_audit": {
+    "consistent": 8
+   },
    "size": 344,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AchievementsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 19
+   },
    "size": 648,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AdToolbox": {
    "error": null,
@@ -67,8 +106,9 @@
   },
   "AdminAbuseEntry": {
    "error": null,
-   "size": 56,
-   "status": "unverified"
+   "size": 200,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "AdminAbuseMeta": {
    "error": null,
@@ -82,23 +122,31 @@
   },
   "AdminActionConfirmPopup": {
    "error": null,
-   "size": 1000,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 1,
+    "unmapped": 7
+   },
+   "size": 1104,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "AdminLogEntry": {
    "error": null,
-   "size": 56,
-   "status": "unverified"
+   "size": 240,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "AdminReportQueueEntry": {
    "error": null,
-   "size": 56,
-   "status": "unverified"
+   "size": 264,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "AdminReportedEntry": {
    "error": null,
-   "size": 56,
-   "status": "unverified"
+   "size": 248,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "AdminReportedMeta": {
    "error": null,
@@ -112,8 +160,12 @@
   },
   "AdvancedFollowEditObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 2128,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AdvancedFollowInstance": {
    "error": null,
@@ -122,18 +174,30 @@
   },
   "AdvancedFollowTriggerObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 80
+   },
    "size": 2104,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AnimatedGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 40
+   },
    "size": 1552,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AnimatedShopKeeper": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 768,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AnimatedSpriteDelegate": {
    "error": null,
@@ -142,38 +206,65 @@
   },
   "AppDelegate": {
    "error": null,
-   "size": 248,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 6,
+    "inconsistent": 3,
+    "unmapped": 1
+   },
+   "size": 256,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "ArtTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 7
+   },
    "size": 1864,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ArtistCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AudioAssetsBrowser": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17
+   },
    "size": 760,
    "status": "unverified"
   },
   "AudioAssetsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 1016,
    "status": "unverified"
   },
   "AudioEffectsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 592,
    "status": "unverified"
   },
   "AudioLineGuideGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 1872,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "AutoBackupOptionsDelegate": {
    "error": null,
@@ -182,23 +273,42 @@
   },
   "AutoBackupOptionsPopup": {
    "error": null,
-   "size": 1008,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 37,
+    "unmapped": 2
+   },
+   "size": 1024,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "AutoBackupPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 6,
+    "unmapped": 49
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "tail-padded"
   },
   "AutoSaveSettingsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 19,
+    "unmapped": 4
+   },
    "size": 1056,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "BitmapFontCache": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 64,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "BonusDropdown": {
    "error": null,
@@ -212,8 +322,12 @@
   },
   "BoomListView": {
    "error": null,
+   "offset_audit": {
+    "consistent": 40
+   },
    "size": 464,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "BoomScrollLayer": {
    "error": "unknown type base cocos2d::CCTouchClipper",
@@ -227,13 +341,20 @@
   },
   "BrowseSmartKeyLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18
+   },
    "size": 752,
    "status": "unverified"
   },
   "BrowseSmartTemplateLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 47
+   },
    "size": 712,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "BulkCommentKey": {
    "error": null,
@@ -243,11 +364,16 @@
   "ButtonPage": {
    "error": null,
    "size": 408,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ButtonSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 32
+   },
    "size": 712,
+   "size_source": "both",
    "status": "verified"
   },
   "CAState": {
@@ -262,18 +388,30 @@
   },
   "CCAnimateFrameCache": {
    "error": null,
+   "offset_audit": {
+    "consistent": 8
+   },
    "size": 80,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCAnimatedSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 44
+   },
    "size": 744,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCBlockLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 28
+   },
    "size": 552,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCCircleAlert": {
    "error": null,
@@ -282,7 +420,11 @@
   },
   "CCCircleWave": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 376,
+   "size_source": "both",
    "status": "verified"
   },
   "CCCircleWaveDelegate": {
@@ -292,8 +434,12 @@
   },
   "CCContentLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 544,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCContentManager": {
    "error": null,
@@ -307,8 +453,12 @@
   },
   "CCCounterLabel": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCExtenderNode": {
    "error": null,
@@ -318,17 +468,25 @@
   "CCIndexPath": {
    "error": null,
    "size": 64,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCLightFlash": {
    "error": null,
+   "offset_audit": {
+    "consistent": 8
+   },
    "size": 360,
    "status": "unverified"
   },
   "CCLightStrip": {
    "error": null,
+   "offset_audit": {
+    "consistent": 4
+   },
    "size": 352,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCMenuExtra": {
    "error": null,
@@ -337,12 +495,21 @@
   },
   "CCMenuItemSpriteExtra": {
    "error": null,
+   "offset_audit": {
+    "consistent": 42,
+    "unmapped": 1
+   },
    "size": 520,
+   "size_source": "both",
    "status": "verified"
   },
   "CCMenuItemToggler": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 400,
+   "size_source": "both",
    "status": "verified"
   },
   "CCMoveCNode": {
@@ -352,13 +519,21 @@
   },
   "CCNodeContainer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 320,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCPartAnimSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 640,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCScrollLayerExt": {
    "error": "unknown type base cocos2d::CCTouchClipper",
@@ -378,42 +553,68 @@
   "CCSpriteGrayscale": {
    "error": null,
    "size": 664,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCSpritePart": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 672,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCSpritePlus": {
    "error": null,
+   "offset_audit": {
+    "consistent": 39
+   },
    "size": 624,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCSpriteWithHue": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 664,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CCTextInputMenu": {
    "error": null,
-   "size": 408,
-   "status": "unverified"
+   "offset_audit": {
+    "unmapped": 1
+   },
+   "size": 432,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "CCTextInputNode": {
    "error": null,
+   "offset_audit": {
+    "consistent": 55
+   },
    "size": 728,
+   "size_source": "create",
    "status": "verified"
   },
   "CCURLObject": {
    "error": null,
    "size": 120,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CameraTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 44
+   },
    "size": 1888,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ChainNode": {
    "error": null,
@@ -422,11 +623,18 @@
   },
   "ChallengeNode": {
    "error": null,
+   "offset_audit": {
+    "consistent": 8
+   },
    "size": 360,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ChallengesPage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 22
+   },
    "size": 736,
    "status": "unverified"
   },
@@ -437,6 +645,9 @@
   },
   "ChanceTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 2
+   },
    "size": 1880,
    "status": "unverified"
   },
@@ -447,32 +658,55 @@
   },
   "CharacterColorPage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 736,
    "status": "unverified"
   },
   "CheckpointGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 37
+   },
    "size": 1872,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CheckpointObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 23
+   },
    "size": 4944,
    "status": "unverified"
   },
   "ClearPlatformerSavesOptionsPopup": {
    "error": null,
-   "size": 1000,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 33,
+    "unmapped": 1
+   },
+   "size": 1008,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "ClearPlatformerSavesPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 5,
+    "consistent": 16
+   },
    "size": 672,
-   "status": "unverified"
+   "status": "known-short"
   },
   "CollisionBlockPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "CollisionTriggerAction": {
@@ -482,7 +716,11 @@
   },
   "ColorAction": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 168,
+   "size_source": "create",
    "status": "verified"
   },
   "ColorAction2": {
@@ -493,11 +731,16 @@
   "ColorActionSprite": {
    "error": null,
    "size": 352,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ColorChannelSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 624,
+   "size_source": "both",
    "status": "verified"
   },
   "ColorSelectDelegate": {
@@ -507,12 +750,20 @@
   },
   "ColorSelectLiveOverlay": {
    "error": null,
+   "offset_audit": {
+    "consistent": 80
+   },
    "size": 864,
+   "size_source": "create",
    "status": "verified"
   },
   "ColorSelectPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 124
+   },
    "size": 1280,
+   "size_source": "create",
    "status": "verified"
   },
   "ColorSetupDelegate": {
@@ -527,13 +778,20 @@
   },
   "CommentCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 35
+   },
    "size": 616,
    "status": "unverified"
   },
   "CommentOptionsPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 4,
+    "consistent": 16
+   },
    "size": 1000,
-   "status": "unverified"
+   "status": "known-short"
   },
   "CommentUploadDelegate": {
    "error": null,
@@ -542,23 +800,38 @@
   },
   "CommunityCreditNode": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 368,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CommunityCreditsPage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 6
+   },
    "size": 696,
    "status": "unverified"
   },
   "ConfigureHSVWidget": {
    "error": null,
+   "offset_audit": {
+    "consistent": 52
+   },
    "size": 456,
+   "size_source": "both",
    "status": "verified"
   },
   "ConfigureValuePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 36
+   },
    "size": 712,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ConfigureValuePopupDelegate": {
    "error": null,
@@ -572,13 +845,23 @@
   },
   "ControlSlotsPopup": {
    "error": null,
-   "size": 1000,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 41,
+    "unmapped": 6
+   },
+   "size": 1016,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "ControllerInputNode": {
    "error": null,
-   "size": 320,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 1,
+    "unmapped": 2
+   },
+   "size": 440,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "CountTriggerAction": {
    "error": null,
@@ -587,28 +870,47 @@
   },
   "CountTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 27
+   },
    "size": 1872,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CreateGuidelinesLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 55
+   },
    "size": 768,
    "status": "unverified"
   },
   "CreateMenuItem": {
    "error": null,
+   "offset_audit": {
+    "consistent": 2
+   },
    "size": 568,
+   "size_source": "both",
    "status": "verified"
   },
   "CreateParticlePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 150
+   },
    "size": 1008,
+   "size_source": "create",
    "status": "verified"
   },
   "CreateStartPosPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 17
+   },
    "size": 1000,
-   "status": "unverified"
+   "status": "known-short"
   },
   "CreateStartPosPopupDelegate": {
    "error": null,
@@ -617,17 +919,28 @@
   },
   "CreatorLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 24
+   },
    "size": 488,
    "status": "unverified"
   },
   "CreatorSettingsDelegate": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 8,
    "status": "unverified"
   },
   "CreatorSettingsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21,
+    "unmapped": 5
+   },
    "size": 1048,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "CurrencyRewardDelegate": {
@@ -637,28 +950,49 @@
   },
   "CurrencyRewardLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 58
+   },
    "size": 640,
+   "size_source": "both",
    "status": "verified"
   },
   "CurrencySprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 680,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CustomListView": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 472,
+   "size_source": "both",
    "status": "verified"
   },
   "CustomMusicCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 584,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CustomSFXCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 28,
+    "unmapped": 4
+   },
    "size": 584,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CustomSFXDelegate": {
    "error": null,
@@ -673,17 +1007,26 @@
   "CustomSFXRowMenu": {
    "error": null,
    "size": 448,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CustomSFXWidget": {
    "error": null,
+   "offset_audit": {
+    "consistent": 66
+   },
    "size": 504,
+   "size_source": "create",
    "status": "verified"
   },
   "CustomSongCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 584,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "CustomSongDelegate": {
    "error": null,
@@ -692,6 +1035,9 @@
   },
   "CustomSongLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 31
+   },
    "size": 712,
    "status": "unverified"
   },
@@ -702,18 +1048,30 @@
   },
   "CustomSongWidget": {
    "error": null,
+   "offset_audit": {
+    "consistent": 131
+   },
    "size": 632,
+   "size_source": "create",
    "status": "verified"
   },
   "CustomizeObjectLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 109
+   },
    "size": 928,
+   "size_source": "create",
    "status": "verified"
   },
   "CustomizeObjectSettingsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 1016,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "DS_Dictionary": {
    "error": null,
@@ -727,53 +1085,96 @@
   },
   "DailyLevelNode": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 376,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "DailyLevelPage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 44,
+    "unmapped": 1
+   },
    "size": 744,
+   "size_source": "create",
    "status": "verified"
   },
   "DailyRecallUnlockPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18
+   },
    "size": 664,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "DashRingObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 8
+   },
    "size": 1880,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "DeathHistogram": {
    "error": null,
-   "size": 320,
-   "status": "unverified"
+   "offset_audit": {
+    "unmapped": 15
+   },
+   "size": 392,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "DeathMarkerLayer": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 1
+   },
    "size": 320,
-   "status": "unverified"
+   "status": "known-short"
   },
   "DeathMarkerSettingsPopup": {
    "error": null,
-   "size": 1008,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 32
+   },
+   "size": 1048,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "DeathStatsPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 16,
+    "consistent": 12
+   },
    "size": 1000,
-   "status": "unverified"
+   "status": "known-short"
   },
   "DeathTrackerOptionsPopup": {
    "error": null,
-   "size": 1008,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 34,
+    "unmapped": 3
+   },
+   "size": 1024,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "DeathTrackerPopup": {
    "error": null,
-   "size": 680,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 7,
+    "unmapped": 58
+   },
+   "size": 1040,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "DelayedSpawnNode": {
    "error": null,
@@ -787,12 +1188,19 @@
   },
   "DemonFilterSelectLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 8
+   },
    "size": 696,
    "status": "unverified"
   },
   "DemonInfoPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 664,
+   "size_source": "both",
    "status": "verified"
   },
   "DialogDelegate": {
@@ -802,13 +1210,18 @@
   },
   "DialogLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 25,
+    "unmapped": 1
+   },
    "size": 648,
    "status": "unverified"
   },
   "DialogObject": {
    "error": null,
    "size": 136,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "DownloadMessageDelegate": {
    "error": null,
@@ -817,17 +1230,27 @@
   },
   "DpadMenu": {
    "error": null,
-   "size": 448,
-   "status": "unverified"
+   "size": 504,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "DrawGridLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 43
+   },
    "size": 640,
+   "size_source": "create",
    "status": "verified"
   },
   "Dropdown": {
    "error": null,
+   "offset_audit": {
+    "consistent": 3,
+    "unmapped": 16
+   },
    "size": 560,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "DropdownDelegate": {
@@ -837,6 +1260,9 @@
   },
   "DropdownListPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 664,
    "status": "unverified"
   },
@@ -857,8 +1283,12 @@
   },
   "DungeonBarsSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 328,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "DynamicBitset": {
    "error": null,
@@ -882,27 +1312,45 @@
   },
   "EasingSelectPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 12,
+    "consistent": 11
+   },
    "size": 1000,
-   "status": "unverified"
+   "status": "known-short"
   },
   "EditButtonBar": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21
+   },
    "size": 368,
+   "size_source": "both",
    "status": "verified"
   },
   "EditGameObjectPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 1000,
    "status": "unverified"
   },
   "EditLevelLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 600,
    "status": "unverified"
   },
   "EditTriggersPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "EditorBuildStats": {
@@ -912,23 +1360,37 @@
   },
   "EditorCommandsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 1152,
    "status": "unverified"
   },
   "EditorOptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "beyond": 3,
+    "inconsistent": 1
+   },
    "size": 1160,
-   "status": "unverified"
+   "status": "known-short"
   },
   "EditorPauseLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 640,
    "status": "unverified"
   },
   "EditorSFXActionConfigLayer": {
    "error": null,
+   "offset_audit": {
+    "beyond": 17,
+    "consistent": 20
+   },
    "size": 1008,
-   "status": "unverified"
+   "status": "known-short"
   },
   "EditorSFXBinding": {
    "error": null,
@@ -942,23 +1404,41 @@
   },
   "EditorSFXManager": {
    "error": null,
+   "offset_audit": {
+    "beyond": 15
+   },
    "size": 1,
-   "status": "unverified"
+   "status": "known-short"
   },
   "EditorSFXSettingsPopup": {
    "error": null,
-   "size": 1000,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 35,
+    "unmapped": 2
+   },
+   "size": 1008,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "EditorSoundBrowserLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 32,
+    "unmapped": 37
+   },
    "size": 1208,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "EditorSoundConfigCell": {
    "error": null,
-   "size": 560,
-   "status": "unverified"
+   "offset_audit": {
+    "beyond": 12,
+    "consistent": 15
+   },
+   "size": 592,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "EditorSoundConfigCellDelegate": {
    "error": null,
@@ -967,13 +1447,22 @@
   },
   "EditorSoundConfigInfoLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26,
+    "unmapped": 39
+   },
    "size": 1232,
+   "size_source": "both",
    "status": "tail-padded"
   },
   "EditorSoundConfigUploadPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 31,
+    "consistent": 20
+   },
    "size": 1008,
-   "status": "unverified"
+   "status": "known-short"
   },
   "EditorSoundDeleteDelegate": {
    "error": null,
@@ -997,31 +1486,56 @@
   },
   "EditorSoundsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 30,
+    "unmapped": 22
+   },
    "size": 1168,
+   "size_source": "both",
    "status": "tail-padded"
   },
   "EditorSoundsSettingsPopup": {
    "error": null,
-   "size": 672,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 15,
+    "unmapped": 2
+   },
+   "size": 688,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "EditorUI": {
    "error": null,
+   "offset_audit": {
+    "consistent": 563
+   },
    "size": 1720,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "EditorWindowPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 125
+   },
    "size": 1152,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "EffectGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 263
+   },
    "size": 1856,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "EffectManagerState": {
    "error": null,
+   "offset_audit": {
+    "consistent": 24
+   },
    "size": 832,
    "status": "unverified"
   },
@@ -1037,13 +1551,21 @@
   },
   "EmotePickerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 31
+   },
    "size": 1224,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "EmoteSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 608,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "EmoteToken": {
    "error": null,
@@ -1052,28 +1574,46 @@
   },
   "EndLevelLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 51
+   },
    "size": 688,
    "status": "unverified"
   },
   "EndPortalObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 1376,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "EndTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 1864,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "EnhancedGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 225
+   },
    "size": 1464,
    "status": "unverified"
   },
   "EnhancedTriggerObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 1872,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "EnterEffectAnimValue": {
    "error": null,
@@ -1082,18 +1622,29 @@
   },
   "EnterEffectInstance": {
    "error": null,
+   "offset_audit": {
+    "consistent": 68
+   },
    "size": 232,
    "status": "unverified"
   },
   "EnterEffectObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 131
+   },
    "size": 2088,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "EventLinkTrigger": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 1888,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "EventTriggerInstance": {
    "error": null,
@@ -1102,23 +1653,36 @@
   },
   "ExplodeItemNode": {
    "error": null,
+   "offset_audit": {
+    "consistent": 6
+   },
    "size": 352,
+   "size_source": "create",
    "status": "verified"
   },
   "ExplodeItemSprite": {
    "error": null,
    "size": 632,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ExtendedLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 416,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "FLAlertLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 56
+   },
    "size": 664,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "FLAlertLayerProtocol": {
    "error": null,
@@ -1177,17 +1741,27 @@
   },
   "FMODAudioEngine": {
    "error": null,
+   "offset_audit": {
+    "consistent": 121
+   },
    "size": 2216,
    "status": "unverified"
   },
   "FMODAudioState": {
    "error": null,
+   "offset_audit": {
+    "consistent": 7
+   },
    "size": 896,
    "status": "unverified"
   },
   "FMODLevelVisualizer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 2
+   },
    "size": 328,
+   "size_source": "both",
    "status": "verified"
   },
   "FMODMusic": {
@@ -1222,6 +1796,9 @@
   },
   "FRequestProfilePage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 63
+   },
    "size": 936,
    "status": "unverified"
   },
@@ -1237,21 +1814,35 @@
   },
   "FindBPMLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 800,
+   "size_source": "both",
    "status": "verified"
   },
   "FindObjectOptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 1136,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "FindObjectPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21
+   },
    "size": 1160,
    "status": "unverified"
   },
   "FollowRewardPage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 704,
    "status": "unverified"
   },
@@ -1263,17 +1854,27 @@
   "FontObject": {
    "error": null,
    "size": 184,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "FontPreviewCell": {
    "error": null,
-   "size": 560,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 11,
+    "unmapped": 3
+   },
+   "size": 568,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "ForceBlockGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 1880,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "FriendPickerDelegate": {
    "error": null,
@@ -1282,7 +1883,12 @@
   },
   "FriendPickerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14,
+    "unmapped": 38
+   },
    "size": 896,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "FriendRequestDelegate": {
@@ -1292,17 +1898,31 @@
   },
   "FriendRequestPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 29,
+    "inconsistent": 4
+   },
    "size": 728,
+   "size_source": "create",
    "status": "verified"
   },
   "FriendRowEdges": {
    "error": null,
-   "size": 320,
-   "status": "unverified"
+   "offset_audit": {
+    "unmapped": 1
+   },
+   "size": 328,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "FriendsProfilePage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 34,
+    "unmapped": 22
+   },
    "size": 984,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "GDFileWriter": {
@@ -1327,8 +1947,12 @@
   },
   "GJAccountManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 35
+   },
    "size": 528,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJAccountRegisterDelegate": {
    "error": null,
@@ -1342,6 +1966,9 @@
   },
   "GJAccountSettingsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 744,
    "status": "unverified"
   },
@@ -1353,7 +1980,8 @@
   "GJActionManager": {
    "error": null,
    "size": 328,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJAssetDownloadAction": {
    "error": null,
@@ -1362,8 +1990,14 @@
   },
   "GJBaseGameLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1489,
+    "inconsistent": 1,
+    "unmapped": 7
+   },
    "size": 14648,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJBigSprite": {
    "error": null,
@@ -1382,33 +2016,54 @@
   },
   "GJChallengeItem": {
    "error": null,
+   "offset_audit": {
+    "consistent": 10
+   },
    "size": 144,
    "status": "unverified"
   },
   "GJChestSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 6
+   },
    "size": 616,
+   "size_source": "both",
    "status": "verified"
   },
   "GJColorSetupLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 46
+   },
    "size": 776,
+   "size_source": "create",
    "status": "verified"
   },
   "GJComment": {
    "error": null,
    "size": 480,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJCommentListLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 10
+   },
    "size": 552,
+   "size_source": "create",
    "status": "verified"
   },
   "GJCompactUserCell": {
    "error": null,
+   "offset_audit": {
+    "beyond": 4,
+    "consistent": 26
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJContentStatusDelegate": {
    "error": null,
@@ -1422,13 +2077,21 @@
   },
   "GJDifficultySprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 4
+   },
    "size": 608,
+   "size_source": "both",
    "status": "verified"
   },
   "GJDropDownLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 37
+   },
    "size": 608,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJDropDownLayerDelegate": {
    "error": null,
@@ -1437,12 +2100,21 @@
   },
   "GJEditorSoundConfig": {
    "error": null,
-   "size": 320,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 1,
+    "unmapped": 38
+   },
+   "size": 552,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "GJEffectManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 166
+   },
    "size": 2088,
+   "size_source": "both",
    "status": "verified"
   },
   "GJFlyGroundLayer": {
@@ -1452,53 +2124,88 @@
   },
   "GJFollowCommandLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 1000,
    "status": "unverified"
   },
   "GJFriendRequest": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 408,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJGameLevel": {
    "error": null,
+   "offset_audit": {
+    "beyond": 640,
+    "consistent": 49
+   },
    "size": 2112,
-   "status": "unverified"
+   "status": "known-short"
   },
   "GJGameLoadingLayer": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 12
+   },
    "size": 424,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJGameState": {
    "error": null,
+   "offset_audit": {
+    "consistent": 7
+   },
    "size": 1744,
    "status": "unverified"
   },
   "GJGarageLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 43
+   },
    "size": 608,
    "status": "unverified"
   },
   "GJGradientLayer": {
    "error": null,
    "size": 608,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJGroundLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 24
+   },
    "size": 472,
+   "size_source": "create",
    "status": "verified"
   },
   "GJHttpResult": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 400,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJItemIcon": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 632,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJKeybindManager": {
    "error": "unknown type base cocos2d::CCKeyboardActionManager",
@@ -1507,13 +2214,21 @@
   },
   "GJLevelList": {
    "error": null,
+   "offset_audit": {
+    "consistent": 63
+   },
    "size": 592,
+   "size_source": "both",
    "status": "verified"
   },
   "GJLevelScoreCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJLinkObject": {
    "error": null,
@@ -1522,23 +2237,36 @@
   },
   "GJListLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 552,
+   "size_source": "create",
    "status": "verified"
   },
   "GJLocalLevelScoreCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJLocalScore": {
    "error": null,
    "size": 72,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJMGLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 488,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJMPDelegate": {
    "error": null,
@@ -1552,23 +2280,37 @@
   },
   "GJMapPack": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 424,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJMessageCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 608,
    "status": "unverified"
   },
   "GJMessagePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 744,
    "status": "unverified"
   },
   "GJMessageThread": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 392,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJMoreGamesLayer": {
    "error": null,
@@ -1577,23 +2319,33 @@
   },
   "GJMultiplayerManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 368,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJNotification": {
    "error": null,
-   "size": 56,
-   "status": "unverified"
+   "size": 296,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "GJNotificationCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 584,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJObjectDecoder": {
    "error": null,
    "size": 328,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJOnlineRewardDelegate": {
    "error": null,
@@ -1602,31 +2354,56 @@
   },
   "GJOptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 30,
+    "inconsistent": 1,
+    "unmapped": 1
+   },
    "size": 1136,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJPFollowCommandLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "GJPathPage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 34
+   },
    "size": 704,
+   "size_source": "create",
    "status": "verified"
   },
   "GJPathRewardPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 672,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJPathSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 7
+   },
    "size": 608,
+   "size_source": "both",
    "status": "verified"
   },
   "GJPathsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 19
+   },
    "size": 688,
    "status": "unverified"
   },
@@ -1642,8 +2419,12 @@
   },
   "GJPromoPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 696,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJPurchaseDelegate": {
    "error": null,
@@ -1657,6 +2438,10 @@
   },
   "GJRateLevelLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26,
+    "inconsistent": 2
+   },
    "size": 1120,
    "status": "unverified"
   },
@@ -1667,8 +2452,12 @@
   },
   "GJRequestCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 584,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJRewardDelegate": {
    "error": null,
@@ -1677,21 +2466,36 @@
   },
   "GJRewardItem": {
    "error": null,
+   "offset_audit": {
+    "consistent": 8
+   },
    "size": 88,
+   "size_source": "create",
    "status": "verified"
   },
   "GJRewardObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 4
+   },
    "size": 72,
+   "size_source": "both",
    "status": "verified"
   },
   "GJRobotSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 808,
+   "size_source": "both",
    "status": "verified"
   },
   "GJRotationControl": {
    "error": null,
+   "offset_audit": {
+    "consistent": 2
+   },
    "size": 520,
    "status": "unverified"
   },
@@ -1702,8 +2506,12 @@
   },
   "GJScaleControl": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17
+   },
    "size": 616,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJScaleControlDelegate": {
    "error": null,
@@ -1712,57 +2520,96 @@
   },
   "GJScoreCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 576,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJSearchObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 40
+   },
    "size": 472,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJSelectionStrip": {
    "error": null,
-   "size": 320,
-   "status": "unverified"
+   "size": 408,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "GJShaderState": {
    "error": null,
+   "offset_audit": {
+    "consistent": 92
+   },
    "size": 720,
    "status": "unverified"
   },
   "GJShopLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 536,
    "status": "unverified"
   },
   "GJSmartBlockPreview": {
    "error": null,
+   "offset_audit": {
+    "consistent": 5
+   },
    "size": 376,
+   "size_source": "create",
    "status": "verified"
   },
   "GJSmartBlockPreviewSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 2
+   },
    "size": 320,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJSmartPrefab": {
    "error": null,
+   "offset_audit": {
+    "consistent": 2
+   },
    "size": 128,
+   "size_source": "create",
    "status": "verified"
   },
   "GJSmartTemplate": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 208,
+   "size_source": "create",
    "status": "verified"
   },
   "GJSongBrowser": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21
+   },
    "size": 688,
+   "size_source": "create",
    "status": "verified"
   },
   "GJSpecialColorSelect": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18
+   },
    "size": 688,
+   "size_source": "create",
    "status": "verified"
   },
   "GJSpecialColorSelectDelegate": {
@@ -1772,7 +2619,11 @@
   },
   "GJSpiderSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 3
+   },
    "size": 808,
+   "size_source": "both",
    "status": "verified"
   },
   "GJSpriteColor": {
@@ -1783,20 +2634,29 @@
   "GJStoreItem": {
    "error": null,
    "size": 376,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJThreadCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17
+   },
    "size": 576,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJThreadMessage": {
    "error": null,
-   "size": 56,
-   "status": "unverified"
+   "size": 120,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "GJTransformControl": {
    "error": null,
+   "offset_audit": {
+    "consistent": 42
+   },
    "size": 648,
    "status": "unverified"
   },
@@ -1812,26 +2672,41 @@
   },
   "GJUINode": {
    "error": null,
+   "offset_audit": {
+    "consistent": 28
+   },
    "size": 392,
+   "size_source": "both",
    "status": "verified"
   },
   "GJUnlockableItem": {
    "error": null,
    "size": 56,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GJUserMessage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 472,
+   "size_source": "both",
    "status": "verified"
   },
   "GJUserScore": {
    "error": null,
+   "offset_audit": {
+    "consistent": 90
+   },
    "size": 952,
    "status": "unverified"
   },
   "GJValueTween": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 40,
    "status": "unverified"
   },
@@ -1847,13 +2722,21 @@
   },
   "GManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 360,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GameCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 600,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GameEffectsManager": {
    "error": null,
@@ -1862,27 +2745,47 @@
   },
   "GameLevelManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 474
+   },
    "size": 1680,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GameLevelOptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 1152,
+   "size_source": "create",
    "status": "verified"
   },
   "GameManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 541,
+    "unmapped": 3
+   },
    "size": 1768,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 628
+   },
    "size": 1360,
    "status": "unverified"
   },
   "GameObjectCopy": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 96,
+   "size_source": "both",
    "status": "verified"
   },
   "GameObjectEditorState": {
@@ -1902,8 +2805,12 @@
   },
   "GameOptionsTrigger": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17
+   },
    "size": 1912,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GameRateDelegate": {
    "error": null,
@@ -1912,13 +2819,22 @@
   },
   "GameSettingsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 36,
+    "unmapped": 17
+   },
    "size": 1192,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "GameStatsManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 230
+   },
    "size": 1000,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GameToolbox": {
    "error": null,
@@ -1927,27 +2843,46 @@
   },
   "GauntletLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 480,
    "status": "unverified"
   },
   "GauntletNode": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 360,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GauntletSelectLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 50
+   },
    "size": 520,
    "status": "unverified"
   },
   "GauntletSprite": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 2
+   },
    "size": 328,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GhostTrailEffect": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18
+   },
    "size": 408,
+   "size_source": "both",
    "status": "verified"
   },
   "GlobalKeybindSource": {
@@ -1962,36 +2897,58 @@
   },
   "GooglePlayManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 336,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GradientTriggerObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 22
+   },
    "size": 1896,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GraphicsReloadLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 6
+   },
    "size": 424,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GravityEffectSprite": {
    "error": null,
    "size": 600,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "GridSettingsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 1152,
    "status": "unverified"
   },
   "GroupCommandObject2": {
    "error": null,
+   "offset_audit": {
+    "consistent": 86
+   },
    "size": 520,
    "status": "unverified"
   },
   "HSVLiveOverlay": {
    "error": null,
+   "offset_audit": {
+    "consistent": 25
+   },
    "size": 744,
    "status": "unverified"
   },
@@ -2002,12 +2959,20 @@
   },
   "HSVWidgetPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 680,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "HardStreak": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18
+   },
    "size": 448,
+   "size_source": "both",
    "status": "verified"
   },
   "IDNameBrowserDelegate": {
@@ -2017,22 +2982,39 @@
   },
   "IDNameBrowserPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 23,
+    "consistent": 17
+   },
    "size": 672,
-   "status": "unverified"
+   "status": "known-short"
   },
   "IDNameInput": {
    "error": null,
-   "size": 344,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 4,
+    "unmapped": 1
+   },
+   "size": 528,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "InfoAlertButton": {
    "error": null,
+   "offset_audit": {
+    "consistent": 5
+   },
    "size": 592,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "InfoLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 100
+   },
    "size": 960,
+   "size_source": "create",
    "status": "verified"
   },
   "InheritanceNode": {
@@ -2042,33 +3024,58 @@
   },
   "InputCaptureDelegate": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 8,
    "status": "unverified"
   },
   "InvitesPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 15,
+    "consistent": 13,
+    "unmapped": 10
+   },
    "size": 792,
-   "status": "unverified"
+   "status": "known-short"
   },
   "ItemInfoPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 680,
+   "size_source": "both",
    "status": "verified"
   },
   "ItemTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 35
+   },
    "size": 1912,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "KeybindCapturePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 59
+   },
    "size": 1128,
+   "size_source": "create",
    "status": "verified"
   },
   "KeybindSet": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1,
+    "unmapped": 8
+   },
    "size": 32,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "KeybindSettingsEntry": {
    "error": null,
@@ -2082,33 +3089,58 @@
   },
   "KeybindingsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 51,
+    "unmapped": 2
+   },
    "size": 1184,
+   "size_source": "both",
    "status": "verified"
   },
   "KeybindingsSettingsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 752,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "KeyframeAnimTriggerObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 1880,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "KeyframeGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 37
+   },
    "size": 1912,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "KeyframeObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 448,
    "status": "unverified"
   },
   "LabelGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38,
+    "unmapped": 1
+   },
    "size": 1936,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "LeaderboardManagerDelegate": {
    "error": null,
@@ -2117,38 +3149,67 @@
   },
   "LeaderboardsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 35
+   },
    "size": 512,
    "status": "unverified"
   },
   "LevelAreaInnerLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18
+   },
    "size": 440,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "LevelAreaLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 440,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "LevelBadgePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17,
+    "unmapped": 4
+   },
    "size": 736,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "LevelBindingsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 1200,
+   "size_source": "both",
    "status": "verified"
   },
   "LevelBrowserLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 140
+   },
    "size": 840,
+   "size_source": "both",
    "status": "verified"
   },
   "LevelCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 55,
+    "unmapped": 3
+   },
    "size": 616,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "LevelCommentDelegate": {
    "error": null,
@@ -2157,7 +3218,12 @@
   },
   "LevelControlConfig": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14,
+    "unmapped": 8
+   },
    "size": 160,
+   "size_source": "both",
    "status": "verified"
   },
   "LevelControlsDelegate": {
@@ -2177,7 +3243,12 @@
   },
   "LevelEditorLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 649,
+    "unmapped": 3
+   },
    "size": 15880,
+   "size_source": "create",
    "status": "verified"
   },
   "LevelFeatureLayer": {
@@ -2187,18 +3258,31 @@
   },
   "LevelInfoLayer": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 105
+   },
    "size": 752,
-   "status": "unverified"
+   "status": "known-short"
   },
   "LevelLeaderboard": {
    "error": null,
+   "offset_audit": {
+    "consistent": 50
+   },
    "size": 752,
+   "size_source": "create",
    "status": "verified"
   },
   "LevelListCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18,
+    "unmapped": 3
+   },
    "size": 576,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "LevelListDeleteDelegate": {
    "error": null,
@@ -2207,6 +3291,9 @@
   },
   "LevelListLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 59
+   },
    "size": 1032,
    "status": "unverified"
   },
@@ -2217,16 +3304,27 @@
   },
   "LevelOptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 37
+   },
    "size": 1144,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "LevelOptionsLayer2": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 1144,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "LevelPage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 32
+   },
    "size": 576,
    "status": "unverified"
   },
@@ -2237,8 +3335,13 @@
   },
   "LevelPickerPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 35,
+    "consistent": 13,
+    "unmapped": 15
+   },
    "size": 792,
-   "status": "unverified"
+   "status": "known-short"
   },
   "LevelRateInfoDelegate": {
    "error": null,
@@ -2247,13 +3350,20 @@
   },
   "LevelSearchLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 504,
    "status": "unverified"
   },
   "LevelSelectLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 480,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "LevelSettingsDelegate": {
    "error": null,
@@ -2262,17 +3372,30 @@
   },
   "LevelSettingsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 54
+   },
    "size": 904,
    "status": "unverified"
   },
   "LevelSettingsObject": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 34,
+    "unmapped": 2
+   },
    "size": 472,
-   "status": "unverified"
+   "status": "known-short"
   },
   "LevelStatsInfoPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18,
+    "unmapped": 22
+   },
    "size": 736,
+   "size_source": "both",
    "status": "tail-padded"
   },
   "LevelTools": {
@@ -2302,12 +3425,20 @@
   },
   "LikeItemLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 25
+   },
    "size": 688,
+   "size_source": "both",
    "status": "verified"
   },
   "ListButtonBar": {
    "error": null,
+   "offset_audit": {
+    "consistent": 8
+   },
    "size": 352,
+   "size_source": "create",
    "status": "verified"
   },
   "ListButtonBarDelegate": {
@@ -2318,12 +3449,17 @@
   "ListButtonPage": {
    "error": null,
    "size": 408,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ListCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ListUploadDelegate": {
    "error": null,
@@ -2332,21 +3468,36 @@
   },
   "LoadingCircle": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 568,
+   "size_source": "both",
    "status": "verified"
   },
   "LoadingCircleSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 4
+   },
    "size": 600,
+   "size_source": "both",
    "status": "verified"
   },
   "LoadingLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 456,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "LocalLevelManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 27
+   },
    "size": 696,
    "status": "unverified"
   },
@@ -2357,8 +3508,12 @@
   },
   "MapPackCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 24
+   },
    "size": 600,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "MapSelectLayer": {
    "error": null,
@@ -2367,16 +3522,28 @@
   },
   "MemberListPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16,
+    "unmapped": 53
+   },
    "size": 888,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "MenuGameLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 27
+   },
    "size": 464,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "MenuLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 31
+   },
    "size": 512,
    "status": "unverified"
   },
@@ -2387,12 +3554,22 @@
   },
   "MessageThreadsPage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 23,
+    "unmapped": 65
+   },
    "size": 960,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "MessagesProfilePage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 34,
+    "unmapped": 3
+   },
    "size": 840,
+   "size_source": "create",
    "status": "verified"
   },
   "MoreOptionsLayer": {
@@ -2402,28 +3579,46 @@
   },
   "MoreSearchLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 736,
    "status": "unverified"
   },
   "MoreVideoOptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 728,
    "status": "unverified"
   },
   "MoveStepPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 36
+   },
    "size": 1152,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "MultiTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "MultilineBitmapFont": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 696,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "MultiplayerLayer": {
    "error": null,
@@ -2432,12 +3627,20 @@
   },
   "MusicArtistObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 120,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "MusicBrowser": {
    "error": null,
+   "offset_audit": {
+    "consistent": 70
+   },
    "size": 920,
+   "size_source": "create",
    "status": "verified"
   },
   "MusicBrowserDelegate": {
@@ -2447,8 +3650,13 @@
   },
   "MusicChangelogEntry": {
    "error": null,
-   "size": 56,
-   "status": "unverified"
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 1
+   },
+   "size": 80,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "MusicChangelogLine": {
    "error": null,
@@ -2457,13 +3665,21 @@
   },
   "MusicChangelogPopup": {
    "error": null,
-   "size": 664,
-   "status": "unverified"
+   "offset_audit": {
+    "unmapped": 1
+   },
+   "size": 680,
+   "size_source": "rtti",
+   "status": "verified"
   },
   "MusicDelegateHandler": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 328,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "MusicDownloadDelegate": {
    "error": null,
@@ -2471,34 +3687,66 @@
    "status": "unverified"
   },
   "MusicDownloadManager": {
+   "dropped_members": [
+    "m_requestedNewsFeedUpdate",
+    "m_unkBool2",
+    "m_unkInt5",
+    "m_updatingNewsFeed"
+   ],
    "error": null,
-   "size": 984,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 82,
+    "inconsistent": 1,
+    "unmapped": 8
+   },
+   "size": 976,
+   "size_source": "rtti",
+   "status": "corrected"
   },
   "MusicSearchResult": {
    "error": null,
+   "offset_audit": {
+    "consistent": 30
+   },
    "size": 176,
    "status": "unverified"
   },
   "MyStuffPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 9
+   },
    "size": 664,
-   "status": "unverified"
+   "status": "known-short"
   },
   "NCSInfoLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 680,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "NewThreadPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 19,
+    "unmapped": 43
+   },
    "size": 960,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "NewgroundsInfoLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 664,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "NewsBlock": {
    "error": null,
@@ -2512,8 +3760,12 @@
   },
   "NewsPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 20,
+    "consistent": 16
+   },
    "size": 680,
-   "status": "unverified"
+   "status": "known-short"
   },
   "NodePoint": {
    "error": null,
@@ -2522,8 +3774,13 @@
   },
   "NotificationFilterPopup": {
    "error": null,
-   "size": 1000,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 33,
+    "unmapped": 4
+   },
+   "size": 1016,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "NotificationListDelegate": {
    "error": null,
@@ -2532,8 +3789,12 @@
   },
   "NotificationsPage": {
    "error": null,
+   "offset_audit": {
+    "beyond": 3,
+    "consistent": 9
+   },
    "size": 672,
-   "status": "unverified"
+   "status": "known-short"
   },
   "NumberInputDelegate": {
    "error": null,
@@ -2542,18 +3803,30 @@
   },
   "NumberInputLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 49
+   },
    "size": 768,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "OBB2D": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 440,
+   "size_source": "both",
    "status": "verified"
   },
   "ObjectControlGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 1856,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ObjectDecoder": {
    "error": null,
@@ -2567,13 +3840,21 @@
   },
   "ObjectManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 336,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ObjectToolbox": {
    "error": null,
+   "offset_audit": {
+    "consistent": 2
+   },
    "size": 336,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "OnlineListDelegate": {
    "error": null,
@@ -2587,18 +3868,30 @@
   },
   "OptionsCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "OptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 23
+   },
    "size": 672,
-   "status": "unverified"
+   "status": "known-short"
   },
   "OptionsObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 120,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "OptionsObjectDelegate": {
    "error": null,
@@ -2607,41 +3900,73 @@
   },
   "OptionsScrollLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 768,
    "status": "unverified"
   },
   "PagedListPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12,
+    "unmapped": 2
+   },
    "size": 776,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ParentalGateLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 3
+   },
    "size": 776,
+   "size_source": "both",
    "status": "verified"
   },
   "ParentalOptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18
+   },
    "size": 752,
+   "size_source": "create",
    "status": "verified"
   },
   "ParentalPrivacyPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 728,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "ParticleGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 82,
+    "unmapped": 15
+   },
    "size": 1824,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "ParticlePreviewLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 4
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "PauseLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 672,
    "status": "unverified"
   },
@@ -2662,13 +3987,24 @@
   },
   "PlatformerControlsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21,
+    "unmapped": 63
+   },
    "size": 1296,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "PlayLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 845,
+    "inconsistent": 2,
+    "unmapped": 1
+   },
    "size": 15584,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "PlayerButtonCommand": {
    "error": null,
@@ -2677,22 +4013,40 @@
   },
   "PlayerCheckpoint": {
    "error": null,
+   "offset_audit": {
+    "consistent": 132,
+    "unmapped": 1
+   },
    "size": 1384,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "PlayerControlGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 22
+   },
    "size": 1864,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "PlayerFireBoostSprite": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 608,
+   "size_source": "both",
    "status": "verified"
   },
   "PlayerObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1839,
+    "unmapped": 8
+   },
    "size": 3152,
+   "size_source": "both",
    "status": "verified"
   },
   "PlayerTrailState": {
@@ -2703,7 +4057,8 @@
   "PointNode": {
    "error": null,
    "size": 64,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "PriceLabel": {
    "error": null,
@@ -2712,13 +4067,22 @@
   },
   "ProfilePage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 102
+   },
    "size": 904,
+   "size_source": "both",
    "status": "verified"
   },
   "ProgressGameObject": {
    "error": null,
-   "size": 1856,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 14,
+    "unmapped": 6
+   },
+   "size": 1864,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "PromoInterstitial": {
    "error": null,
@@ -2732,16 +4096,27 @@
   },
   "PurchaseItemPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 19
+   },
    "size": 680,
+   "size_source": "create",
    "status": "verified"
   },
   "RandTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 1880,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "RateDemonLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 744,
    "status": "unverified"
   },
@@ -2752,18 +4127,28 @@
   },
   "RateLevelLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 696,
    "status": "unverified"
   },
   "RateStarsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 28
+   },
    "size": 760,
    "status": "unverified"
   },
   "RateStarsModLayer": {
    "error": null,
+   "offset_audit": {
+    "beyond": 10,
+    "consistent": 12
+   },
    "size": 680,
-   "status": "unverified"
+   "status": "known-short"
   },
   "ReadArchive": {
    "error": null,
@@ -2782,12 +4167,21 @@
   },
   "RenameThreadPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 7,
+    "consistent": 14
+   },
    "size": 1008,
-   "status": "unverified"
+   "status": "known-short"
   },
   "ReportPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 5,
+    "unmapped": 10
+   },
    "size": 1176,
+   "size_source": "both",
    "status": "tail-padded"
   },
   "ReportPopupConfig": {
@@ -2797,11 +4191,19 @@
   },
   "ReportQueuePopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 16,
+    "consistent": 12,
+    "unmapped": 12
+   },
    "size": 792,
-   "status": "unverified"
+   "status": "known-short"
   },
   "RetryLevelLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 632,
    "status": "unverified"
   },
@@ -2812,12 +4214,21 @@
   },
   "ReviewChoiceSheet": {
    "error": null,
+   "offset_audit": {
+    "consistent": 34,
+    "unmapped": 7
+   },
    "size": 1024,
+   "size_source": "both",
    "status": "tail-padded"
   },
   "RewardUnlockLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 36
+   },
    "size": 744,
+   "size_source": "create",
    "status": "verified"
   },
   "RewardedVideoDelegate": {
@@ -2827,28 +4238,51 @@
   },
   "RewardsPage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 19
+   },
    "size": 728,
    "status": "unverified"
   },
   "RingObject": {
    "error": null,
+   "offset_audit": {
+    "beyond": 5,
+    "consistent": 29,
+    "unmapped": 1
+   },
    "size": 1864,
+   "size_source": "both",
    "status": "verified"
   },
   "RotateGameplayGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21
+   },
    "size": 1888,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "RowPressItem": {
    "error": null,
+   "offset_audit": {
+    "consistent": 3,
+    "unmapped": 1
+   },
    "size": 528,
+   "size_source": "both",
    "status": "tail-padded"
   },
   "SFXBrowser": {
    "error": null,
+   "offset_audit": {
+    "beyond": 58,
+    "consistent": 43,
+    "unmapped": 2
+   },
    "size": 864,
-   "status": "unverified"
+   "status": "known-short"
   },
   "SFXBrowserDelegate": {
    "error": null,
@@ -2857,18 +4291,28 @@
   },
   "SFXChangelogEntry": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 1
+   },
    "size": 56,
-   "status": "unverified"
+   "status": "known-short"
   },
   "SFXChangelogPopup": {
    "error": null,
-   "size": 664,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 10,
+    "unmapped": 2
+   },
+   "size": 680,
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SFXFolderObject": {
    "error": null,
    "size": 184,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SFXFolderPickerDelegate": {
    "error": null,
@@ -2877,23 +4321,42 @@
   },
   "SFXFolderPickerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17,
+    "unmapped": 20
+   },
    "size": 768,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "SFXInfoObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 176,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SFXSearchResult": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9,
+    "unmapped": 2
+   },
    "size": 192,
+   "size_source": "both",
    "status": "verified"
   },
   "SFXSettingsPopup": {
    "error": null,
-   "size": 1136,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 13,
+    "unmapped": 4
+   },
+   "size": 1152,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "SFXStateContainer": {
    "error": null,
@@ -2902,6 +4365,9 @@
   },
   "SFXTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 81
+   },
    "size": 2056,
    "status": "unverified"
   },
@@ -2932,8 +4398,13 @@
   },
   "ScrollViewPopup": {
    "error": null,
-   "size": 664,
-   "status": "unverified"
+   "offset_audit": {
+    "consistent": 10,
+    "unmapped": 1
+   },
+   "size": 680,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "ScrollableContentLayer": {
    "error": "unknown type base cocos2d::CCTouchClipper",
@@ -2942,12 +4413,17 @@
   },
   "ScrollingLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 608,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SearchButton": {
    "error": null,
    "size": 616,
+   "size_source": "both",
    "status": "verified"
   },
   "SecretGame01Layer": {
@@ -2957,26 +4433,42 @@
   },
   "SecretLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 488,
    "status": "unverified"
   },
   "SecretLayer2": {
    "error": null,
+   "offset_audit": {
+    "consistent": 25
+   },
    "size": 520,
    "status": "unverified"
   },
   "SecretLayer3": {
    "error": null,
+   "offset_audit": {
+    "consistent": 22
+   },
    "size": 464,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SecretLayer4": {
    "error": null,
+   "offset_audit": {
+    "consistent": 24
+   },
    "size": 496,
    "status": "unverified"
   },
   "SecretLayer5": {
    "error": null,
+   "offset_audit": {
+    "consistent": 43
+   },
    "size": 656,
    "status": "unverified"
   },
@@ -2987,18 +4479,29 @@
   },
   "SecretNumberLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 6
+   },
    "size": 408,
+   "size_source": "both",
    "status": "verified"
   },
   "SecretRewardsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 40
+   },
    "size": 600,
    "status": "unverified"
   },
   "SectionedContentNode": {
    "error": null,
-   "size": 320,
-   "status": "unverified"
+   "offset_audit": {
+    "unmapped": 2
+   },
+   "size": 328,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "SelectArtDelegate": {
    "error": null,
@@ -3007,23 +4510,37 @@
   },
   "SelectArtLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 704,
+   "size_source": "create",
    "status": "verified"
   },
   "SelectEventLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17
+   },
    "size": 1056,
    "status": "unverified"
   },
   "SelectFontLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1
+   },
    "size": 688,
    "status": "unverified"
   },
   "SelectFontLayer2": {
    "error": null,
+   "offset_audit": {
+    "beyond": 5,
+    "consistent": 15
+   },
    "size": 672,
-   "status": "unverified"
+   "status": "known-short"
   },
   "SelectListIconDelegate": {
    "error": null,
@@ -3032,6 +4549,9 @@
   },
   "SelectListIconLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 688,
    "status": "unverified"
   },
@@ -3042,8 +4562,13 @@
   },
   "SelectPremadeLayer": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 12
+   },
    "size": 672,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SelectSFXSortDelegate": {
    "error": null,
@@ -3052,8 +4577,12 @@
   },
   "SelectSFXSortLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 680,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SelectSettingDelegate": {
    "error": null,
@@ -3062,7 +4591,11 @@
   },
   "SelectSettingLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 22
+   },
    "size": 688,
+   "size_source": "create",
    "status": "verified"
   },
   "SelectSmartTemplateLayer": {
@@ -3072,8 +4605,12 @@
   },
   "SequenceTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 31
+   },
    "size": 2032,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SequenceTriggerState": {
    "error": null,
@@ -3082,23 +4619,38 @@
   },
   "SetColorIDPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 712,
    "status": "unverified"
   },
   "SetFolderPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 728,
+   "size_source": "create",
    "status": "verified"
   },
   "SetGroupIDLayer": {
    "error": null,
+   "offset_audit": {
+    "beyond": 1,
+    "consistent": 105
+   },
    "size": 864,
-   "status": "unverified"
+   "status": "known-short"
   },
   "SetIDPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 60
+   },
    "size": 704,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetIDPopupDelegate": {
    "error": null,
@@ -3107,21 +4659,34 @@
   },
   "SetItemIDLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18
+   },
    "size": 1000,
    "status": "unverified"
   },
   "SetLevelOrderPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 4
+   },
    "size": 712,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetTargetIDLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 1016,
    "status": "unverified"
   },
   "SetTextPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 40
+   },
    "size": 760,
    "status": "unverified"
   },
@@ -3132,176 +4697,304 @@
   },
   "SetupAdvFollowEditPhysicsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 34
+   },
    "size": 1000,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupAdvFollowPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 46
+   },
    "size": 1008,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupAdvFollowRetargetPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 39
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupAnimSettingsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 35
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupAnimationPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 27
+   },
    "size": 1024,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupAreaAnimTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 1056,
    "status": "unverified"
   },
   "SetupAreaFadeTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 1016,
    "status": "unverified"
   },
   "SetupAreaMoveTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 49
+   },
    "size": 1016,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupAreaRotateTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 1016,
    "status": "unverified"
   },
   "SetupAreaTintTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 46
+   },
    "size": 1056,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupAreaTransformTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 1016,
    "status": "unverified"
   },
   "SetupAreaTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 1016,
    "status": "unverified"
   },
   "SetupArtSwitchPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 39
+   },
    "size": 1024,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupAudioLineGuidePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 40
+   },
    "size": 1016,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupAudioTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 19
+   },
    "size": 1008,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupBGSpeedTrigger": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupCameraEdgePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 30
+   },
    "size": 1024,
    "status": "unverified"
   },
   "SetupCameraGuidePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 36
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupCameraModePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 46
+   },
    "size": 1064,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupCameraOffsetTrigger": {
    "error": null,
+   "offset_audit": {
+    "consistent": 67
+   },
    "size": 1120,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupCameraRotatePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 3
+   },
    "size": 1080,
    "status": "unverified"
   },
   "SetupCameraRotatePopup2": {
    "error": null,
+   "offset_audit": {
+    "consistent": 31
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupCheckpointPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 1000,
    "status": "unverified"
   },
   "SetupCoinLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 1000,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupCollisionStateTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupCollisionTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 1000,
    "status": "unverified"
   },
   "SetupCountTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupDashRingPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 35
+   },
    "size": 1000,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupEndPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 31,
+    "unmapped": 2
+   },
    "size": 1024,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupEnterEffectPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 1072,
    "status": "unverified"
   },
   "SetupEnterTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 25
+   },
    "size": 1024,
    "status": "unverified"
   },
   "SetupEventLinkPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupForceBlockPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupGameplayOffsetPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 1000,
    "status": "unverified"
   },
   "SetupGradientPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 1040,
    "status": "unverified"
   },
@@ -3312,102 +5005,178 @@
   },
   "SetupGravityTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupInstantCollisionTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 45
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupInstantCountPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 44
+   },
    "size": 1072,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupInteractObjectPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupItemCompareTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 36
+   },
    "size": 1008,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupItemEditTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 1008,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupKeyframeAnimPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupKeyframePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 1024,
    "status": "unverified"
   },
   "SetupMGTrigger": {
    "error": null,
+   "offset_audit": {
+    "consistent": 56
+   },
    "size": 1080,
    "status": "unverified"
   },
   "SetupMoveCommandPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 24
+   },
    "size": 1008,
    "status": "unverified"
   },
   "SetupObjectControlPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupObjectOptions2Popup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 1000,
    "status": "unverified"
   },
   "SetupObjectOptionsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 67
+   },
    "size": 712,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupObjectTogglePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupOpacityPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 1056,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupOptionsTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 42
+   },
    "size": 1016,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupPersistentItemTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 34
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupPickupTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 36
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupPlatformerEndPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupPlayerControlPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupPortalPopup": {
@@ -3417,166 +5186,298 @@
   },
   "SetupProgressPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 31
+   },
    "size": 1000,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupPulsePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 136
+   },
    "size": 1336,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupRandAdvTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 37
+   },
    "size": 1064,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupRandTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 39
+   },
    "size": 1048,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupResetTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupReverbPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 42
+   },
    "size": 1008,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupRotateCommandPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupRotateGameplayPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 36
+   },
    "size": 1000,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupRotatePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupSFXEditPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 1008,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupSFXPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 34,
+    "unmapped": 1
+   },
    "size": 1048,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupSequenceTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 1032,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupShaderEffectPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 50,
+    "inconsistent": 1
+   },
    "size": 1024,
    "status": "unverified"
   },
   "SetupShakePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 53
+   },
    "size": 1072,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupSmartBlockLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 44
+   },
    "size": 704,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupSmartTemplateLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21
+   },
    "size": 696,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupSongTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 30
+   },
    "size": 1032,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupSpawnParticlePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 35
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupSpawnPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 37,
+    "inconsistent": 1
+   },
    "size": 1048,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupStaticCameraPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupStopTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 37
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupTeleportPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 1008,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupTimeWarpPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 1024,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupTimerControlTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 34
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupTimerEventTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 31
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupTimerTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 31
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupTouchTogglePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 43
+   },
    "size": 1064,
+   "size_source": "create",
    "status": "verified"
   },
   "SetupTransformPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 35
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "SetupTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 203
+   },
    "size": 1000,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SetupZoomTriggerPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 17
+   },
    "size": 1000,
+   "size_source": "create",
    "status": "verified"
   },
   "ShaderGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 40
+   },
    "size": 1936,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ShaderLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 240
+   },
    "size": 1648,
    "status": "unverified"
   },
   "ShardsPage": {
    "error": null,
+   "offset_audit": {
+    "consistent": 4
+   },
    "size": 704,
    "status": "unverified"
   },
@@ -3587,21 +5488,33 @@
   },
   "ShareCommentLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 42
+   },
    "size": 832,
    "status": "unverified"
   },
   "ShareLevelLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21
+   },
    "size": 760,
    "status": "unverified"
   },
   "ShareLevelSettingsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 712,
    "status": "unverified"
   },
   "ShareListLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 752,
    "status": "unverified"
   },
@@ -3612,7 +5525,11 @@
   },
   "SimplePlayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 35
+   },
    "size": 680,
+   "size_source": "both",
    "status": "verified"
   },
   "SlideInLayer": {
@@ -3622,8 +5539,12 @@
   },
   "Slider": {
    "error": null,
+   "offset_audit": {
+    "consistent": 7
+   },
    "size": 456,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SliderDelegate": {
    "error": null,
@@ -3632,16 +5553,23 @@
   },
   "SliderThumb": {
    "error": null,
+   "offset_audit": {
+    "consistent": 8
+   },
    "size": 424,
    "status": "unverified"
   },
   "SliderTouchLogic": {
    "error": null,
    "size": 488,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SmartGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 4
+   },
    "size": 1432,
    "status": "unverified"
   },
@@ -3652,18 +5580,30 @@
   },
   "SmartTemplateCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SocialLinksPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 6,
+    "consistent": 15
+   },
    "size": 664,
-   "status": "unverified"
+   "status": "known-short"
   },
   "SongCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SongChannelState": {
    "error": null,
@@ -3672,23 +5612,35 @@
   },
   "SongInfoLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 24
+   },
    "size": 760,
    "status": "unverified"
   },
   "SongInfoObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 37
+   },
    "size": 976,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "SongObject": {
    "error": null,
    "size": 64,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SongOptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 23
+   },
    "size": 688,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SongPlaybackDelegate": {
    "error": null,
@@ -3697,13 +5649,21 @@
   },
   "SongSelectNode": {
    "error": null,
+   "offset_audit": {
+    "consistent": 38
+   },
    "size": 432,
+   "size_source": "both",
    "status": "verified"
   },
   "SongTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 2064,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SongTriggerState": {
    "error": null,
@@ -3722,12 +5682,21 @@
   },
   "SongUsagePopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 16,
+    "unmapped": 8
+   },
    "size": 744,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "SongsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 608,
+   "size_source": "both",
    "status": "verified"
   },
   "SoundPackDescDelegate": {
@@ -3737,8 +5706,12 @@
   },
   "SoundPackDescPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 13,
+    "consistent": 14
+   },
    "size": 1008,
-   "status": "unverified"
+   "status": "known-short"
   },
   "SoundStateContainer": {
    "error": null,
@@ -3747,8 +5720,12 @@
   },
   "SpawnParticleGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21
+   },
    "size": 1896,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SpawnTriggerAction": {
    "error": null,
@@ -3757,23 +5734,38 @@
   },
   "SpawnTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 33
+   },
    "size": 1936,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SpecialAnimGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 25
+   },
    "size": 1472,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SpriteAnimationManager": {
    "error": null,
+   "offset_audit": {
+    "consistent": 20
+   },
    "size": 472,
    "status": "unverified"
   },
   "SpriteDescription": {
    "error": null,
+   "offset_audit": {
+    "consistent": 5
+   },
    "size": 104,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "SpritePartDelegate": {
    "error": null,
@@ -3782,13 +5774,21 @@
   },
   "StarInfoPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 664,
+   "size_source": "both",
    "status": "verified"
   },
   "StartPosBrowser": {
    "error": null,
+   "offset_audit": {
+    "beyond": 6,
+    "consistent": 12
+   },
    "size": 680,
-   "status": "unverified"
+   "status": "known-short"
   },
   "StartPosBrowserDelegate": {
    "error": null,
@@ -3797,43 +5797,71 @@
   },
   "StartPosLayer": {
    "error": null,
+   "offset_audit": {
+    "beyond": 10,
+    "consistent": 35
+   },
    "size": 1008,
-   "status": "unverified"
+   "status": "known-short"
   },
   "StartPosObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 1864,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "StatsCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 11
+   },
    "size": 560,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "StatsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 608,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "StatsObject": {
    "error": null,
    "size": 72,
+   "size_source": "both",
    "status": "verified"
   },
   "SupportLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 7
+   },
    "size": 640,
    "status": "unverified"
   },
   "TOSPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 13
+   },
    "size": 664,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "TabbedPopupLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 23
+   },
    "size": 1072,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "TabbedPopupTab": {
    "error": null,
@@ -3847,8 +5875,12 @@
   },
   "TableViewCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 6
+   },
    "size": 560,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "TableViewCellDelegate": {
    "error": null,
@@ -3867,18 +5899,31 @@
   },
   "TeleportPortalObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 40,
+    "unmapped": 4
+   },
    "size": 1928,
+   "size_source": "both",
    "status": "verified"
   },
   "TextAlertPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 5
+   },
    "size": 344,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "TextArea": {
    "error": null,
+   "offset_audit": {
+    "consistent": 25
+   },
    "size": 736,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "TextAreaDelegate": {
    "error": null,
@@ -3887,7 +5932,11 @@
   },
   "TextGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 1400,
+   "size_source": "both",
    "status": "verified"
   },
   "TextInputDelegate": {
@@ -3898,12 +5947,17 @@
   "TextStyleSection": {
    "error": null,
    "size": 96,
+   "size_source": "both",
    "status": "verified"
   },
   "ThreadDescPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 13,
+    "consistent": 15
+   },
    "size": 1016,
-   "status": "unverified"
+   "status": "known-short"
   },
   "ThreadMessageDelegate": {
    "error": null,
@@ -3912,8 +5966,12 @@
   },
   "ThreadMessageOptionsPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 8,
+    "consistent": 16
+   },
    "size": 1008,
-   "status": "unverified"
+   "status": "known-short"
   },
   "ThreadOpenHelper": {
    "error": null,
@@ -3922,27 +5980,50 @@
   },
   "ThreadOptionsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 19,
+    "unmapped": 19
+   },
    "size": 1048,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "ThreadRequestPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 10,
+    "consistent": 16
+   },
    "size": 664,
-   "status": "unverified"
+   "status": "known-short"
   },
   "ThreadSearchPopup": {
    "error": null,
+   "offset_audit": {
+    "beyond": 21,
+    "consistent": 16
+   },
    "size": 1000,
-   "status": "unverified"
+   "status": "known-short"
   },
   "ThreadViewPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 109,
+    "unmapped": 20
+   },
    "size": 1240,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "TimeSpeedControl": {
    "error": null,
+   "offset_audit": {
+    "consistent": 1,
+    "unmapped": 7
+   },
    "size": 352,
+   "size_source": "both",
    "status": "tail-padded"
   },
   "TimerItem": {
@@ -3957,8 +6038,12 @@
   },
   "TimerTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21
+   },
    "size": 1888,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "ToggleTriggerAction": {
    "error": null,
@@ -3967,12 +6052,20 @@
   },
   "TopArtistsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21
+   },
    "size": 752,
    "status": "unverified"
   },
   "TouchControlEditLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 18,
+    "unmapped": 32
+   },
    "size": 1344,
+   "size_source": "create",
    "status": "tail-padded"
   },
   "TouchToggleAction": {
@@ -3992,13 +6085,21 @@
   },
   "TransformTriggerGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 21
+   },
    "size": 1880,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "TriggerControlGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 1896,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "TriggerEffectDelegate": {
    "error": null,
@@ -4007,7 +6108,11 @@
   },
   "TutorialLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 696,
+   "size_source": "both",
    "status": "verified"
   },
   "TutorialPopup": {
@@ -4017,17 +6122,27 @@
   },
   "UIButtonConfig": {
    "error": null,
+   "offset_audit": {
+    "consistent": 12
+   },
    "size": 40,
    "status": "unverified"
   },
   "UILayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 42
+   },
    "size": 656,
    "status": "unverified"
   },
   "UIObjectSettingsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 34
+   },
    "size": 1000,
+   "size_source": "both",
    "status": "verified"
   },
   "UIOptionsLayer": {
@@ -4037,8 +6152,12 @@
   },
   "UIPOptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 42
+   },
    "size": 1032,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "UISaveLoadLayer": {
    "error": null,
@@ -4047,26 +6166,45 @@
   },
   "UISettingsGameObject": {
    "error": null,
+   "offset_audit": {
+    "consistent": 22
+   },
    "size": 1872,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "URLCell": {
    "error": null,
+   "offset_audit": {
+    "consistent": 14
+   },
    "size": 568,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "URLViewLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 9
+   },
    "size": 616,
+   "size_source": "create",
    "status": "verified"
   },
   "UndoObject": {
+   "dropped_members": [
+    "m_unk90"
+   ],
    "error": null,
-   "size": 168,
-   "status": "unverified"
+   "size": 160,
+   "size_source": "rtti",
+   "status": "corrected"
   },
   "UpdateAccountSettingsPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 3
+   },
    "size": 712,
    "status": "unverified"
   },
@@ -4077,11 +6215,18 @@
   },
   "UploadActionPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 26
+   },
    "size": 704,
+   "size_source": "both",
    "status": "verified"
   },
   "UploadListPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 704,
    "status": "unverified"
   },
@@ -4092,6 +6237,9 @@
   },
   "UploadPopup": {
    "error": null,
+   "offset_audit": {
+    "consistent": 15
+   },
    "size": 704,
    "status": "unverified"
   },
@@ -4117,7 +6265,11 @@
   },
   "VideoOptionsLayer": {
    "error": null,
+   "offset_audit": {
+    "consistent": 68
+   },
    "size": 760,
+   "size_source": "create",
    "status": "verified"
   },
   "VirtualKeyboardNode": {
@@ -4572,8 +6724,9 @@
   },
   "cocos2d::CCGLProgram": {
    "error": null,
-   "size": 56,
-   "status": "unverified"
+   "size": 120,
+   "size_source": "rtti",
+   "status": "tail-padded"
   },
   "cocos2d::CCGrabber": {
    "error": null,
@@ -4702,8 +6855,12 @@
   },
   "cocos2d::CCLightning": {
    "error": null,
+   "offset_audit": {
+    "consistent": 25
+   },
    "size": 408,
-   "status": "unverified"
+   "size_source": "rtti",
+   "status": "verified"
   },
   "cocos2d::CCLiquid": {
    "error": null,
@@ -5021,9 +7178,13 @@
    "status": "unverified"
   },
   "cocos2d::CCSet": {
+   "dropped_members": [
+    "m_pSet"
+   ],
    "error": null,
-   "size": 72,
-   "status": "unverified"
+   "size": 64,
+   "size_source": "rtti",
+   "status": "corrected"
   },
   "cocos2d::CCShaderCache": {
    "error": null,

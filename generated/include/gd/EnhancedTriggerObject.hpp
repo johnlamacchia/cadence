@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(EnhancedTriggerObject) == 0x750, "EnhancedTriggerObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(EnhancedTriggerObject, m_minXID) == 0x740, "EnhancedTriggerObject::m_minXID");
 static_assert(offsetof(EnhancedTriggerObject, m_minYID) == 0x744, "EnhancedTriggerObject::m_minYID");

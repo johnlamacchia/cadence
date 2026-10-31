@@ -38,11 +38,12 @@ public:
     bool m_unk0ec;
     bool m_needsSafeArea;
     double m_saveTime;
+    uint8_t _unmapped_tail[8];
 };
 
 
-// layout: unverified
-static_assert(sizeof(AppDelegate) == 0xf8, "AppDelegate: size differs from the layout computed from the bindings");
+// layout: tail-padded
+static_assert(sizeof(AppDelegate) == 0x100, "AppDelegate: size differs from the layout computed from the bindings");
 static_assert(offsetof(AppDelegate, m_glViewSetup) == 0xd8, "AppDelegate::m_glViewSetup");
 static_assert(offsetof(AppDelegate, m_gamePaused) == 0xd9, "AppDelegate::m_gamePaused");
 static_assert(offsetof(AppDelegate, m_runningScene) == 0xe0, "AppDelegate::m_runningScene");
@@ -53,7 +54,7 @@ static_assert(offsetof(AppDelegate, m_unk0eb) == 0xeb, "AppDelegate::m_unk0eb");
 static_assert(offsetof(AppDelegate, m_unk0ec) == 0xec, "AppDelegate::m_unk0ec");
 static_assert(offsetof(AppDelegate, m_needsSafeArea) == 0xed, "AppDelegate::m_needsSafeArea");
 static_assert(offsetof(AppDelegate, m_saveTime) == 0xf0, "AppDelegate::m_saveTime");
-inline const cadence::detail::LayoutRegistration cadence_layout_AppDelegate("AppDelegate", "1ef20a7fb4862e50");
+inline const cadence::detail::LayoutRegistration cadence_layout_AppDelegate("AppDelegate", "56fdedba5918a388");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&AppDelegate::applicationDidFinishLaunching> = "AppDelegate::applicationDidFinishLaunching()";
 template <> inline constexpr const char* fn_sig<&AppDelegate::applicationDidEnterBackground> = "AppDelegate::applicationDidEnterBackground()";

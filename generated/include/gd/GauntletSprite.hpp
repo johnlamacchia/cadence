@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GauntletSprite) == 0x148, "GauntletSprite: size differs from the layout computed from the bindings");
 static_assert(offsetof(GauntletSprite, m_gauntletType) == 0x140, "GauntletSprite::m_gauntletType");
 inline const cadence::detail::LayoutRegistration cadence_layout_GauntletSprite("GauntletSprite", "ceef2d771d425992");

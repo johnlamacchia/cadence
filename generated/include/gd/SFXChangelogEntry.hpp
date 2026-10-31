@@ -14,6 +14,6 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(SFXChangelogEntry) == 0x38, "SFXChangelogEntry: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_SFXChangelogEntry("SFXChangelogEntry", "f62ffc2c2a467ca9");

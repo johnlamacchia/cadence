@@ -64,7 +64,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(FLAlertLayer) == 0x298, "FLAlertLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(FLAlertLayer, m_buttonMenu) == 0x228, "FLAlertLayer::m_buttonMenu");
 static_assert(offsetof(FLAlertLayer, m_alertProtocol) == 0x230, "FLAlertLayer::m_alertProtocol");

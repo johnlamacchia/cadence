@@ -26,7 +26,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(MapPackCell) == 0x258, "MapPackCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(MapPackCell, m_mapPack) == 0x230, "MapPackCell::m_mapPack");
 static_assert(offsetof(MapPackCell, m_viewButton) == 0x238, "MapPackCell::m_viewButton");

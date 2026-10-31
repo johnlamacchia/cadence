@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(KeybindSet) == 0x20, "KeybindSet: size differs from the layout computed from the bindings");
 static_assert(offsetof(KeybindSet, m_actionToChords) == 0x8, "KeybindSet::m_actionToChords");
 static_assert(offsetof(KeybindSet, m_dirty) == 0x18, "KeybindSet::m_dirty");

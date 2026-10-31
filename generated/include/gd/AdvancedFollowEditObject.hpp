@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(AdvancedFollowEditObject) == 0x850, "AdvancedFollowEditObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(AdvancedFollowEditObject, m_modX) == 0x838, "AdvancedFollowEditObject::m_modX");
 static_assert(offsetof(AdvancedFollowEditObject, m_modXVariance) == 0x83c, "AdvancedFollowEditObject::m_modXVariance");

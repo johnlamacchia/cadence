@@ -40,7 +40,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(IDNameBrowserPopup) == 0x2a0, "IDNameBrowserPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_IDNameBrowserPopup("IDNameBrowserPopup", "6e4866a973402432");
 namespace cadence {

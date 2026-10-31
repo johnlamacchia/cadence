@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(NewgroundsInfoLayer) == 0x298, "NewgroundsInfoLayer: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_NewgroundsInfoLayer("NewgroundsInfoLayer", "8e034298e217c794");
 namespace cadence {

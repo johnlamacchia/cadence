@@ -27,7 +27,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GauntletNode) == 0x168, "GauntletNode: size differs from the layout computed from the bindings");
 static_assert(offsetof(GauntletNode, m_gauntletInfoNode) == 0x140, "GauntletNode::m_gauntletInfoNode");
 static_assert(offsetof(GauntletNode, m_rewardNode) == 0x148, "GauntletNode::m_rewardNode");

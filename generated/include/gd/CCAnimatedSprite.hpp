@@ -37,7 +37,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCAnimatedSprite) == 0x2e8, "CCAnimatedSprite: size differs from the layout computed from the bindings");
 static_assert(offsetof(CCAnimatedSprite, m_unkString1) == 0x258, "CCAnimatedSprite::m_unkString1");
 static_assert(offsetof(CCAnimatedSprite, m_activeTween) == 0x278, "CCAnimatedSprite::m_activeTween");

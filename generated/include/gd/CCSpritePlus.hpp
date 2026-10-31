@@ -36,7 +36,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCSpritePlus) == 0x270, "CCSpritePlus: size differs from the layout computed from the bindings");
 static_assert(offsetof(CCSpritePlus, m_followers) == 0x258, "CCSpritePlus::m_followers");
 static_assert(offsetof(CCSpritePlus, m_followingSprite) == 0x260, "CCSpritePlus::m_followingSprite");

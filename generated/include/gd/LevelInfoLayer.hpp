@@ -127,7 +127,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(LevelInfoLayer) == 0x2f0, "LevelInfoLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(LevelInfoLayer, m_isBusy) == 0x1e8, "LevelInfoLayer::m_isBusy");
 static_assert(offsetof(LevelInfoLayer, m_playBtnMenu) == 0x1f0, "LevelInfoLayer::m_playBtnMenu");

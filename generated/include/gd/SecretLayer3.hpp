@@ -41,7 +41,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SecretLayer3) == 0x1d0, "SecretLayer3: size differs from the layout computed from the bindings");
 static_assert(offsetof(SecretLayer3, m_dungeonBars) == 0x1a0, "SecretLayer3::m_dungeonBars");
 static_assert(offsetof(SecretLayer3, m_lockInput) == 0x1a8, "SecretLayer3::m_lockInput");

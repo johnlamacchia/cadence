@@ -36,7 +36,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(MultilineBitmapFont) == 0x2b8, "MultilineBitmapFont: size differs from the layout computed from the bindings");
 static_assert(offsetof(MultilineBitmapFont, m_fontObject) == 0x258, "MultilineBitmapFont::m_fontObject");
 static_assert(offsetof(MultilineBitmapFont, m_unk260) == 0x260, "MultilineBitmapFont::m_unk260");

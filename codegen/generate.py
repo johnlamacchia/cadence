@@ -106,10 +106,24 @@ def main():
     parser = parse_version(bindings_dir, source_version)
     print(f"  {len(parser.classes)} classes, {len(parser.free_functions)} free functions")
 
+    # Class sizes read from the game binary, from two independent places:
+    #   create : the `mov ecx, size; call operator new` at the top of X::create   (tools/layout_check.py harvest)
+    #   rtti   : the deleting destructor in the class's vtable                      (tools/rtti_sizes.py)
     sizes_path = out_dir / f"class_sizes_{version}.json"
-    sizes = json.loads(sizes_path.read_text())["sizes"] if sizes_path.exists() else {}
+    rtti_path = out_dir / f"class_sizes_rtti_{version}.json"
+    from_create = json.loads(sizes_path.read_text())["sizes"] if sizes_path.exists() else {}
+    from_rtti = json.loads(rtti_path.read_text())["sizes"] if rtti_path.exists() else {}
+    disagree = {c: (from_create[c], from_rtti[c]) for c in from_create if c in from_rtti and from_create[c] != from_rtti[c]}
+    if disagree:
+        for c, (a, b) in sorted(disagree.items()):
+            print(f"  SIZE SOURCES DISAGREE for {c}: create says {a:#x}, vtable says {b:#x}")
+        sys.exit("the two binary size sources contradict each other; fix that before generating headers")
+    sizes = {**from_rtti, **from_create}
+    size_sources = {c: ("both" if c in from_create and c in from_rtti else "create" if c in from_create else "rtti")
+                    for c in sizes}
     if sizes:
-        print(f"  {len(sizes)} class sizes read from the game binary ({sizes_path.name})")
+        print(f"  {len(sizes)} class sizes read from the game binary "
+              f"({len(from_create)} from create, {len(from_rtti)} from vtables, {len(from_create.keys() & from_rtti.keys())} by both)")
     else:
         print(f"  no {sizes_path.name}: layouts will be 'unverified' (run tools/layout_check.py harvest)")
 
@@ -120,7 +134,9 @@ def main():
         print(f"  addresses: kept existing addresses_{version}.json")
     else:
         generate_address_json(parser, version, out_dir)
-    hashes, _ = headergen.generate(parser, bindings_dir, version, out_dir, sizes)
+    audit_path = out_dir / f"offset_audit_{version}.json"
+    audit = json.loads(audit_path.read_text()) if audit_path.exists() else {}
+    hashes, _ = headergen.generate(parser, bindings_dir, version, out_dir, sizes, size_sources, audit)
     generate_layout_hashes(hashes, version, out_dir)
 
     hookable = sum(1 for c in parser.classes.values() for f in c.functions if f.addrs.has_win())

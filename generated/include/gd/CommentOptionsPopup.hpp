@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(CommentOptionsPopup) == 0x3e8, "CommentOptionsPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_CommentOptionsPopup("CommentOptionsPopup", "b9ea375218c06de7");
 namespace cadence {

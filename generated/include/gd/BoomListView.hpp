@@ -41,7 +41,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(BoomListView) == 0x1d0, "BoomListView: size differs from the layout computed from the bindings");
 static_assert(offsetof(BoomListView, m_tableView) == 0x1a8, "BoomListView::m_tableView");
 static_assert(offsetof(BoomListView, m_entries) == 0x1b0, "BoomListView::m_entries");

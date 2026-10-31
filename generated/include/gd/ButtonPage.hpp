@@ -15,6 +15,6 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ButtonPage) == 0x198, "ButtonPage: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_ButtonPage("ButtonPage", "2cc767aaef7d5e8a");

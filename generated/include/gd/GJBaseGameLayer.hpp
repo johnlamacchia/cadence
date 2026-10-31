@@ -923,7 +923,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJBaseGameLayer) == 0x3938, "GJBaseGameLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJBaseGameLayer, m_gameState) == 0x1a8, "GJBaseGameLayer::m_gameState");
 static_assert(offsetof(GJBaseGameLayer, m_level) == 0x878, "GJBaseGameLayer::m_level");

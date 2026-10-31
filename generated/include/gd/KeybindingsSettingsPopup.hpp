@@ -29,7 +29,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(KeybindingsSettingsPopup) == 0x2f0, "KeybindingsSettingsPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(KeybindingsSettingsPopup, m_layer) == 0x2a0, "KeybindingsSettingsPopup::m_layer");
 static_assert(offsetof(KeybindingsSettingsPopup, m_entries) == 0x2a8, "KeybindingsSettingsPopup::m_entries");

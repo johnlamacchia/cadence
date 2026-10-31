@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJPromoPopup) == 0x2b8, "GJPromoPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJPromoPopup, m_promoFrame) == 0x298, "GJPromoPopup::m_promoFrame");
 inline const cadence::detail::LayoutRegistration cadence_layout_GJPromoPopup("GJPromoPopup", "ba2aa4da4b6cb454");

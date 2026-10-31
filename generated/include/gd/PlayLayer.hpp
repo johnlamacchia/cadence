@@ -293,7 +293,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(PlayLayer) == 0x3ce0, "PlayLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(PlayLayer, m_unk36c8) == 0x3950, "PlayLayer::m_unk36c8");
 static_assert(offsetof(PlayLayer, m_unk36cc) == 0x3954, "PlayLayer::m_unk36cc");

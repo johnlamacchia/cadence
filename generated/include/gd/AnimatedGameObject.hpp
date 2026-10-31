@@ -40,7 +40,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(AnimatedGameObject) == 0x610, "AnimatedGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(AnimatedGameObject, m_animatedSprite) == 0x5c8, "AnimatedGameObject::m_animatedSprite");
 static_assert(offsetof(AnimatedGameObject, m_childSprite) == 0x5d0, "AnimatedGameObject::m_childSprite");

@@ -16,7 +16,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCURLObject) == 0x78, "CCURLObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(CCURLObject, m_name) == 0x38, "CCURLObject::m_name");
 static_assert(offsetof(CCURLObject, m_url) == 0x58, "CCURLObject::m_url");

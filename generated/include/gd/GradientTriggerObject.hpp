@@ -28,7 +28,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GradientTriggerObject) == 0x768, "GradientTriggerObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(GradientTriggerObject, m_blendingLayer) == 0x740, "GradientTriggerObject::m_blendingLayer");
 static_assert(offsetof(GradientTriggerObject, m_blendingMode) == 0x744, "GradientTriggerObject::m_blendingMode");

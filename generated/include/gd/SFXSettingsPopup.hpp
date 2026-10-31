@@ -14,12 +14,13 @@ public:
     virtual void didToggleGV(std::string);
     bool init(SFXBrowser*);
 
+    uint8_t _unmapped_tail[16];
 };
 
 
-// layout: unverified
-static_assert(sizeof(SFXSettingsPopup) == 0x470, "SFXSettingsPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_SFXSettingsPopup("SFXSettingsPopup", "9665691a7cbdbd9d");
+// layout: tail-padded
+static_assert(sizeof(SFXSettingsPopup) == 0x480, "SFXSettingsPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_SFXSettingsPopup("SFXSettingsPopup", "02b298d6e7887cce");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&SFXSettingsPopup::onClose> = "SFXSettingsPopup::onClose(cocos2d::CCObject* sender)";
 template <> inline constexpr const char* fn_sig<&SFXSettingsPopup::setupOptions> = "SFXSettingsPopup::setupOptions()";

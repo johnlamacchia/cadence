@@ -20,7 +20,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(ThreadMessageOptionsPopup) == 0x3f0, "ThreadMessageOptionsPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_ThreadMessageOptionsPopup("ThreadMessageOptionsPopup", "552888795da6d36f");
 namespace cadence {

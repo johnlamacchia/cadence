@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(KeyframeAnimTriggerObject) == 0x758, "KeyframeAnimTriggerObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(KeyframeAnimTriggerObject, m_timeMod) == 0x740, "KeyframeAnimTriggerObject::m_timeMod");
 static_assert(offsetof(KeyframeAnimTriggerObject, m_positionXMod) == 0x744, "KeyframeAnimTriggerObject::m_positionXMod");

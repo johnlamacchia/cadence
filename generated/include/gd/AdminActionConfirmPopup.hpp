@@ -18,12 +18,13 @@ public:
     void onConfirm(cocos2d::CCObject* sender);
     TodoReturn selectedCategories();
 
+    uint8_t _unmapped_tail[104];
 };
 
 
-// layout: unverified
-static_assert(sizeof(AdminActionConfirmPopup) == 0x3e8, "AdminActionConfirmPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_AdminActionConfirmPopup("AdminActionConfirmPopup", "b9ea375218c06de7");
+// layout: tail-padded
+static_assert(sizeof(AdminActionConfirmPopup) == 0x450, "AdminActionConfirmPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_AdminActionConfirmPopup("AdminActionConfirmPopup", "c0483d7d296c314b");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&AdminActionConfirmPopup::keyBackClicked> = "AdminActionConfirmPopup::keyBackClicked()";
 template <> inline constexpr const char* fn_sig<&AdminActionConfirmPopup::onClose> = "AdminActionConfirmPopup::onClose(cocos2d::CCObject* sender)";

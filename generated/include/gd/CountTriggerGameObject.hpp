@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CountTriggerGameObject) == 0x750, "CountTriggerGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(CountTriggerGameObject, m_pickupCount) == 0x740, "CountTriggerGameObject::m_pickupCount");
 static_assert(offsetof(CountTriggerGameObject, m_pickupTriggerMode) == 0x744, "CountTriggerGameObject::m_pickupTriggerMode");

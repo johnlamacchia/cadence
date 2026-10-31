@@ -27,7 +27,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(ReportQueuePopup) == 0x318, "ReportQueuePopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_ReportQueuePopup("ReportQueuePopup", "a22e6dffd3bbe898");
 namespace cadence {

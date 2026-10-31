@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SelectPremadeLayer) == 0x2a0, "SelectPremadeLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(SelectPremadeLayer, m_delegate) == 0x298, "SelectPremadeLayer::m_delegate");
 inline const cadence::detail::LayoutRegistration cadence_layout_SelectPremadeLayer("SelectPremadeLayer", "65c200f5ebfb438e");

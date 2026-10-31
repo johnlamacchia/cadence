@@ -26,7 +26,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(AchievementBar) == 0x1a0, "AchievementBar: size differs from the layout computed from the bindings");
 static_assert(offsetof(AchievementBar, m_layerColor) == 0x158, "AchievementBar::m_layerColor");
 static_assert(offsetof(AchievementBar, m_offsetUnused) == 0x160, "AchievementBar::m_offsetUnused");

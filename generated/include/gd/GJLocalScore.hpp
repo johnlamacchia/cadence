@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJLocalScore) == 0x48, "GJLocalScore: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJLocalScore, m_points) == 0x38, "GJLocalScore::m_points");
 static_assert(offsetof(GJLocalScore, m_type) == 0x3c, "GJLocalScore::m_type");

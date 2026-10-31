@@ -26,7 +26,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CameraTriggerGameObject) == 0x760, "CameraTriggerGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(CameraTriggerGameObject, m_exitStatic) == 0x740, "CameraTriggerGameObject::m_exitStatic");
 static_assert(offsetof(CameraTriggerGameObject, m_followObject) == 0x741, "CameraTriggerGameObject::m_followObject");

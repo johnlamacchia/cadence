@@ -27,7 +27,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(TimerTriggerGameObject) == 0x760, "TimerTriggerGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(TimerTriggerGameObject, m_startTime) == 0x740, "TimerTriggerGameObject::m_startTime");
 static_assert(offsetof(TimerTriggerGameObject, m_targetTime) == 0x748, "TimerTriggerGameObject::m_targetTime");

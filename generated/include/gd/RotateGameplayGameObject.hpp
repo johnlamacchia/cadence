@@ -30,7 +30,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(RotateGameplayGameObject) == 0x760, "RotateGameplayGameObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(RotateGameplayGameObject, m_moveDirection) == 0x740, "RotateGameplayGameObject::m_moveDirection");
 static_assert(offsetof(RotateGameplayGameObject, m_groundDirection) == 0x744, "RotateGameplayGameObject::m_groundDirection");

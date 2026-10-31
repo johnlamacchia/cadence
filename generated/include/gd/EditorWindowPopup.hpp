@@ -79,7 +79,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(EditorWindowPopup) == 0x480, "EditorWindowPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(EditorWindowPopup, m_editorUI) == 0x3e8, "EditorWindowPopup::m_editorUI");
 static_assert(offsetof(EditorWindowPopup, m_background) == 0x3f0, "EditorWindowPopup::m_background");

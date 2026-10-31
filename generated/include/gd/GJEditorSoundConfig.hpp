@@ -19,12 +19,13 @@ public:
     TodoReturn getUnpackedSoundDesc();
     TodoReturn showSoundInfo();
 
+    uint8_t _unmapped_tail[232];
 };
 
 
-// layout: unverified
-static_assert(sizeof(GJEditorSoundConfig) == 0x140, "GJEditorSoundConfig: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_GJEditorSoundConfig("GJEditorSoundConfig", "11f4537e62b2b14e");
+// layout: tail-padded
+static_assert(sizeof(GJEditorSoundConfig) == 0x228, "GJEditorSoundConfig: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_GJEditorSoundConfig("GJEditorSoundConfig", "0e06362c5a69a494");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&GJEditorSoundConfig::encodeWithCoder> = "GJEditorSoundConfig::encodeWithCoder(DS_Dictionary*)";
 template <> inline constexpr const char* fn_sig<&GJEditorSoundConfig::init> = "GJEditorSoundConfig::init()";

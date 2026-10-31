@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(StartPosObject) == 0x748, "StartPosObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(StartPosObject, m_startSettings) == 0x740, "StartPosObject::m_startSettings");
 inline const cadence::detail::LayoutRegistration cadence_layout_StartPosObject("StartPosObject", "3999243d57e34334");

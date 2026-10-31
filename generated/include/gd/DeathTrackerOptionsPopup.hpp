@@ -17,12 +17,13 @@ public:
     void onClearData(cocos2d::CCObject* sender);
     void onToggleAutoScroll(cocos2d::CCObject* sender);
 
+    uint8_t _unmapped_tail[16];
 };
 
 
-// layout: unverified
-static_assert(sizeof(DeathTrackerOptionsPopup) == 0x3f0, "DeathTrackerOptionsPopup: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_DeathTrackerOptionsPopup("DeathTrackerOptionsPopup", "552888795da6d36f");
+// layout: tail-padded
+static_assert(sizeof(DeathTrackerOptionsPopup) == 0x400, "DeathTrackerOptionsPopup: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_DeathTrackerOptionsPopup("DeathTrackerOptionsPopup", "c21f2e2d6595f2b5");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&DeathTrackerOptionsPopup::keyBackClicked> = "DeathTrackerOptionsPopup::keyBackClicked()";
 template <> inline constexpr const char* fn_sig<&DeathTrackerOptionsPopup::onClose> = "DeathTrackerOptionsPopup::onClose(cocos2d::CCObject* sender)";

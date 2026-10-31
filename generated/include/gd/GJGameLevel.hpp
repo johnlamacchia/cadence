@@ -251,7 +251,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(GJGameLevel) == 0x840, "GJGameLevel: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJGameLevel, m_lastBuildSave) == 0x140, "GJGameLevel::m_lastBuildSave");
 static_assert(offsetof(GJGameLevel, m_levelID) == 0x148, "GJGameLevel::m_levelID");

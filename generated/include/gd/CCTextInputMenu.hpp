@@ -19,12 +19,13 @@ public:
     void onCopy(cocos2d::CCObject* sender);
     void onPaste(cocos2d::CCObject* sender);
 
+    uint8_t _unmapped_tail[24];
 };
 
 
-// layout: unverified
-static_assert(sizeof(CCTextInputMenu) == 0x198, "CCTextInputMenu: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_CCTextInputMenu("CCTextInputMenu", "2cc767aaef7d5e8a");
+// layout: tail-padded
+static_assert(sizeof(CCTextInputMenu) == 0x1b0, "CCTextInputMenu: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_CCTextInputMenu("CCTextInputMenu", "f4769227f528b8e5");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&CCTextInputMenu::ccTouchBegan> = "CCTextInputMenu::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)";
 template <> inline constexpr const char* fn_sig<&CCTextInputMenu::registerWithTouchDispatcher> = "CCTextInputMenu::registerWithTouchDispatcher()";

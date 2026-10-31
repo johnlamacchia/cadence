@@ -25,7 +25,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJRequestCell) == 0x248, "GJRequestCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJRequestCell, m_score) == 0x230, "GJRequestCell::m_score");
 static_assert(offsetof(GJRequestCell, m_toggler) == 0x238, "GJRequestCell::m_toggler");

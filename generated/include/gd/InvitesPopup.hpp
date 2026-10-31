@@ -35,7 +35,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(InvitesPopup) == 0x318, "InvitesPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_InvitesPopup("InvitesPopup", "92698344289fef10");
 namespace cadence {

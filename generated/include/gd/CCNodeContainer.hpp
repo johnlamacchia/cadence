@@ -15,7 +15,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCNodeContainer) == 0x140, "CCNodeContainer: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_CCNodeContainer("CCNodeContainer", "11f4537e62b2b14e");
 namespace cadence {

@@ -20,11 +20,10 @@ public:
     void removeAllObjects();
     void removeObject(cocos2d::CCObject*);
 
-    std::set<cocos2d::CCObject*> m_pSet;
+    uint8_t _unmapped_tail[8];
 };
 }
 
-// layout: unverified
-static_assert(sizeof(cocos2d::CCSet) == 0x48, "cocos2d::CCSet: size differs from the layout computed from the bindings");
-static_assert(offsetof(cocos2d::CCSet, m_pSet) == 0x38, "cocos2d::CCSet::m_pSet");
-inline const cadence::detail::LayoutRegistration cadence_layout_cocos2d__CCSet("cocos2d::CCSet", "ac0d81ad38e02ee2");
+// layout: corrected
+static_assert(sizeof(cocos2d::CCSet) == 0x40, "cocos2d::CCSet: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_cocos2d__CCSet("cocos2d::CCSet", "0bae3ba333a68ebf");

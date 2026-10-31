@@ -16,7 +16,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(CCIndexPath) == 0x40, "CCIndexPath: size differs from the layout computed from the bindings");
 static_assert(offsetof(CCIndexPath, m_row) == 0x38, "CCIndexPath::m_row");
 static_assert(offsetof(CCIndexPath, m_section) == 0x3c, "CCIndexPath::m_section");

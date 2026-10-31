@@ -15,7 +15,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(StatsLayer) == 0x260, "StatsLayer: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_StatsLayer("StatsLayer", "5f3a8a094ac73981");
 namespace cadence {

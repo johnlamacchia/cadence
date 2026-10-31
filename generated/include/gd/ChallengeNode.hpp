@@ -22,7 +22,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ChallengeNode) == 0x168, "ChallengeNode: size differs from the layout computed from the bindings");
 static_assert(offsetof(ChallengeNode, m_challengesPage) == 0x140, "ChallengeNode::m_challengesPage");
 static_assert(offsetof(ChallengeNode, m_challengeItem) == 0x148, "ChallengeNode::m_challengeItem");

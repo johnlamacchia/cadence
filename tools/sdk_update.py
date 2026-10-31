@@ -8,8 +8,11 @@ Steps:
   2. Run gdport: fingerprint every function in the old exe and find it in the new
      one, writing generated/addresses_<new>.json (plus the functions it could not
      place).
-  3. Read each class's sizeof out of the new exe (tools/layout_check.py harvest).
-  4. Regenerate headers and layout hashes. If geode-sdk/bindings has a <new>
+  3. Read each class's sizeof out of the new exe, from two independent places that must
+     agree (tools/layout_check.py harvest: X::create; tools/rtti_sizes.py: vtable destructors).
+  4. Regenerate headers and layout hashes, then audit member offsets against the game's own
+     code (tools/offset_audit.py) and regenerate once more so classes the audit shows are
+     incomplete are marked. If geode-sdk/bindings has a <new>
      folder, use it (its addresses are the official ones). If not, carry the old
      layouts over and keep the gdport addresses; step 5 tells you what to recheck.
   5. Report which class layouts changed (hash diff, plus sizeof changes seen
@@ -78,6 +81,8 @@ def main():
     print("\nReading class sizes from the new exe...")
     if run([sys.executable, SDK_ROOT / "tools" / "layout_check.py", "harvest", "--exe", dest_exe, "--addresses", new_addr]):
         print("  (could not read class sizes; layouts will be marked unverified)")
+    if run([sys.executable, SDK_ROOT / "tools" / "rtti_sizes.py", bindings, "--version", new_ver, "--exe", dest_exe]):
+        print("  (could not read sizes from the vtables; only the X::create sizes will be used)")
 
     # 4. regenerate
     have_bindings = (bindings / new_ver).exists()
@@ -87,6 +92,13 @@ def main():
         cmd += ["--bindings-version", old_ver, "--keep-addresses"]
     if run(cmd):
         sys.exit("ERROR: codegen failed")
+
+    print("\nAuditing member offsets against the new exe's code...")
+    if run([sys.executable, SDK_ROOT / "tools" / "offset_audit.py", bindings, "--version", new_ver, "--exe", dest_exe,
+            "--json", generated / f"offset_audit_{new_ver}.json"]) == 0:
+        print("Regenerating once more so classes the audit found incomplete are marked...")
+        if run(cmd):
+            sys.exit("ERROR: codegen failed")
 
     # 5. what changed
     print("\n=== Layout changes ===")
@@ -99,6 +111,8 @@ def main():
 
     old_s = load_json(generated / f"class_sizes_{old_ver}.json").get("sizes", {})
     new_s = load_json(generated / f"class_sizes_{new_ver}.json").get("sizes", {})
+    old_s = {**load_json(generated / f"class_sizes_rtti_{old_ver}.json").get("sizes", {}), **old_s}
+    new_s = {**load_json(generated / f"class_sizes_rtti_{new_ver}.json").get("sizes", {}), **new_s}
     resized = [(c, old_s[c], new_s[c]) for c in sorted(set(old_s) & set(new_s)) if old_s[c] != new_s[c]]
     print(f"binary:   {len(resized)} class(es) changed sizeof between {old_ver} and {new_ver}")
     for c, a, b in resized:

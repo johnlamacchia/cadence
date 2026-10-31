@@ -27,7 +27,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(RenameThreadPopup) == 0x3f0, "RenameThreadPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_RenameThreadPopup("RenameThreadPopup", "37cb7a9a520f3048");
 namespace cadence {

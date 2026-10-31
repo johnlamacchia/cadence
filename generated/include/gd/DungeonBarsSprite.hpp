@@ -18,7 +18,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(DungeonBarsSprite) == 0x148, "DungeonBarsSprite: size differs from the layout computed from the bindings");
 static_assert(offsetof(DungeonBarsSprite, m_barsSprite) == 0x140, "DungeonBarsSprite::m_barsSprite");
 inline const cadence::detail::LayoutRegistration cadence_layout_DungeonBarsSprite("DungeonBarsSprite", "253234711a54d45f");

@@ -20,7 +20,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SelectSFXSortLayer) == 0x2a8, "SelectSFXSortLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(SelectSFXSortLayer, m_sortType) == 0x298, "SelectSFXSortLayer::m_sortType");
 static_assert(offsetof(SelectSFXSortLayer, m_delegate) == 0x2a0, "SelectSFXSortLayer::m_delegate");

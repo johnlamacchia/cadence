@@ -17,7 +17,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(CreateStartPosPopup) == 0x3e8, "CreateStartPosPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_CreateStartPosPopup("CreateStartPosPopup", "b9ea375218c06de7");
 namespace cadence {

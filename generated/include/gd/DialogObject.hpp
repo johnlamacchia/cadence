@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(DialogObject) == 0x88, "DialogObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(DialogObject, m_text) == 0x38, "DialogObject::m_text");
 static_assert(offsetof(DialogObject, m_character) == 0x58, "DialogObject::m_character");

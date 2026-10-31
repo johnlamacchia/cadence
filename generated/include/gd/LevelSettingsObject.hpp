@@ -76,7 +76,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(LevelSettingsObject) == 0x1d8, "LevelSettingsObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(LevelSettingsObject, m_effectManager) == 0x140, "LevelSettingsObject::m_effectManager");
 static_assert(offsetof(LevelSettingsObject, m_startMode) == 0x148, "LevelSettingsObject::m_startMode");

@@ -38,7 +38,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(LevelCell) == 0x268, "LevelCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(LevelCell, m_button) == 0x230, "LevelCell::m_button");
 static_assert(offsetof(LevelCell, m_level) == 0x238, "LevelCell::m_level");

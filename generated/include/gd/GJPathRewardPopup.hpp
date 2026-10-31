@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJPathRewardPopup) == 0x2a0, "GJPathRewardPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJPathRewardPopup, m_pathNumber) == 0x298, "GJPathRewardPopup::m_pathNumber");
 inline const cadence::detail::LayoutRegistration cadence_layout_GJPathRewardPopup("GJPathRewardPopup", "9c7b214a32c4c760");

@@ -44,7 +44,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(OptionsLayer) == 0x2a0, "OptionsLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(OptionsLayer, m_optionsMenu) == 0x270, "OptionsLayer::m_optionsMenu");
 static_assert(offsetof(OptionsLayer, m_unknown) == 0x278, "OptionsLayer::m_unknown");

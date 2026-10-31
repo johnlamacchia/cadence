@@ -17,7 +17,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(SocialLinksPopup) == 0x298, "SocialLinksPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_SocialLinksPopup("SocialLinksPopup", "8e034298e217c794");
 namespace cadence {

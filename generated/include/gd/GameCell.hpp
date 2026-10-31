@@ -20,7 +20,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GameCell) == 0x258, "GameCell: size differs from the layout computed from the bindings");
 static_assert(offsetof(GameCell, m_unk230) == 0x230, "GameCell::m_unk230");
 static_assert(offsetof(GameCell, m_gameLink) == 0x238, "GameCell::m_gameLink");

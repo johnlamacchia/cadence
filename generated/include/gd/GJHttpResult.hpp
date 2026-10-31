@@ -19,7 +19,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GJHttpResult) == 0x190, "GJHttpResult: size differs from the layout computed from the bindings");
 static_assert(offsetof(GJHttpResult, m_success) == 0x140, "GJHttpResult::m_success");
 static_assert(offsetof(GJHttpResult, m_response) == 0x148, "GJHttpResult::m_response");

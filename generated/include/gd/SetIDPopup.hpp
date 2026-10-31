@@ -33,7 +33,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SetIDPopup) == 0x2c0, "SetIDPopup: size differs from the layout computed from the bindings");
 static_assert(offsetof(SetIDPopup, m_inputNode) == 0x298, "SetIDPopup::m_inputNode");
 static_assert(offsetof(SetIDPopup, m_value) == 0x2a0, "SetIDPopup::m_value");

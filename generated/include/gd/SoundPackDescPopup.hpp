@@ -24,7 +24,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: known-short
 static_assert(sizeof(SoundPackDescPopup) == 0x3f0, "SoundPackDescPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_SoundPackDescPopup("SoundPackDescPopup", "f6f6d2d8b17ca6c5");
 namespace cadence {

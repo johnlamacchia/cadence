@@ -34,7 +34,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(EmoteSprite) == 0x260, "EmoteSprite: size differs from the layout computed from the bindings");
 static_assert(offsetof(EmoteSprite, m_emoteDef) == 0x258, "EmoteSprite::m_emoteDef");
 inline const cadence::detail::LayoutRegistration cadence_layout_EmoteSprite("EmoteSprite", "5e872c6834f3a491");

@@ -21,7 +21,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(ExplodeItemSprite) == 0x278, "ExplodeItemSprite: size differs from the layout computed from the bindings");
 static_assert(offsetof(ExplodeItemSprite, m_xVelocity) == 0x258, "ExplodeItemSprite::m_xVelocity");
 static_assert(offsetof(ExplodeItemSprite, m_yVelocity) == 0x25c, "ExplodeItemSprite::m_yVelocity");

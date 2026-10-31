@@ -24,7 +24,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(EndPortalObject) == 0x560, "EndPortalObject: size differs from the layout computed from the bindings");
 static_assert(offsetof(EndPortalObject, m_gradientBar) == 0x550, "EndPortalObject::m_gradientBar");
 static_assert(offsetof(EndPortalObject, m_flippedX) == 0x558, "EndPortalObject::m_flippedX");

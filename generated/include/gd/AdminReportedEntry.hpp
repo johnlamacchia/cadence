@@ -9,9 +9,10 @@ class AdminReportedEntry : public cocos2d::CCObject {
 public:
     virtual ~AdminReportedEntry();
 
+    uint8_t _unmapped_tail[192];
 };
 
 
-// layout: unverified
-static_assert(sizeof(AdminReportedEntry) == 0x38, "AdminReportedEntry: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_AdminReportedEntry("AdminReportedEntry", "f62ffc2c2a467ca9");
+// layout: tail-padded
+static_assert(sizeof(AdminReportedEntry) == 0xf8, "AdminReportedEntry: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_AdminReportedEntry("AdminReportedEntry", "0a5ea8615db5db6a");

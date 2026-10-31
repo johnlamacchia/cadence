@@ -15,7 +15,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(SetupDashRingPopup) == 0x3e8, "SetupDashRingPopup: size differs from the layout computed from the bindings");
 inline const cadence::detail::LayoutRegistration cadence_layout_SetupDashRingPopup("SetupDashRingPopup", "b9ea375218c06de7");
 namespace cadence {

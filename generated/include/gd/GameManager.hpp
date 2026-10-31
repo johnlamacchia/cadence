@@ -406,7 +406,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GameManager) == 0x6e8, "GameManager: size differs from the layout computed from the bindings");
 static_assert(offsetof(GameManager, m_unkStringVector) == 0x168, "GameManager::m_unkStringVector");
 static_assert(offsetof(GameManager, m_mainFramesForAnimation) == 0x180, "GameManager::m_mainFramesForAnimation");

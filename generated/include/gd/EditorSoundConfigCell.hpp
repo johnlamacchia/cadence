@@ -17,12 +17,13 @@ public:
     void onViewProfile(cocos2d::CCObject* sender);
     TodoReturn updateBGColor(int);
 
+    uint8_t _unmapped_tail[32];
 };
 
 
-// layout: unverified
-static_assert(sizeof(EditorSoundConfigCell) == 0x230, "EditorSoundConfigCell: size differs from the layout computed from the bindings");
-inline const cadence::detail::LayoutRegistration cadence_layout_EditorSoundConfigCell("EditorSoundConfigCell", "732414bd04a5252e");
+// layout: tail-padded
+static_assert(sizeof(EditorSoundConfigCell) == 0x250, "EditorSoundConfigCell: size differs from the layout computed from the bindings");
+inline const cadence::detail::LayoutRegistration cadence_layout_EditorSoundConfigCell("EditorSoundConfigCell", "4a4727661a412582");
 namespace cadence {
 template <> inline constexpr const char* fn_sig<&EditorSoundConfigCell::init> = "EditorSoundConfigCell::init()";
 template <> inline constexpr const char* fn_sig<&EditorSoundConfigCell::loadFromConfig> = "EditorSoundConfigCell::loadFromConfig(GJEditorSoundConfig*)";

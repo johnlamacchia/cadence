@@ -23,7 +23,7 @@ public:
 };
 
 
-// layout: unverified
+// layout: verified
 static_assert(sizeof(GraphicsReloadLayer) == 0x1a8, "GraphicsReloadLayer: size differs from the layout computed from the bindings");
 static_assert(offsetof(GraphicsReloadLayer, m_quality) == 0x198, "GraphicsReloadLayer::m_quality");
 static_assert(offsetof(GraphicsReloadLayer, m_resolution) == 0x19c, "GraphicsReloadLayer::m_resolution");
