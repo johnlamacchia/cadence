@@ -40,5 +40,8 @@ Copy-Item tools\install.ps1 $stage
 
 $zip = Join-Path $root "dist\Cadence-$ver.zip"
 if (Test-Path $zip) { Remove-Item $zip }
-Compress-Archive -Path "$stage\*" -DestinationPath $zip
+# Not Compress-Archive: in Windows PowerShell 5.1 it writes backslashes into the entry names, which 7-Zip,
+# unzip and most other tools reject. .NET's ZipFile writes standard forward slashes.
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+[System.IO.Compression.ZipFile]::CreateFromDirectory($stage, $zip, [System.IO.Compression.CompressionLevel]::Optimal, $false)
 Write-Host "`nPackaged: $zip" -ForegroundColor Green
