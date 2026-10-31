@@ -71,6 +71,11 @@ Properties > General > Launch Options and set:
 WINEDLLOVERRIDES="winmm=n,b" %command%
 ```
 
+If your Geometry Dash is not under Steam's `steamapps/common` (a non-Steam shortcut, or a downloaded depot folder), `install.sh`
+cannot find it by itself: pass the folder with `--gd-dir`. Installing by hand? Copy the **whole** release, including the
+`generated/` folder (the address and layout-hash files). Without it the loader starts but mods cannot look up GD
+functions by name, and `loader.log` says so.
+
 `install.sh` and `CadenceInstaller.exe` write the same `cadence_install.txt`, so either can uninstall what the other
 installed. `CadenceInstaller.exe` is not meant for Linux: it finds Steam through the Windows registry, which a Wine
 prefix does not have.

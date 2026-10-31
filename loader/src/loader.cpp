@@ -490,6 +490,18 @@ static bool install_drawscene_hook() {
                          reinterpret_cast<void**>(&orig_drawScene));
 }
 
+static std::string utf8_path(const std::filesystem::path& p) {
+    auto u = p.u8string();
+    return std::string(reinterpret_cast<const char*>(u.data()), u.size());
+}
+
+// Wine (and so Proton) exports wine_get_version from ntdll; Windows does not.
+static void log_environment() {
+    if (HMODULE nt = GetModuleHandleW(L"ntdll.dll"))
+        if (auto wine_version = reinterpret_cast<const char* (__cdecl*)()>(GetProcAddress(nt, "wine_get_version")))
+            log("[INFO] running under Wine %s", wine_version());
+}
+
 bool init() {
     wchar_t exe_path[MAX_PATH];
     GetModuleFileNameW(nullptr, exe_path, MAX_PATH);
@@ -498,6 +510,8 @@ bool init() {
     auto log_path = g_base_dir / "loader.log";
     g_log = _wfopen(log_path.c_str(), L"w");
     log("[INFO] Cadence loader starting");
+    log("[INFO] game folder: %s", utf8_path(g_base_dir).c_str());
+    log_environment();
 
     crash::init();
     log("[INFO] crash handler installed");
@@ -514,7 +528,10 @@ bool init() {
     if (!std::filesystem::exists(gen_dir)) gen_dir = g_base_dir;
 
     if (!load_addresses(gen_dir)) {
-        log("[ERROR] no address file found, mods will not be able to resolve functions");
+        log("[ERROR] no usable addresses in %s: addresses_<version>.json is missing, or none of its addresses "
+            "fit this GeometryDash.exe. Mods cannot resolve GD functions by name (hooks on cocos2d exports still "
+            "work). Run the installer, or copy the release's generated/ folder next to GeometryDash.exe.",
+            utf8_path(gen_dir).c_str());
     }
     load_layout_hashes(gen_dir);
 
