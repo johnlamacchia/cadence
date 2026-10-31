@@ -1,4 +1,4 @@
-# Cadence
+﻿# Cadence
 
 A minimal mod loader and SDK for **Geometry Dash 2.2091** (Windows x64).
 
@@ -226,6 +226,25 @@ Press keys while **in a level** with GD focused unless noted.
 | `noglow` | Remove glitter/glow effects | always on |
 | `hideattempts` | Hide the in-level attempt label | always on |
 | `anticheat` | Bypass the spawn-abuse check | always on |
+| `uidemo` | A GD-style popup built with `sdk_ui.h` (label, checkbox, buttons, alert, confirm) | **F7** |
+
+### GD-style UI (`sdk_ui.h`)
+
+Optional header, like `sdk_extras.h`. Popups, buttons and checkboxes built from the game's own classes, with no cocos
+subclassing:
+
+```cpp
+#include <sdk_ui.h>
+cadence::ui::alert("Hello", "A GD popup.");
+cadence::ui::confirm("Sure?", "Pick one.", "No", "Yes", [](bool yes) { /* ... */ });
+cadence::ui::Popup("My mod", 300, 180)
+    .label("Options", 0, 55)
+    .checkbox("Show hitboxes", -100, 20, on, [](bool v) { on = v; })
+    .button("Reset", 0, -50, [] { reset(); })
+    .show();
+```
+
+`mods/uidemo` (F7) uses all of it. **Not yet tested in the game**: first run, check `loader.log` for `uidemo:` lines.
 
 The example mod hooks `MenuLayer::onRobTop` rather than `onMoreGames`: the bindings give
 `onMoreGames` no Windows address in 2.2091, so it cannot be hooked (trying to is a compile error that says so).

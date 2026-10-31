@@ -1,4 +1,4 @@
-# Builds everything and produces dist/Cadence-<gd version>.zip
+﻿# Builds everything and produces dist/Cadence-<gd version>.zip
 #   powershell -File tools/package.ps1
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
@@ -29,7 +29,7 @@ Copy-Item build\loader\Release\winmm.dll $stage
 Copy-Item generated\addresses_*.json, generated\layout_hashes_*.json "$stage\generated"
 Get-ChildItem build\mods -Recurse -Filter *.dll | Where-Object { $_.FullName -like "*\Release\*" } | Copy-Item -Destination "$stage\mods"
 
-Copy-Item loader\include\sdk.h, loader\include\sdk_extras.h, loader\include\cadence_abi.h "$stage\sdk\loader\include"
+Copy-Item loader\include\sdk.h, loader\include\sdk_extras.h, loader\include\sdk_ui.h, loader\include\cadence_abi.h "$stage\sdk\loader\include"
 Copy-Item generated\include "$stage\sdk\generated\include" -Recurse
 Copy-Item cmake\CadenceMod.cmake "$stage\sdk\cmake"
 Copy-Item template\* "$stage\sdk\template"
