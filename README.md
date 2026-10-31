@@ -1,4 +1,4 @@
-﻿# Cadence
+# Cadence
 
 A minimal mod loader and SDK for **Geometry Dash 2.2091** (Windows x64).
 
@@ -244,7 +244,7 @@ cadence::ui::Popup("My mod", 300, 180)
     .show();
 ```
 
-`mods/uidemo` (F7) uses all of it. **Not yet tested in the game**: first run, check `loader.log` for `uidemo:` lines.
+`mods/uidemo` (F7) uses all of it and has been run in GD 2.2091; if something misbehaves, the `uidemo:` and `sdk_ui:` lines in `loader.log` say what happened.
 
 The example mod hooks `MenuLayer::onRobTop` rather than `onMoreGames`: the bindings give
 `onMoreGames` no Windows address in 2.2091, so it cannot be hooked (trying to is a compile error that says so).
@@ -260,7 +260,7 @@ python tools/verify_addresses.py --sample 400                       # addresses 
 ```
 
 - `hook_test`: chaining; removing a hook from the head, middle or tail of a chain; byte-exact restore; re-hooking.
-- `loader_smoke`: loads the real loader and all 17 mods in a scratch folder: load order, shadow copies, missing and
+- `loader_smoke`: loads the real loader and every example mod in a scratch folder: load order, shadow copies, missing and
   invalid addresses skipped without touching memory, a stale layout hash refusing exactly the mods that use the class.
 - `gd_headers`: all 1,104 generated headers compile under MSVC, with every `static_assert` passing.
 - `python gdport/selftest.py <exe> <addresses.json>`: the address porter against known truth (identical and altered exe).
@@ -305,7 +305,7 @@ loader/            winmm proxy, mod loader, hook engine, crash handler
   include/sdk.h        the entire mod-facing API
   include/sdk_extras.h optional helpers
   include/cadence_abi.h LoaderAPI / ModEntry, shared by the loader and sdk.h
-mods/              17 example mods (one directory each)
+mods/              example mods (one directory each)
 template/          standalone starter mod
 cmake/             cadence_add_mod() build helper
 codegen/           Broma parser, layout calculator, header + data generator
