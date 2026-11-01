@@ -1,6 +1,6 @@
 # The installer: one CadenceInstaller.exe that carries the loader, the bundled mods and the
 # address data inside itself (as a resource) and installs them into a Geometry Dash folder.
-set(CADENCE_VERSION "1.1.0")
+set(CADENCE_VERSION "1.1.1")
 
 add_executable(cadence_pack pack.cpp)
 set_target_properties(cadence_pack PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tools")
